@@ -7,7 +7,7 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 		</div>
 
 		<div class="sidebar-header">
-				<img class="img-fluid" src="images/empresa.png">
+				<img class="img-fluid" src="images/empresa.png?v=1.1">
 		</div>
 
 		<ul class="list-unstyled components">
@@ -21,13 +21,10 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 					</ul>
 				</li>
 				<li>
-						<a href="productos.html" class="d-flex align-items-center"><i class="icofont-business-man"></i> Sub dirección Adm.</span></a>
+						<a href="#" class="d-flex align-items-center"><i class="icofont-business-man"></i> Sub dirección Adm.</span></a>
 				</li>
 				<li>
-						<a href="caja.php" class="d-flex align-items-center"><i class="icofont-business-man"></i> Sub dirección Académica</span></a>
-				</li>
-				<li>
-					<a href="#pageSubAcademico" data-toggle="collapse" aria-expanded="false" class="d-flex align-items-center"><i class="icofont-pen-holder"></i> Área de registro </span> <i class="icofont-caret-down ml-auto"></i></a>
+					<a href="#pageSubAcademico" data-toggle="collapse" aria-expanded="false" class="d-flex align-items-center"><i class="icofont-business-man"></i> Sub dirección Académica </span> <i class="icofont-caret-down ml-auto"></i></a>
 					<ul class="collapse list-unstyled" id="pageSubAcademico">
 						<li>
 							<a href="ciclos.php"><i class="icofont-folder-open"></i> Ciclos</a>
@@ -36,10 +33,10 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 							<a href="mesacademico.php"><i class="icofont-folder-open"></i> Mes académico</a>
 						</li>
 						<li>
-							<a href="matrícula.php"><i class="icofont-book-mark"></i> Matrícular alumno</a>
+							<a href="matricula.php"><i class="icofont-book-mark"></i> Matrícular alumno</a>
 						</li>
 						<li>
-							<a href="tramites.php"><i class="icofont-money"></i> Pagos</a>
+							<a href="pagos.php"><i class="icofont-money"></i> Pagos</a>
 						</li>
 						<li>
 							<a href="tramites.php"><i class="icofont-attachment"></i> Trámite documentario</a>
@@ -50,16 +47,53 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 					</ul>
 				</li>
 				<li>
-						<a href="reportes.php" class="d-flex align-items-center"><i class="icofont-ui-home"></i> Sede Huancas</span></a>
+					<a href="#pageRegistros" data-toggle="collapse" aria-expanded="false" class="d-flex align-items-center"><i class="icofont-pen-holder"></i> Área de registro </span> <i class="icofont-caret-down ml-auto"></i></a>
+					<ul class="collapse list-unstyled" id="pageRegistros">
+						<li>
+							<a href="ciclos.php"><i class="icofont-folder-open"></i> Ciclos</a>
+						</li>
+						<li>
+							<a href="mesacademico.php"><i class="icofont-folder-open"></i> Mes académico</a>
+						</li>
+						<li>
+							<a href="matricula.php"><i class="icofont-book-mark"></i> Matrícular alumno</a>
+						</li>
+						<li>
+							<a href="pagos.php"><i class="icofont-money"></i> Pagos</a>
+						</li>
+						<li>
+							<a href="tramites.php"><i class="icofont-attachment"></i> Trámite documentario</a>
+						</li>
+						<li>
+								<a href="seguimiento.php"><i class="icofont-attachment"></i> Seguimiento académico</a>
+						</li>
+					</ul>
 				</li>
 				<li>
-						<a href="configuraciones.php" class="d-flex align-items-center"><i class="icofont-ui-home"></i> Sede Tarma</span></a>
+						<a href="#pageHuancas" data-toggle="collapse" aria-expanded="false" class="d-flex align-items-center"><i class="icofont-ui-home"></i> Sede Huancas</span> <i class="icofont-caret-down ml-auto"></i></a>
+					<ul class="collapse list-unstyled" id="pageHuancas">
+						<li>
+							<a href="ciclos.php"><i class="icofont-folder-open"></i> Ciclos</a>
+						</li>
+						<li>
+							<a href="mesacademico.php"><i class="icofont-folder-open"></i> Mes académico</a>
+						</li>
+						<li>
+							<a href="matricula.php"><i class="icofont-book-mark"></i> Matrícular alumno</a>
+						</li>
+						<li>
+							<a href="pagos.php"><i class="icofont-money"></i> Pagos</a>
+						</li>
+						<li>
+							<a href="tramites.php"><i class="icofont-attachment"></i> Trámite documentario</a>
+						</li>
+						<li>
+								<a href="seguimiento.php"><i class="icofont-attachment"></i> Seguimiento académico</a>
+						</li>
+					</ul>
 				</li>
-				<li <?php if($nomArchivo =='docente.php') echo 'class="active"'; ?>>
-						<a href="docente.php" class="d-flex align-items-center"><i class="icofont-man-in-glasses"></i> Docente</span></a>
-				</li>
-				<li <?php if($nomArchivo =='alumnado.php') echo 'class="active"'; ?>>
-						<a href="alumnado.php" class="d-flex align-items-center"><i class="icofont-boy"></i> Alumnado</span></a>
+				<li>
+						<a href="#" class="d-flex align-items-center"><i class="icofont-ui-home"></i> Sede Tarma</span></a>
 				</li>
 				<li <?php if($nomArchivo =='configuraciones.php') echo 'class="active"'; ?>>
 						<a href="configuraciones.php" class="d-flex align-items-center"><i class="icofont-ui-settings"></i> Configuraciones</span></a>
@@ -76,8 +110,8 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 		</button>
 										
 		<a class="navbar-brand" href="#!" id="btnBrand">
-			<img src="images/ceid_logo.png" width="auto" height="35" class="d-inline-block align-top" alt=""> <!-- -->
-			Centro de Idiomas - UNCP
+			<img src="images/logoceid2.png?v=1.1" width="auto" height="45" class="d-inline-block align-top" alt=""> <!-- -->
+			<span class="d-none">Centro de Idiomas - UNCP</span>
 		</a>
 		<button class="btn btn-outline-light d-inline-block d-lg-none ml-auto px-2" id="btnSubNavegacion" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<i class="icofont-caret-down"></i>

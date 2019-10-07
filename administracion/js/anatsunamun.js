@@ -43,3 +43,8 @@
 	function mostrarInfo( titulo, mensaje ){
 		$('#toastInfoTitle').text(`¡${titulo}!`); $('#toastInfo').text(mensaje); $('#tostadaInfo').toast('show');
 	} 
+
+	function pantallaOver(tipo) {
+		if(tipo){$('#overlay').css('display', 'initial');}
+		else{ $('#overlay').css('display', 'none'); }
+	}

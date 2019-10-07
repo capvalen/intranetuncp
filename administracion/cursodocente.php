@@ -31,8 +31,9 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 	inner join alumno a on a.Alu_Codigo = ra.Alu_Codigo
 	inner join seccion se on se.Sec_Codigo = ra.Sec_Codigo 
 	inner join onota no on no.Reg_Codigo = ra.Reg_Codigo
-	WHERE ra.`Sec_Codigo` = '{$_GET['cursor']}' and se.Emp_Codigo='{$_COOKIE['ckidUsuario']}' order by Alu_Apellido asc ; ";
-	//
+	WHERE ra.`Sec_Codigo` = '{$_GET['cursor']}' order by Alu_Apellido asc ; ";
+	// and se.Emp_Codigo='{$_COOKIE['ckidUsuario']}' 
+	
 	$resultadoCursos=$esclavo->query($sqlCursos); $i=1; ?>
 
 <div id="content" class="px-5 pt-5">

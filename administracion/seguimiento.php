@@ -21,7 +21,7 @@
 	<!-- Contenido de la Página  -->
 
 		
-	<h2 class="d-print-none"><i class="icofont-people"></i> Seguimiento académico</h2>
+	<h2 class="d-print-none mt-3"><i class="icofont-people"></i> Seguimiento académico</h2>
 	
 	<div class="card mb-3 col-6 d-print-none">
 		<div class="card-body">
@@ -57,7 +57,7 @@
 			inner join mesacademico ma on ma.Mes_Codigo = s.Mes_Codigo
 			inner join horarioclases h on h.Hor_Codigo = s.Hor_Codigo
 			inner join onota ono on ono.Reg_Codigo = ra.Reg_Codigo
-			where Alu_Codigo='{$rowAlumno['Alu_Codigo']}' ;"; //  and Sec_Detalle = 'Habilitado'
+			where Alu_Codigo='{$rowAlumno['Alu_Codigo']}' order by Sec_nrociclo, sec_seccion asc ;"; //  and Sec_Detalle = 'Habilitado'
 	?> 
 
 	<div class="">
@@ -196,7 +196,7 @@
 
 $('#btnBuscarAlumno').click(function () {
 	if( $('#txtBusquedaAlumno').val()!='' ){
-		window.location.href = 'alumnado.php?cursor='+$('#txtBusquedaAlumno').val();
+		window.location.href = 'seguimiento.php?cursor='+$('#txtBusquedaAlumno').val();
 	}
 })
 </script>

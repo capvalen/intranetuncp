@@ -6,7 +6,8 @@
 include 'conexionInfocat.php';
 $local="/";
 
-$sqlCons= "SELECT *, concat(lower(Emp_Apellido), ', ',lower(Emp_Nombre)) as nomCompleto  FROM `empleado` where Emp_NroDocumento = '{$_POST['user']}' and pwd = '{$_POST['pws']}'; ";
+$sqlCons= "SELECT lower(Emp_Nombre) as Emp_Nombre, e.Emp_Codigo, concat(lower(Emp_Apellido), ', ', lower(Emp_Nombre)) as nomCompleto, Emp_Estado FROM `usuario` u
+inner join empleado e on e.Emp_Codigo= u.Emp_Codigo where Usu_Descripcion = '{$_POST['user']}' and Usu_Pasword = '{$_POST['pws']}'; ";
 $log = mysqli_query($cadena, $sqlCons);
 //echo $sqlCons;
 $row = mysqli_fetch_array($log, MYSQLI_ASSOC);
