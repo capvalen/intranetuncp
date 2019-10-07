@@ -3,6 +3,7 @@
 CREATE TABLE `configuraciones` ( `ultAnio` VARCHAR(100) NOT NULL , `ultMes` VARCHAR(100) NOT NULL COMMENT 'considerar 1=ene,2=feb' , `fechaMaximaUpload` DATE NOT NULL ) ENGINE = InnoDB;
 INSERT INTO `configuraciones` (`ultAnio`, `ultMes`, `fechaMaximaUpload`) VALUES ('2019', '9', '2019-10-07');
 
+
 DELIMITER $$
 CREATE PROCEDURE `datosCursoCompleto`(IN `codSeccion` VARCHAR(20))
     NO SQL
@@ -13,4 +14,23 @@ SELECT s.Mes_Codigo, i.Idi_Nombre, n.Niv_Detalle, Sec_NroCiclo, Sec_Seccion, hc.
 	inner join horarioclases hc on hc.Hor_Codigo = s.Hor_Codigo
     inner join sucursal su on su.Suc_Codigo = s.Suc_Codigo
 	where Sec_Codigo = codSeccion$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE FUNCTION `proxIdPagos`() RETURNS int(11)
+    NO SQL
+BEGIN
+declare nuevoId int default concat(SUBSTRING(YEAR(CURDATE()), -2),'000001');
+
+SELECT cod_detpag+1 into nuevoId FROM `detallepago`
+where Cod_DetPag like concat(SUBSTRING(YEAR(CURDATE()), -2),'%')
+order by Cod_DetPag desc
+limit 1;
+
+
+
+return nuevoId;
+
+END$$
 DELIMITER ;
