@@ -25,7 +25,7 @@
 	
 	<div class="card mb-3 col-6 d-print-none">
 		<div class="card-body">
-			<h6 class="card-subtitle mb-2 text-muted">Filtro de búsqueda por D.N.I.:</h6>
+			<h6 class="card-subtitle mb-2 text-muted">Filtro de búsqueda por Nombre/D.N.I. Alumno:</h6>
 			<div class="row">
 					<div class="col">
 						<input type="text" class="form-control" id="txtBusquedaAlumno">
@@ -38,9 +38,15 @@
 
 		</div>
 	</div>
-	
-	<?php if(isset($_GET['cursor'])){ 
-		$sqlAlumno = "SELECT lower(a.Alu_Apellido) as Alu_Apellido, lower(a.Alu_Nombre) as Alu_Nombre, a.Alu_Codigo FROM `alumno` a where Alu_NroDocumento = '{$_GET['cursor']}'";
+	<?php if(isset($_GET['cursor'])){
+	$sqlAlumno = "SELECT lower(a.Alu_Apellido) as Alu_Apellido, lower(a.Alu_Nombre) as Alu_Nombre, a.Alu_Codigo FROM `alumno` a where Alu_NroDocumento = '{$_GET['cursor']}'";
+	}else if(isset($_GET['patron'])){
+		$sqlAlumno = "SELECT lower(a.Alu_Apellido) as Alu_Apellido, lower(a.Alu_Nombre) as Alu_Nombre, a.Alu_Codigo FROM `alumno` a where Alu_Codigo = '{$_GET['patron']}'";
+	}
+	?>
+
+	<?php if(isset($_GET['cursor']) || isset($_GET['patron']) ){ 
+		
 		
 		$resultadoAlumno=$cadena->query($sqlAlumno);
 		if($resultadoAlumno->num_rows>=1){
@@ -186,19 +192,61 @@
 			</div>
 		</div>
 	</div>
-		
+
+<div class="modal fade " id="modalBuscarAlumno" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Alumnos coincidentes</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <table class="table table-hover">
+       <thead>
+        <tr>
+          <th>N°</th>
+          <th>Apellidos y Nombres</th>
+          <th>D.N.I.</th>
+        </tr>
+       </thead>
+       <tbody>
+        
+       </tbody>
+       </table>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
 <!-- Fin de #wrapper  -->
 </div>
 
 <?php include "php/footer.php"; ?>
 
 <script>
-
+$('#txtBusquedaAlumno').keyup(function (e) {
+  if (e.which ==13){ $('#btnBuscarAlumno').click(); }
+});
 $('#btnBuscarAlumno').click(function () {
-	if( $('#txtBusquedaAlumno').val()!='' ){
-		window.location.href = 'seguimiento.php?cursor='+$('#txtBusquedaAlumno').val();
-	}
+	pantallaOver(true);
+  if($('#txtBusquedaAlumno').val()!=''){
+    if( $.isNumeric($('#txtBusquedaAlumno').val()) ){
+      window.location.href = 'seguimiento.php?cursor='+$('#txtBusquedaAlumno').val();
+    }else{ 
+      //Buscar texto
+      $.ajax({url: 'php/buscarAlumnosApellido2.php', type: 'POST', data: {texto:$('#txtBusquedaAlumno').val() }}).done(function (resp) {
+        $('#modalBuscarAlumno tbody').children().remove();
+        $('#modalBuscarAlumno tbody').append(resp);
+        console.log(resp)
+        pantallaOver(false)
+        $('#modalBuscarAlumno').modal('show')
+      })
+    }
+  }
 })
 </script>
-  </body>
+	</body>
 </html>

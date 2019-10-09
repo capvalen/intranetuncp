@@ -18,7 +18,12 @@
 if(isset($_GET['cursor'])){
   $sqlAlumno = "SELECT `Alu_Codigo`, lower(`Alu_Nombre`) as Alu_Nombre, lower(`Alu_Apellido`) as Alu_Apellido, `Alu_NroDocumento`, date_format(`Alu_FechaNacimiento`, '%d/%m/%Y') as Alu_FechaNacimiento FROM `alumno` where Alu_NroDocumento = '{$_GET['cursor']}';";
   $resultadoAlumno= $cadena->query($sqlAlumno);
+}else if( isset($_GET['patron'])){
+  $sqlAlumno = "SELECT `Alu_Codigo`, lower(`Alu_Nombre`) as Alu_Nombre, lower(`Alu_Apellido`) as Alu_Apellido, `Alu_NroDocumento`, date_format(`Alu_FechaNacimiento`, '%d/%m/%Y') as Alu_FechaNacimiento FROM `alumno` where Alu_Codigo = '{$_GET['patron']}';";
+  $resultadoAlumno= $cadena->query($sqlAlumno);
 }
+
+
 ?>
 
 <div id="content" class="container-fluid pt-5">
@@ -30,13 +35,13 @@ if(isset($_GET['cursor'])){
 		<div class="card-body pt-1">
 		<p class="card-text m-0"><small class="text-muted"><i class="icofont-filter"></i> Filtro</small></p>
 			<div class="form-inline">
-      <label class="mr-3" for=""><small>D.N.I Alumno:</small></label>
-      <input type="text ml-3" class="form-control" id="txtAlumnoDni">
-      <button class="btn btn-outline-primary ml-3" id="btnBuscarDniAlumno"><i class="icofont-search-1"></i> Buscar</button>
+      <label class="mr-3" for=""><small>Nombre/D.N.I Alumno:</small></label>
+      <input type="text" class="form-control mr-3" id="txtAlumnoDni">
+      <button class="btn btn-outline-primary" id="btnBuscarDniAlumno"><i class="icofont-search-1"></i> Buscar</button>
 		</div>
 	</div>
   </div>
-  <?php if(isset($_GET['cursor'])){ ?>
+  <?php if(isset($_GET['cursor']) || isset($_GET['patron'])){ ?>
   <div class="row mt-3">
     <div class="col-4">
       <div class="card">
@@ -95,14 +100,57 @@ if(isset($_GET['cursor'])){
   </div>
 </div>
 
+<div class="modal fade " id="modalBuscarAlumno" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Alumnos coincidentes</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <table class="table table-hover">
+       <thead>
+        <tr>
+          <th>N°</th>
+          <th>Apellidos y Nombres</th>
+          <th>D.N.I.</th>
+        </tr>
+       </thead>
+       <tbody>
+        
+       </tbody>
+       </table>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+
 <?php include "php/footer.php"; ?>
 
 <script>
 $('#txtAlumnoDni').keyup(function (e) {
   if (e.which ==13){ $('#btnBuscarDniAlumno').click(); }
-})
+});
 $('#btnBuscarDniAlumno').click(function () {
-  window.location="pagos.php?cursor="+$('#txtAlumnoDni').val();
+  pantallaOver(true);
+  if($('#txtAlumnoDni').val()!=''){
+    if( $.isNumeric($('#txtAlumnoDni').val()) ){
+      window.location="pagos.php?cursor="+$('#txtAlumnoDni').val();
+    }else{ 
+      //Buscar texto
+      $.ajax({url: 'php/buscarAlumnosApellido.php', type: 'POST', data: {texto:$('#txtAlumnoDni').val() }}).done(function (resp) {
+        $('#modalBuscarAlumno tbody').children().remove();
+        $('#modalBuscarAlumno tbody').append(resp);
+        console.log(resp)
+        pantallaOver(false)
+        $('#modalBuscarAlumno').modal('show')
+      })
+    }
+  }
 });
 $('.btnAddPagoDyno').click(function () {
   pantallaOver(true);

@@ -57,14 +57,7 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 		
 	</div>
 	<p>Listado de alumnos inscritos:</p>
-	<?php if($resultadoCursos->num_rows >0){ ?>
-	<div class="card">
-		<div class="card-body d-flex justify-content-end">
-			<button class="btn btn-outline-primary"><i class="icofont icofont-save"></i> Guardar cambios</button>
-		</div>
-	</div>
-	<?php }?>
-	
+		
 	<div class="container">
 		<table class="table table-hover">
 			<thead>

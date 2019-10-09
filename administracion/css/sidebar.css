@@ -235,7 +235,9 @@ a.article:hover {
 
 .show li a:hover{margin: 0px!important;}
 
-
+.fixed-top{
+    z-index: 997;
+}
 #overlay {
     position: fixed; /* Sit on top of the page content */
     display: none; /* Hidden by default */
