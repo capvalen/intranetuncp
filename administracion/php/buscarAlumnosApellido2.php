@@ -2,7 +2,7 @@
 include 'conexionInfocat.php';
 
 $sql="SELECT `Alu_Codigo`, `Alu_Nombre`, `Alu_Apellido`, `Alu_NroDocumento` FROM `alumno` 
-where Alu_Apellido like concat('{$_POST['texto']}','%') order by Alu_Apellido, Alu_Nombre asc  ;";
+where concat(Alu_Apellido, ' ',Alu_Nombre) like concat('{$_POST['texto']}','%') order by Alu_Apellido, Alu_Nombre asc  ;";
 //echo $sql;
 $i=1;
 $resultado=$cadena->query($sql);

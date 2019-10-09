@@ -34,3 +34,18 @@ return nuevoId;
 
 END$$
 DELIMITER ;
+
+
+DELIMITER $$
+CREATE FUNCTION `returnPensionCurso`(`idioma` VARCHAR(10), `nivel` VARCHAR(10)) RETURNS int(11)
+    NO SQL
+BEGIN
+
+declare pension int;
+
+select n.nxi_Pension into pension from nivelxidioma n where n.idi_Codigo = idioma and n.Niv_Codigo = nivel;
+
+return pension ;
+
+END$$
+DELIMITER ;

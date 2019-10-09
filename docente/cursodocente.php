@@ -68,6 +68,12 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 
 <div id="content" class="px-5 pt-5">
 	<!-- Contenido de la Página  -->
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="#!" onClick="goBack()">Ciclos</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Curso</li>
+		</ol>
+	</nav>
 	<h3>Datos del curso</h3>
 	<div class="row">
 		<div class="col">
@@ -89,11 +95,18 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 	<p>Listado de alumnos inscritos:</p>
 	<?php if($resultadoCursos->num_rows >0){ ?>
 	<div class="card">
-		<div class="card-body d-flex justify-content-end">
+		<div class="card-body d-flex justify-content-between">
+			<a href="#!" class="btn btn-outline-primary" onClick='goBack();'><i class="icofont-swoosh-left"></i> Volver a Mis cursos</a>
 			<button class="btn btn-outline-primary" id="btnGuardarNotas"><i class="icofont icofont-save"></i> Guardar cambios</button>
 		</div>
 	</div>
-	<?php }?>
+	<?php }else{ ?>
+		<div class="card">
+		<div class="card-body d-flex justify-content-between">
+			<a href="#!" class="btn btn-outline-primary" onClick='goBack();'><i class="icofont-swoosh-left"></i> Volver a Mis cursos</a>
+		</div>
+	</div>
+	<?php } ?>
 	
 	<div class="container">
 		<table class="table table-hover">
@@ -253,6 +266,9 @@ $('#btnGuardarNotas').click(function () {
 function pantallaOver(tipo) {
 	if(tipo){$('#overlay').css('display', 'initial');}
 	else{ $('#overlay').css('display', 'none'); }
+}
+function goBack() {
+  window.history.back();
 }
 </script>
   </body>

@@ -34,7 +34,7 @@
 
 		
 	<h2 class="d-print-none"><i class="icofont-settings-alt"></i> Mes académico</h2>
-<?php if(!isset($_GET['year']) && !isset($_GET['nuevo']) && !isset($_GET['edit']) ): ?>
+<?php if( !isset($_GET['nuevo']) && !isset($_GET['edit']) ): ?>
 	<div class="card mb-3 col-6 d-print-none">
 		<div class="card-body">
 			<h6 class="card-subtitle mb-2 text-muted">Año académico:</h6>

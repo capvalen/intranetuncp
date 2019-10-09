@@ -38,6 +38,12 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 
 <div id="content" class="px-5 pt-5">
 	<!-- Contenido de la Página  -->
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="#!" onClick="goBack()">Ciclos</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Curso</li>
+		</ol>
+	</nav>
 	<h3>Datos del curso</h3>
 	<div class="row">
 		<div class="col">
@@ -56,6 +62,16 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 		</div>
 		
 	</div>
+
+	<?php if(isset($_GET['cursor'])){ ?>
+	<div class="card">
+		<div class="card-body">
+			<button class="btn btn-outline-primary" id="btnAsignarAlumno"><i class="icofont-badge"></i> Asignar alumno</button>
+		</div>
+	</div>
+	<?php } ?>
+
+
 	<p>Listado de alumnos inscritos:</p>
 		
 	<div class="container">
@@ -159,6 +175,58 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 			</div>
 		</div>
 	</div>
+	<div class="modal fade" id="modalAsignarAlumno" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Asignar nuevo alumno al curso</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div id="primeraParte">
+						<p>Primero, ubique al alumno por D.N.I o por sus Apellidos:</p>
+						<input type="text" class="form-control text-center" autocomplete='off' id="txtUbicarAlumno">
+						<div class="d-flex justify-content-center mt-2">
+							<button class="btn btn-outline-success " id="btnUbicarAlumno"><i class="icofont-search-1"></i> Ubicar alumno</button>
+						</div>
+					</div>
+					<div class='d-none ' id="segundaParte">
+						<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>N°</th>
+								<th>Apellidos y Nombres</th>
+								<th>D.N.I.</th>
+							</tr>
+						</thead>
+						<tbody>
+							
+						</tbody>
+						</table>
+					</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<div class="modal fade" id="modalChosenAlumno" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Asignar nuevo alumno al curso</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Desea realmente matricular al alumno: <strong class="text-capitalize" id="txtNombreChosen"></strong></p>
+					<button class="btn btn-outline-primary" id="btnInsertChosen"><i class="icofont-contact-add"></i> Sí, matricular</button>
+				</div>
+				
+			</div>
+		</div>
+	</div>
 		
 <!-- Fin de #wrapper  -->
 </div>
@@ -193,6 +261,89 @@ $('.txtNotas').change(function () {
 function n(n){
     return n > 9 ? "" + n: "0" + n;
 }
+$('#btnAsignarAlumno').click(function () {
+	$('#primeraParte').removeClass('d-none');
+	$('#segundaParte').addClass('d-none');
+	$('#txtUbicarAlumno').val('')
+
+	$('#modalAsignarAlumno').modal('show');
+});
+$('#txtUbicarAlumno').keyup(function (e) {
+	if (e.which ==13){ $('#btnUbicarAlumno').click(); }
+})
+$('#btnUbicarAlumno').click(function () {
+	if($('#txtUbicarAlumno').val()!=""){
+	pantallaOver(true);
+	$('#segundaParte tbody').children().remove();
+
+	animateCSS('#primeraParte', 'fadeOut', function () {
+		$.ajax({url: 'php/encontrarAlumnosCoincidentes.php', type: 'POST', data:{texto: $('#txtUbicarAlumno').val() }}).done(function (resp) {
+		//console.log(resp)
+		pantallaOver(false);
+			var datos = JSON.parse(resp); var docDni ='';
+			if(datos.length>1){
+				$.each(datos, function (index, elem) {
+					if(elem.Alu_NroDocumento == null ){ docDni='';}else{docDni = elem.Alu_NroDocumento}
+					$('#segundaParte tbody').append(`<tr>
+					<td> ${index+1} </td>
+					<td class='text-capitalize tdNombre'> ${elem.Alu_Apellido.toLowerCase() +', '+ elem.Alu_Nombre.toLowerCase()}</td>
+					<td>${docDni}</td>
+					<td><button class="btn btn-outline-success btn-sm btnElegirAlumno" data-id="${elem.Alu_Codigo}"><i class="icofont-ui-rate-add"></i></button></td>
+				</tr>`)
+				});
+
+			}
+		});
+		$('#primeraParte').addClass('d-none');
+		$('#segundaParte').addClass('animated fadeIn').removeClass('d-none');
+		pantallaOver(false);
+	})
+	}
+});
+
+function animateCSS(element, animationName, callback) {
+    const node = document.querySelector(element)
+    node.classList.add('animated', animationName)
+
+    function handleAnimationEnd() {
+        node.classList.remove('animated', animationName)
+        node.removeEventListener('animationend', handleAnimationEnd)
+
+        if (typeof callback === 'function') callback()
+    }
+
+    node.addEventListener('animationend', handleAnimationEnd)
+}
+$('tbody').on('click', '.btnElegirAlumno', function () {
+	$('#txtNombreChosen').text( $(this).parent().parent().find('.tdNombre').text())
+	$('#btnInsertChosen').attr('data-id', $(this).attr('data-id'));
+	$('#modalAsignarAlumno').modal('hide');
+	$('#modalChosenAlumno').modal('show');
+});
+function goBack() {
+  window.history.back();
+}
+<?php if (isset($_GET['cursor'])){ ?>
+$('#btnInsertChosen').click(function () {
+	$.ajax({url: 'php/insertarAlumnoaCurso.php', type: 'POST', data: {codSec: '<?= $_GET['cursor'];?>', codAlu: $('#btnInsertChosen').attr('data-id')}}).done(function (resp) { //console.log(resp);
+		$('#modalChosenAlumno').modal('show');
+		if(resp=='todo ok'){
+			$('#h1Bien').text('Alumno registrado al curso');
+				$('#modalGuardadoCorrecto').modal('hide');
+		}else if(resp=='ya registrado'){
+			$('#h1Advertencia').text('El alumno ya se encontraba registrado en el curso ' + $('#spanCursoConf').text());
+			$('#modalAdvertencia').modal('show');
+		}else{
+			$('#h1Advertencia').text('Error desconocido, comuníquelo al área de soporte');
+			$('#modalAdvertencia').modal('show');
+		}
+		
+	})
+})
+$('#modalGuardadoCorrecto').on('hidden.bs.modal', function (e) {
+  location.reload();
+});
+<?php } ?>
 </script>
   </body>
 </html>

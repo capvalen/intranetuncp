@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="css/icofont.min.css">
 <link rel="stylesheet" href="css/bootstrap-select.min.css?version=0.4" >
 <link rel="stylesheet" href="css/bootstrap-material-datetimepicker.css?version=0.1" >
+<link rel="stylesheet" href="css/animate.css?version=0.0" >
 
 
 <title>CEID Intranet</title>
