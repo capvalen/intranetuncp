@@ -70,8 +70,8 @@ if( $resultadoCursos->num_rows>0){
               </thead>
               <tbody>
               <?php $i=1; while($rowPagos = $resultadoPagos->fetch_assoc()){ ?>
-                <tr>
-                  <td><?= $i; ?></td>
+                <tr data-id="<?= $rowPagos['Cod_DetPag']; ?>">
+                  <td><button class="btn btn-outline-danger btn-sm border-0 btnBorrarPay" ><i class="icofont-close"></i></button> <?= $i; ?></td>
                   <td><?= $rowPagos['Cod_DetPag']; ?></td>
                   <td><?= $rowPagos['Pag_Detalle']; ?></td>
                   <td><?= $rowPagos['Cod_Recibo']; ?></td>
