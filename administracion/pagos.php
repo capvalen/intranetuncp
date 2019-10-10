@@ -206,7 +206,7 @@ $('#btnInsertPay').click(function () {
 $('#modalGuardadoCorrecto').on('hidden.bs.modal', function (e) {
   location.reload();
 });
-<?php if(isset($_GET['cursor'])){ ?>
+<?php if(isset($_GET['cursor']) || isset($_GET['patron'])){ ?>
   
 $('.btnBorrarPay').click(function () {
   $('#btnDeletePay').attr('data-id', $(this).parent().parent().attr('data-id'));
