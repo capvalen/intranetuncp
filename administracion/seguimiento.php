@@ -62,8 +62,9 @@
 			inner join empleado e on e.Emp_Codigo = s.Emp_Codigo
 			inner join mesacademico ma on ma.Mes_Codigo = s.Mes_Codigo
 			inner join horarioclases h on h.Hor_Codigo = s.Hor_Codigo
-			inner join onota ono on ono.Reg_Codigo = ra.Reg_Codigo
-			where Alu_Codigo='{$rowAlumno['Alu_Codigo']}' order by Sec_nrociclo, sec_seccion asc ;"; //  and Sec_Detalle = 'Habilitado'
+			left join onota ono on ono.Reg_Codigo = ra.Reg_Codigo
+			where Alu_Codigo='{$rowAlumno['Alu_Codigo']}' 
+			order by i.Idi_Nombre, year(STR_TO_DATE(s.Mes_Codigo, '%m%Y')), month(STR_TO_DATE(s.Mes_Codigo, '%m%Y')) asc ;"; //  and Sec_Detalle = 'Habilitado'
 	?> 
 
 	<div class="">
@@ -109,7 +110,11 @@
 						<?php } //fin de while
 						}else{ ?>
 						<div class="row">
+						<?php if(trim($rowDetalles['AlSe_Condicion'])=='Normal'){ ?>
 							<p>Sin pagos</p>
+						<?php }else{ ?>
+							<p class='text-capitalize'><strong><?= $rowDetalles['AlSe_Condicion']; ?></strong></p>
+						<?php } ?>
 						</div>
 						<?php } ?>
 					
