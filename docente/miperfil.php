@@ -83,7 +83,8 @@ $('#btnActualizarPerfil').click(function () {
 	if($('#txtCorreo').val()!='' ){ datos.push({correo: $('#txtCorreo').val() }); $queActualiza+=' Correo electrónico.'; }else{ datos.push({correo: '' });  }
 	$.ajax({url: 'php/updatePerfil.php', type: 'POST', data:{datos: datos}}).done(function (resp) { console.log(resp)
 		if(resp == 'todo ok'){
-			mostrarInfo('Datos actualizados', `Acaba de actualizar correctamente los siguientes datos: ${$queActualiza}`);
+			$('#h1Advertencia').text(`Acaba de actualizar correctamente los siguientes datos: ${$queActualiza}`);
+			$('#modalAdvertencia').modal('show');
 		}
 	})
 });
@@ -91,11 +92,13 @@ $('#btnActualizarPwd').click(function () {
 	if($('#txtPwd1').val()== $('#txtPwd2').val() && $('#txtPwd1').val() !=''){
 		$.ajax({url: 'php/updatePwd.php', type: 'POST', data:{'pwd': $('#txtPwd2').val()}}).done(function (resp) { console.log(resp)
 			if(resp == 'todo ok'){
-				mostrarInfo('Datos actualizados', `Su contraseña se actualizó correctamente`);
+				$('#h1Advertencia').text('Su contraseña se actualizó correctamente');
+				$('#modalAdvertencia').modal('show');
 			}
 		})
 	}else{
-		mostrarError('Advertencia', 'Las contraseñas ingresadas no son iguales o no puede estar vacío.');
+		$('#h1Advertencia').text('Las contraseñas ingresadas no son iguales o no puede estar vacío.');
+		$('#modalAdvertencia').modal('show');
 	}
 })
 </script>

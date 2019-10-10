@@ -19,3 +19,26 @@
     <div class="toast-body" id="toastInfo">
     </div>
 </div>
+<!-- Modal para decir que todo guardo bien  -->
+<div class="modal fade" id="modalAdvertencia" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Aviso</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img src="images/penuse.png?ver=1.1" class="img-fluid" alt=""><br>
+		  	<div class="d-flex justify-content-center">
+          <h5 class="text-center text-muted d-block" id="h1Advertencia"></h5>
+        </div>
+        <div class="row d-flex justify-content-center">
+          <button class="btn btn-outline-primary" data-dismiss="modal" ><i class="icofont-check-alt"></i> Ok</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>

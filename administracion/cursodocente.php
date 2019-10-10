@@ -65,12 +65,14 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 
 	<?php if(isset($_GET['cursor'])){ ?>
 	<div class="card">
-		<div class="card-body">
+		<div class="card-body d-flex justify-content-between">
 			<button class="btn btn-outline-primary" id="btnAsignarAlumno"><i class="icofont-badge"></i> Asignar alumno</button>
+			<?php if($resultadoCursos->num_rows >0){ ?>
+				<button class="btn btn-outline-primary" id="btnGuardarNotas"><i class="icofont icofont-save"></i> Guardar cambios</button>
+			<?php } ?>
 		</div>
 	</div>
 	<?php } ?>
-
 
 	<p>Listado de alumnos inscritos:</p>
 		
@@ -91,9 +93,9 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 			<tbody>
 				<?php if($resultadoCursos->num_rows >0){
 				while($rowCursos =$resultadoCursos ->fetch_assoc()){ ?>
-				<tr>
+				<tr class="rowAlumno" data-alu="<?= $rowCursos['Reg_Codigo']; ?>">
 					<td><?= $i;?></td>
-					<td><?= $rowCursos['Alu_Codigo'];?></td>
+					<td><button class="btn btn-outline-danger btn-sm border-0 btnRemoveStudent"><i class="icofont-close"></i></button> <?= $rowCursos['Alu_Codigo'];?></td>
 					<td class="text-capitalize"><?= $rowCursos['Alu_Apellido'];?></td>
 					<td class="text-capitalize"><?= $rowCursos['Alu_Nombre'];?></td>
 					<td><input type="number" class="form-control text-center txtNotas" id="txtNota1" max="20" min="0" step="1" autocomplete="nope" value="<?php if($rowCursos['not_1']==null){ echo 0;} else {echo $rowCursos['not_1'];} ?>"></td>
@@ -220,8 +222,25 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 					</button>
 				</div>
 				<div class="modal-body">
-					<p>Desea realmente matricular al alumno: <strong class="text-capitalize" id="txtNombreChosen"></strong></p>
+					<p>¿Desea realmente matricular al alumno: <strong class="text-capitalize" id="txtNombreChosen"></strong>?</p>
 					<button class="btn btn-outline-primary" id="btnInsertChosen"><i class="icofont-contact-add"></i> Sí, matricular</button>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="modalRemoveAlumno" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title text-danger">Retirar alumno</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>¿Desea realmente retirar al alumno: <strong class="text-capitalize" id="txtNombreRemove"></strong> del curso?</p>
+					<button class="btn btn-outline-danger float-right" id="btnRemoveChosen"><i class="icofont-trash"></i> Sí, retirar</button>
 				</div>
 				
 			</div>
@@ -281,7 +300,7 @@ $('#btnUbicarAlumno').click(function () {
 		//console.log(resp)
 		pantallaOver(false);
 			var datos = JSON.parse(resp); var docDni ='';
-			if(datos.length>1){
+			if(datos.length>0){
 				$.each(datos, function (index, elem) {
 					if(elem.Alu_NroDocumento == null ){ docDni='';}else{docDni = elem.Alu_NroDocumento}
 					$('#segundaParte tbody').append(`<tr>
@@ -300,6 +319,25 @@ $('#btnUbicarAlumno').click(function () {
 	})
 	}
 });
+<?php if($resultadoCursos->num_rows >0){ ?>
+$('#btnGuardarNotas').click(function () {
+	pantallaOver(true);
+	var alumnoRegistro = [];
+	$.each( $('.rowAlumno'), function (index, elem ) {
+		alumnoRegistro.push( {'registro': $(elem).attr('data-alu'), n1: $(elem).find('#txtNota1').val(), n2: $(elem).find('#txtNota2').val(), n3: $(elem).find('#txtNota3').val() });
+	});
+	//console.log(alumnoRegistro);
+	$.ajax({url: 'php/insertarPadron.php', type: 'POST', data: {padron: alumnoRegistro }}).done(function (resp) {
+		console.log(resp);
+		pantallaOver(false);
+		if(resp=='ok'){
+			$('#toastInfoTitle').text('¡Guardado exitoso!'); $('#toastInfo').text("Acaba de actualizar correctamente su padrón de notas."); $('#tostadaInfo').toast('show');
+		}else{
+			$('#toastAdverTitle').text('Advertencia'); $('#toastError').text("Hubo un error al actualizar sus notas, es posible que no se hayan guardado los cambios."); $('#tostadaError').toast('show');
+		}
+	})
+});
+<?php } ?>
 
 function animateCSS(element, animationName, callback) {
     const node = document.querySelector(element)
@@ -326,10 +364,10 @@ function goBack() {
 <?php if (isset($_GET['cursor'])){ ?>
 $('#btnInsertChosen').click(function () {
 	$.ajax({url: 'php/insertarAlumnoaCurso.php', type: 'POST', data: {codSec: '<?= $_GET['cursor'];?>', codAlu: $('#btnInsertChosen').attr('data-id')}}).done(function (resp) { //console.log(resp);
-		$('#modalChosenAlumno').modal('show');
+		$('#modalChosenAlumno').modal('hide');
 		if(resp=='todo ok'){
 			$('#h1Bien').text('Alumno registrado al curso');
-				$('#modalGuardadoCorrecto').modal('hide');
+			$('#modalGuardadoCorrecto').modal('show');
 		}else if(resp=='ya registrado'){
 			$('#h1Advertencia').text('El alumno ya se encontraba registrado en el curso ' + $('#spanCursoConf').text());
 			$('#modalAdvertencia').modal('show');
@@ -342,6 +380,26 @@ $('#btnInsertChosen').click(function () {
 })
 $('#modalGuardadoCorrecto').on('hidden.bs.modal', function (e) {
   location.reload();
+});
+$('.btnRemoveStudent').click(function () {
+	$('#btnRemoveChosen').attr( 'data-alu', $(this).parent().parent().attr('data-alu'))
+	$('#modalRemoveAlumno').modal('show');
+});
+$('#btnRemoveChosen').click(function () {
+	$.ajax({url: 'php/removeAlumnoDeCurso.php', type: 'POST', data:{rege: $('#btnRemoveChosen').attr('data-alu') }}).done(function (resp) {
+		//console.log(resp);
+		$('#modalRemoveAlumno').modal('hide');
+		if(resp=='todo ok'){
+			$('#h1Advertencia').text('Alumno eliminado del curso');
+			$('#modalAdvertencia').modal('show');
+		}else{
+			$('#h1Advertencia').text('Error desconocido, comuníquelo al área de soporte');
+			$('#modalAdvertencia').modal('show');
+		}
+		$('#modalAdvertencia').on('hidden.bs.modal', function (e) {
+			location.reload();
+		});
+	})
 });
 <?php } ?>
 </script>

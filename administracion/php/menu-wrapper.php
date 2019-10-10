@@ -103,7 +103,7 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 <!-- Fin Sidebar  -->
 			
 <!--Barra de Menú-->
-<nav class="navbar navbar-expand-lg navbar-dark " style="background-color: #a35bb4">
+<nav class="navbar navbar-expand-lg navbar-dark " style="background-color: #0a121b">
 	<div class="container-fluid">
 		<button type="button" id="sidebarCollapse" class="btn btn-outline-light tieneMostrar mr-3 px-2" >
 				<i class="icofont-navigation-menu"></i>
@@ -126,8 +126,8 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 				<li class="nav-item dropdown ">
 					<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><ion-icon name="settings"></ion-icon> Opciones</a>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown07">
-						<a class="dropdown-item" href="#">Mi perfil</a>
-						<a class="dropdown-item" href="php/desconectar.php">Cerrar sesión</a>
+						<a class="dropdown-item" href="#"><i class="icofont-id"></i> Mi perfil</a>
+						<a class="dropdown-item" href="php/desconectar.php"><i class="icofont-exit"></i> Cerrar sesión</a>
 					</div>
 				</li>
 			</ul>

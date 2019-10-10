@@ -59,7 +59,7 @@ p {
     height: 100vh;
     z-index: 999;
     background: #fff; /*#7386D5;*/
-    color: #a35bb4; /*color: #fff;*/
+    color: #2d84de; /*color: #fff;*/
     transition: all 0.3s;
     overflow-y: scroll;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
@@ -73,7 +73,7 @@ p {
     height: 35px;
     line-height: 35px;
     text-align: center;
-    background: #b548c7bd;/*#7386D5;*/
+    background: #3094fb;/*#7386D5;*/
     position: absolute;
     top: 10px;
     right: 10px;
@@ -121,7 +121,7 @@ p {
 }
 
 #sidebar ul p {
-    color: #a35bb4;
+    color: #3094fb;
 	margin: 0;
 }
 
@@ -142,9 +142,9 @@ p {
 #sidebar ul li a:hover {
     /*color: #7386D5;
     background: #fff;*/
-    color: #a35bb4;
+    color: #163f73;
     /*border-bottom: solid #a35bb4 3px;*/
-		border-bottom: solid #ffba0d 2px;
+		border-bottom: solid #093380 2px;
     border-radius: 3px;
     padding: 10px;
     margin-left: 10px;
@@ -231,7 +231,7 @@ a.article:hover {
 .btn-outline-light:hover, .btn-outline-light:not(:disabled):not(.disabled):active{
     color: #a35bb4;
 }
-.dropdown-item{color: #a35bb4;}
+.dropdown-item{color: #3094fb;}
 
 .show li a:hover{margin: 0px!important;}
 

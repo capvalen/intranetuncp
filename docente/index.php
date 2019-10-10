@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>CEID UNCP - Intranet académica</title>
+  <title>Docentes - CEID UNCP - Intranet académica</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="css/icofont.min.css">
   <link rel="shortcut icon" href="images/favicon.png" >
@@ -63,8 +63,8 @@ $rowMaxUpdate = $respuestaMaxUpdate->fetch_assoc();
   </ul>
 </nav>
   <div class="container">
-    <h1 class="display-3 text-center">Docentes CEID-UNCP</h1>
-    <p class="lead text-center">Bienvenido aliado de CEID, por favor rellene sus credenciales para poder subir sus notas: </p>
+    <h1 class="display-4 text-center">Estudiar idiomas es conocer el mundo</h1>
+    <p class="lead text-center">Estimado Docente, rellene para ingresar al centro de Idiomas - UNCP: </p>
     <div class="card  col-md-4 col-sm-12 mx-auto">
       <div class="card-body ">
         <div class="row d-flex justify-content-center mb-3">

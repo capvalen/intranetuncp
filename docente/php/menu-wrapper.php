@@ -23,8 +23,8 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 				<li class="nav-item dropdown ">
 					<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><ion-icon name="settings"></ion-icon> Opciones</a>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown07">
-						<a class="dropdown-item" href="miperfil.php">Mi perfil</a>
-						<a class="dropdown-item" href="php/desconectar.php">Cerrar sesión</a>
+						<a class="dropdown-item" href="miperfil.php"><i class="icofont-id"></i> Mi perfil</a>
+						<a class="dropdown-item" href="php/desconectar.php"><i class="icofont-exit"></i> Cerrar sesión</a>
 					</div>
 				</li>
 			</ul>
