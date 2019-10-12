@@ -31,13 +31,16 @@ if(isset($_GET['cursor'])){
 		
 	<h2 class="d-print-none"><i class="icofont-people"></i> Pagos</h2>
 	
-	<div class="card col-6">
+	<div class="card col-8">
 		<div class="card-body pt-1">
 		<p class="card-text m-0"><small class="text-muted"><i class="icofont-filter"></i> Filtro</small></p>
 			<div class="form-inline">
       <label class="mr-3" for=""><small>Nombre/D.N.I Alumno:</small></label>
       <input type="text" class="form-control mr-3" id="txtAlumnoDni">
       <button class="btn btn-outline-primary" id="btnBuscarDniAlumno"><i class="icofont-search-1"></i> Buscar</button>
+      <?php if(isset($_GET['cursor']) || isset($_GET['patron'])){ ?>
+      <a href="seguimiento.php?cursor=<?= trim($rowAlumno['Alu_NroDocumento']); ?>" class="btn btn-outline-dark ml-3" ><i class="icofont-bulb-alt"></i> Ver seguimiento</a>
+			<?php } ?>
 		</div>
 	</div>
   </div>

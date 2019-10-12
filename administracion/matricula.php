@@ -18,6 +18,7 @@
 if(isset($_GET['cursor'])){
 	$sqlAlumno = "SELECT `Alu_Codigo`, lower(`Alu_Nombre`) as Alu_Nombre, lower(`Alu_Apellido`) as Alu_Apellido, `Alu_NroDocumento`, date_format(`Alu_FechaNacimiento`, '%d/%m/%Y') as Alu_FechaNacimiento FROM `alumno` where Alu_NroDocumento = '{$_GET['cursor']}';";
 	$resultadoAlumno= $cadena->query($sqlAlumno);
+	
 }
 ?>
 
@@ -26,23 +27,27 @@ if(isset($_GET['cursor'])){
 		
 	<h2 class="d-print-none"><i class="icofont-people"></i> Matrícula</h2>
 	
-	<div class="card col-6">
+	<div class="card col-7">
 		<div class="card-body pt-1">
 		<p class="card-text m-0"><small class="text-muted"><i class="icofont-filter"></i> Filtro alumno antiguo:</small></p>
 			<div class="form-inline">
-      <label class="mr-3" for=""><small>D.N.I Alumno:</small></label>
+      <label class="mr-3" for=""><small>D.N.I/Apellidos Alumno:</small></label>
       <input type="text ml-3" class="form-control" id="txtAlumnoDni">
       <button class="btn btn-outline-primary ml-3" id="btnBuscarDniAlumno"><i class="icofont-search-1"></i> Buscar</button>
       <button class="btn btn-outline-success ml-3" id="btnCrearAlumno"><i class="icofont-bulb-alt"></i> Crear alumno</button>
+			<?php if(isset($_GET['cursor'])){ ?>
+      <a href="seguimiento.php?cursor=<?= trim($rowAlumno['Alu_NroDocumento']); ?>" class="btn btn-outline-dark ml-3 d-none" ><i class="icofont-bulb-alt"></i> Ver seguimiento</a>
+			<?php } ?>
 		</div>
 	</div>
   </div>
-	<?php if(isset($_GET['cursor'])){ $_POST['idAlumno']=$_GET['cursor']; ?>
+	<?php if(isset($_GET['cursor'])){ $_POST['idAlumno']=$_GET['cursor'];
+		$rowAlumno = $resultadoAlumno->fetch_assoc(); $_POST['idAlumno'] = $rowAlumno['Alu_Codigo']; ?>
   <div class="row mt-3">
     <div class="col-12 my-3">
       <div class="card">
         <div class="card-body">
-        <?php if($resultadoAlumno->num_rows>0){$rowAlumno = $resultadoAlumno->fetch_assoc(); $_POST['idAlumno'] = $rowAlumno['Alu_Codigo']; ?>
+        <?php if($resultadoAlumno->num_rows>0){ ?>
           <div class="row">
 						<h5>Datos del alumno</h5>
 						<p class="d-none"><strong>Cod. Int.:</strong> <span><?= $rowAlumno['Alu_Codigo']; ?></span></p>
@@ -208,6 +213,32 @@ if(isset($_GET['cursor'])){
   </div>
 </div>
 
+<div class="modal fade" id="modalListadoAlumnos" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+		
+			<div class="modal-body">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h5 class="modal-title"><i class="icofont-mail"></i> Listado de alumnos coincidentes</h5>
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>N°</th>
+							<th>Apellidos y Nombres</th>
+							<th>D.N.I.</th>
+						</tr>
+					</thead>
+					<tbody>
+						
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>	
+
 <?php include "php/footer.php"; ?>
 
 <script>
@@ -268,7 +299,7 @@ $('#sltNiveles').on('changed.bs.select', function (e, clickedIndex, isSelected, 
 $('#btnRegistrarConfirmado').click(function () {
 	$.ajax({url: 'php/registrarAlumnoCurso.php', type: 'POST', data:{ codAlu: '<?= $rowAlumno['Alu_Codigo']; ?>', codSec: $('#btnRegistrarConfirmado').attr('data-seccion'), idIdioma: $('#btnRegistrarConfirmado').attr('data-idIdioma'), idNivel: $('#btnRegistrarConfirmado').attr('data-idNivel')  }}).done(function (resp) { console.log(resp)
 		$('#modalConfirmarRegistro').modal('hide');
-		if(resp=='todo ok'){
+		if(resp=='todo ok'){ 
 			$('#h1Bien').text('Alumno registrado al curso');
 			$('#modalGuardadoCorrecto').modal('show');
 		}else if(resp=='ya registrado'){
@@ -283,11 +314,44 @@ $('#btnRegistrarConfirmado').click(function () {
 <?php } ?>
 
 $('#txtAlumnoDni').keyup(function (e) {
-  if (e.which ==13){ $('#btnBuscarDniAlumno').click(); }
+	if (e.which ==13){ $('#btnBuscarDniAlumno').click(); }
 })
 $('#btnBuscarDniAlumno').click(function () {
-  window.location="matricula.php?cursor="+$('#txtAlumnoDni').val();
+	pantallaOver(true);
+	if($('#txtAlumnoDni').val()!=''){
+		if( $.isNumeric($('#txtAlumnoDni').val()) &&  $('#txtAlumnoDni').val().length==8 ){
+  	window.location="matricula.php?cursor="+$('#txtAlumnoDni').val();
+	}else{
+		$('#modalListadoAlumnos tbody').children().remove();
+		$.ajax({url: 'php/encontrarAlumnosCoincidentes.php', type: 'POST', data:{texto: $('#txtAlumnoDni').val() }}).done(function (resp) {
+		//console.log(resp)
+		
+		var datos = JSON.parse(resp); var docDni ='';
+		if(datos.length>0){
+			$.each(datos, function (index, elem) {
+				if(elem.Alu_NroDocumento == null ){ docDni='';}else{docDni = elem.Alu_NroDocumento}
+				$('#modalListadoAlumnos tbody').append(`<tr>
+				<td> ${index+1} </td>
+				<td class='text-capitalize tdNombre'> ${elem.Alu_Apellido.toLowerCase() +', '+ elem.Alu_Nombre.toLowerCase()}</td>
+				<td>${docDni}</td>
+				<td><button class="btn btn-outline-success btn-sm btnElegirAlumno" data-id="${elem.Alu_NroDocumento}"><i class="icofont-ui-rate-add"></i></button></td>
+			</tr>`)
+			});
+
+		}else{
+			$('#modalListadoAlumnos tbody').append(`<tr>
+				<td colspan="3"> <i class="icofont-not-allowed"></i> No existen alumnos coincidentes con lo solicitado </td>
+			</tr>`)
+		}
+		pantallaOver(false);
+		$('#modalListadoAlumnos').modal('show');
+	});
+	
+	}}
 });
+$('tbody').on('click', '.btnElegirAlumno', function () {
+	window.location="matricula.php?cursor="+$(this).attr('data-id');
+})
 $('.btnRegistrarAlumno').click(function () {
 	$('#spanCursoConf').text($(this).parent().parent().find('.tdCursoDetalle').text());
 	$('#btnRegistrarConfirmado').attr('data-seccion', $(this).attr('data-seccion') );

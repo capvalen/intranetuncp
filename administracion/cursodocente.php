@@ -180,13 +180,12 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 	<div class="modal fade" id="modalAsignarAlumno" tabindex="-1" role="dialog">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Asignar nuevo alumno al curso</h5>
+			
+				<div class="modal-body">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-				</div>
-				<div class="modal-body">
+					<h5 class="modal-title"><i class="icofont-mail"></i> Asignar nuevo alumno al curso</h5>
 					<div id="primeraParte">
 						<p>Primero, ubique al alumno por D.N.I o por sus Apellidos:</p>
 						<input type="text" class="form-control text-center" autocomplete='off' id="txtUbicarAlumno">
@@ -294,9 +293,11 @@ $('#btnUbicarAlumno').click(function () {
 	if($('#txtUbicarAlumno').val()!=""){
 	pantallaOver(true);
 	$('#segundaParte tbody').children().remove();
-
-	animateCSS('#primeraParte', 'fadeOut', function () {
-		$.ajax({url: 'php/encontrarAlumnosCoincidentes.php', type: 'POST', data:{texto: $('#txtUbicarAlumno').val() }}).done(function (resp) {
+	
+	/* animateCSS('#primeraParte', 'fadeOut', function () {
+		
+	}) */
+	$.ajax({url: 'php/encontrarAlumnosCoincidentes.php', type: 'POST', data:{texto: $('#txtUbicarAlumno').val() }}).done(function (resp) {
 		//console.log(resp)
 		pantallaOver(false);
 			var datos = JSON.parse(resp); var docDni ='';
@@ -311,12 +312,15 @@ $('#btnUbicarAlumno').click(function () {
 				</tr>`)
 				});
 
+			}else{
+				$('#segundaParte tbody').append(`<tr>
+					<td colspan="3"> <i class="icofont-not-allowed"></i> No existen alumnos coincidentes con lo solicitado </td>
+				</tr>`)
 			}
 		});
 		$('#primeraParte').addClass('d-none');
 		$('#segundaParte').addClass('animated fadeIn').removeClass('d-none');
 		pantallaOver(false);
-	})
 	}
 });
 <?php if($resultadoCursos->num_rows >0){ ?>

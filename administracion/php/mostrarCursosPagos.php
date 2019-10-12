@@ -1,5 +1,7 @@
 <div class="col">
 <?php 
+
+$meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 $sqlCursos = "SELECT i.Idi_Codigo, i.Idi_Nombre FROM `registroalumno` ra
 inner join seccion s on s.Sec_Codigo = ra.Sec_Codigo
 inner join idioma i on s.Idi_Codigo = i.Idi_Codigo
@@ -28,7 +30,7 @@ if( $resultadoCursos->num_rows>0){
       <div class="tab-pane fade <?php if($i==0){echo "show active"; } $i++; ?>" id="<?= $rowCursos['Idi_Codigo']; ?>" role="tabpanel" aria-labelledby="home-tab" >
       <div class="accordion" id="accordionExample">
       <?php
-      $sqlCiclos= "SELECT ra.*, s.Niv_Codigo, n.Niv_Detalle, s.Sec_NroCiclo, s.Idi_Codigo FROM `registroalumno` ra
+      $sqlCiclos= "SELECT ra.*, s.Niv_Codigo, n.Niv_Detalle, s.Sec_NroCiclo, s.Idi_Codigo, DATE_FORMAT(str_to_date(concat('01',s.Mes_Codigo), '%d%m%Y'), '%Y-%m-%d') as Mes_Codigo FROM `registroalumno` ra
       inner join seccion s on s.Sec_Codigo = ra.Sec_Codigo
       inner join idioma i on s.Idi_Codigo = i.Idi_Codigo
       inner join nivel n on n.Niv_Codigo = s.Niv_Codigo
@@ -38,14 +40,14 @@ if( $resultadoCursos->num_rows>0){
       if($resultadoCiclos->num_rows>0){
         ?> <p>Total de ciclos: <?= $resultadoCiclos->num_rows; ?></p> <?php
         while($rowCiclos = $resultadoCiclos->fetch_assoc()){
-      
+      $fecha = new DateTime($rowCiclos['Mes_Codigo']);
        ?>
         
         
         <div class="card">
           <div class="card-header cardAcordeon" id="" data-toggle="collapse" data-target="#<?= $rowCiclos['Reg_Codigo'];?>" aria-expanded="false" aria-controls="collapseOne">
             <h2 class="mb-0">
-              <button class="btn btn-link text-decoration-none" type="button"><?= $rowCiclos['Niv_Detalle'].' '.$rowCiclos['Sec_NroCiclo'] ?></button> <span class="float-right text-primary"><i class="icofont-rounded-down"></i></span>
+              <button class="btn btn-link text-decoration-none" type="button"><?= $rowCiclos['Niv_Detalle'].' '.$rowCiclos['Sec_NroCiclo']. ' (' . $meses[$fecha->format('n')-1] .' '. $fecha->format('Y').')' ; ?></button> <span class="float-right text-primary"><i class="icofont-rounded-down"></i></span>
             </h2>
           </div>
 
