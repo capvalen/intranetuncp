@@ -49,3 +49,26 @@ return pension ;
 
 END$$
 DELIMITER ;
+
+
+DELIMITER $$
+CREATE FUNCTION `proxIdAlumno`() RETURNS int(11)
+    NO SQL
+BEGIN
+
+declare idAlu int;
+declare resp int;
+
+SELECT alu_Codigo+1 into idAlu FROM `alumno`
+where Alu_Codigo like concat(substr(year(curdate()),-2), '%')
+order by Alu_Codigo desc
+limit 1;
+
+if idAlu is null then
+	set idAlu = concat(substr(year(curdate()),-2), '00001');
+end if;
+
+RETURN idAlu;
+
+END$$
+DELIMITER ;

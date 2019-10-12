@@ -169,6 +169,44 @@ if(isset($_GET['cursor'])){
     </div>
   </div>
 </div>
+<!-- Modal para craer alumno  -->
+<div class="modal fade" id="modalCrearAlumno" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar datos</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+				<p>Ingrese el D.N.I. que se desea crear:</p>
+				<input type="text" class="form-control" id="txtCrearDni">
+				<button class="btn btn-outline-warning mt-3" id="btnBuscarDni"> <i class="icofont-search-1"></i> Buscar en Reniec</button>
+				<div class="d-none" id="datosEncontrados">
+					<label for="">Apellidos</label>
+					<input type="text" class="form-control text-capitalize" id="txtCrearApellidos">
+					<label for="">Nombres</label>
+					<input type="text" class="form-control text-capitalize" id="txtCrearNombres">
+					<label for="">Género:</label>
+					<select class="selectpicker" id="SltPSexo" data-search='false' data-width='100%'>
+						<option value="0">Femenino</option>
+						<option value="1">Masculino</option>
+					</select>
+					<label for="">Facultad:</label>
+					<select class="selectpicker" id="SltPFacultad" data-search='true' data-width='100%'>
+						<?php include 'php/OPT_facultades.php'; ?>
+					</select>
+					<label for="">Fecha de nacimiento:</label>
+					<input type="date" class="form-control" id="txtCrearFecha" value="<?= date('Y-m-d'); ?>">
+					<button class="btn btn-outline-primary mt-3" id="btnSaveAlumno"><i class="icofont-save"></i> Guardar Alumno</button>
+				</div>
+			
+      </div>
+      
+    </div>
+  </div>
+</div>
 
 <?php include "php/footer.php"; ?>
 
@@ -261,6 +299,51 @@ $('.btnRegistrarAlumno').click(function () {
 $('#modalGuardadoCorrecto').on('hidden.bs.modal', function (e) {
   location.reload();
 });
+$('#btnCrearAlumno').click(function () {
+	$('#modalCrearAlumno').modal('show');
+});
+$('#txtCrearDni').keyup(function (e) {
+	e.preventDefault();
+	if($('#txtCrearDni').val().length==8){if (e.which ==13){ $('#btnBuscarDni').click(); }}else if($('#txtCrearDni').val().length<8){
+		$('#btnBuscarDni').removeClass('d-none');
+		$('#datosEncontrados').addClass('d-none');
+	}
+})
+$('#btnBuscarDni').click(function () {
+	pantallaOver(true);
+	$.ajax({url: 'php/apiReniec.php', type: 'POST', data: {dni: $('#txtCrearDni').val() }}).done(function (resp) {
+		console.log(resp);
+		if(resp =='ya registrado'){
+			//ya fue
+		}else{
+			var datos = JSON.parse(resp);
+			console.log(datos)
+			$('#txtCrearApellidos').val($.trim(datos[0]+ ' '+ datos[1]) );
+			$('#txtCrearNombres').val(datos[2]);
+			$('#btnBuscarDni').addClass('d-none');
+			$('#datosEncontrados').removeClass('d-none');
+			$('#txtCrearApellidos').focus();
+
+		}
+		pantallaOver(false);
+	})
+});
+$('#btnSaveAlumno').click(function () {
+	pantallaOver(true);
+	$.ajax({url: 'php/insertarAlumnoNuevo.php', type: 'POST', data: {
+		dni: $('#txtCrearDni').val(), nombre: $('#txtCrearNombres').val(), apellido: $('#txtCrearApellidos').val(), sexo: $('#SltPSexo').val(), facultad: $('#SltPFacultad').val(), fechanac: $('#txtCrearFecha').val()
+	}}).done(function (resp) {
+		console.log(resp)
+		pantallaOver(false);
+		if(resp=='todo ok'){
+			window.location='matricula.php?cursor='+$('#txtCrearDni').val();
+		}else{
+			$('#h1Advertencia').text('Ocurrió un error al intentar insertar al alumno, comuníquelo al área de soporte');
+			$('#modalAdvertencia').modal('show');
+		}
+	})
+})
+
 
 </script>
 </body>
