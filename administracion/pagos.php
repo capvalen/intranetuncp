@@ -39,7 +39,7 @@ if(isset($_GET['cursor'])){
       <input type="text" class="form-control mr-3" id="txtAlumnoDni">
       <button class="btn btn-outline-primary" id="btnBuscarDniAlumno"><i class="icofont-search-1"></i> Buscar</button>
       <?php if(isset($_GET['cursor']) || isset($_GET['patron'])){ ?>
-      <a href="seguimiento.php?cursor=<?= trim($rowAlumno['Alu_NroDocumento']); ?>" class="btn btn-outline-dark ml-3" ><i class="icofont-bulb-alt"></i> Ver seguimiento</a>
+      <a href="seguimiento.php?cursor=<?= trim($_GET['cursor']); ?>" class="btn btn-outline-dark ml-3" ><i class="icofont-bulb-alt"></i> Ver seguimiento</a>
 			<?php } ?>
 		</div>
 	</div>
@@ -76,7 +76,7 @@ if(isset($_GET['cursor'])){
 </div>
 
 <div class="modal fade" id="modalAddPay" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Agregar pago</h5>
@@ -85,15 +85,15 @@ if(isset($_GET['cursor'])){
         </button>
       </div>
       <div class="modal-body">
-        <label for="">Motivo</label>
+        <label for=""><small>Motivo</small></label>
         <select name="" id="sltTipoPago" class="form-control">
-          <option value="1">ABC</option>
         </select>
-        <label for="">Cod. Recibo</label>
+        <label for=""><small>Código de recibo</small></label>
         <input type="text" class="form-control" id="txtCodRecibo">
-        <label for="">Monto</label>
+        <div class="alert alert-secondary my-3" role="alert"><i class="icofont-diamond"></i> Tipo de pago: <span id="spanMotivo"></span></div>
+        <label for=""><small>Monto</small></label>
         <input type="number" class="form-control" value="0.00" min=0 id="txtMontoPago">
-        <div class="alert alert-danger d-none my-3" id="alertPagos" role="alert"><i class="icofont-warning-alt"></i> <span>A simple danger alert—check it out!</span></div>
+       
         <div class="row col justify-content-end mx-0 mt-3">
           <button type="button" class="btn btn-outline-primary float-right" id="btnInsertPay"><i class="icofont-save"></i> Insertar pago</button>
         </div>
@@ -155,6 +155,7 @@ if(isset($_GET['cursor'])){
 <?php include "php/footer.php"; ?>
 
 <script>
+$('.selectpicker').selectpicker();
 $('#txtAlumnoDni').keyup(function (e) {
   if (e.which ==13){ $('#btnBuscarDniAlumno').click(); }
 });
@@ -181,7 +182,7 @@ $('.btnAddPagoDyno').click(function () {
   $('#btnInsertPay').attr('data-idioma', $(this).parent().parent().attr('data-idioma'))
   $('#btnInsertPay').attr('data-ciclo', $(this).parent().parent().attr('data-ciclo'))
 
-  $.ajax({url: 'php/OPT_detalleConPagos.php', type:'POST', data:{idioma: $('#btnInsertPay').attr('data-idioma'), nivel: $('#btnInsertPay').attr('data-ciclo') }}).done(function (resp) {// console.log(resp)
+  $.ajax({url: 'php/OPT_detalleConPagos.php', type:'POST', data:{idioma: $('#btnInsertPay').attr('data-idioma'), nivel: $('#btnInsertPay').attr('data-ciclo'), registro: $('#btnInsertPay').attr('reg_cod') }}).done(function (resp) {// console.log(resp)
     $('#sltTipoPago').children().remove(); $('#sltTipoPago').append(resp);
     $('#sltTipoPago').change();
     $('#modalAddPay').modal('show');
@@ -189,7 +190,9 @@ $('.btnAddPagoDyno').click(function () {
   })
 });
 $('#sltTipoPago').change(function () {
-  $('#txtMontoPago').val(parseFloat($(`#sltTipoPago option[value='${$('#sltTipoPago').val()}']`).attr('data-valor')).toFixed(2))
+  var motivo = $(`#sltTipoPago option[value='${$('#sltTipoPago').val()}']`).attr('data-motivo')
+  $('#txtMontoPago').val(parseFloat($(`#sltTipoPago option[value='${$('#sltTipoPago').val()}']`).attr('data-valor')).toFixed(2));
+  $('#spanMotivo').text(motivo);
 });
 $('#btnInsertPay').click(function () {
   $('#alertPagos').addClass('d-none')

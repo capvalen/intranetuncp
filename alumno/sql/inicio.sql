@@ -72,3 +72,89 @@ RETURN idAlu;
 
 END$$
 DELIMITER ;
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` FUNCTION `proxSeccion`(`idioma` VARCHAR(10), `nivel` VARCHAR(10), `mes` VARCHAR(10), `anio` VARCHAR(10)) RETURNS varchar(2) CHARSET utf8mb4
+    NO SQL
+BEGIN
+
+declare secActual varchar(2);
+set secActual ='';
+
+SELECT sec_seccion into secActual FROM `seccion` WHERE
+Idi_Codigo = idioma and Niv_Codigo = nivel and Mes_Codigo = concat(mes, anio) order by sec_seccion desc
+limit 1;
+
+case secActual
+when '' then return 'A';
+when 'A' then return 'B';
+when 'B' then return 'C';
+when 'C' then return 'D';
+when 'D' then return 'E';
+when 'E' then return 'F';
+when 'F' then return 'G';
+when 'G' then return 'H';
+when 'H' then return 'I';
+when 'I' then return 'J';
+when 'J' then return 'K';
+when 'K' then return 'L';
+when 'L' then return 'M';
+when 'M' then return 'N';
+when 'N' then return 'O';
+when 'O' then return 'P';
+when 'P' then return 'Q';
+when 'Q' then return 'R';
+when 'R' then return 'S';
+when 'S' then return 'T';
+when 'T' then return 'U';
+when 'U' then return 'V';
+when 'V' then return 'W';
+when 'W' then return 'X';
+when 'X' then return 'Y';
+when 'Y' then return 'Z';
+
+else return 'NA';
+end case;
+
+END$$
+DELIMITER ;
+
+
+
+
+ALTER TABLE `condicionalumno` CHANGE `ValDcto` `ValDcto` FLOAT NULL DEFAULT '0';
+
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` FUNCTION `calcPagoPension`(`idIdioma` VARCHAR(10), `idNivel` VARCHAR(10), `idDescuento` INT) RETURNS varchar(200) CHARSET utf8mb4
+    NO SQL
+BEGIN
+declare pension float;
+declare tipoDescuento varchar(200);
+declare valorDescuento float;
+
+SELECT nxi_Pension into pension from nivelxidioma where idi_Codigo =idIdioma and Niv_Codigo= idNivel;
+
+select TipoDcto, ValDcto into tipoDescuento, valorDescuento
+from condicionalumno
+where idcondicion = idDescuento;
+
+set @pension = pension;
+
+CASE tipoDescuento
+	WHEN 'PORCENTAJE' THEN
+		SET @pension = @pension - @pension *(valorDescuento/100) ;
+
+	WHEN 'MONTO' THEN
+        SET @pension = @pension - valorDescuento ;
+
+	ELSE
+        SET @pension = @pension ;
+END CASE;
+
+return @pension ;
+
+END$$
+DELIMITER ;

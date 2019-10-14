@@ -5,5 +5,11 @@ $sql="SELECT `nxi_Pension`, `nxi_Matricula` FROM `nivelxidioma` WHERE `idi_Codig
 
 $resultado=$cadena->query($sql);
 $row=$resultado->fetch_assoc(); ?>
-<option value='Matr0001' data-valor="<?= $row['nxi_Matricula'];?>">Matrícula</option>
-<option value='Pens0001' data-valor="<?= $row['nxi_Pension'];?>">Pensión</option>
+<option value='Matr0001' data-valor="<?= $row['nxi_Matricula'];?>" data-motivo='Normal'>Matrícula</option>
+<?php
+$sqlEsp="SELECT AlSe_Condicion, reg_MontoPension FROM `registroalumno` where reg_codigo = '{$_POST['registro']}';";
+
+$resultadoEsp=$esclavo->query($sqlEsp);
+$rowEsp=$resultadoEsp->fetch_assoc(); ?>
+<option value='Pens0001' data-valor="<?= $rowEsp['reg_MontoPension'];?>" data-motivo="<?= $rowEsp['AlSe_Condicion'];?>">Pensión</option>
+?>

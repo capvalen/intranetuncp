@@ -1,11 +1,11 @@
 <?php
 include 'conexionInfocat.php';
 
-$sql="SELECT Suc_Codigo, lower(Suc_Direccion) as Suc_Direccion FROM `sucursal` order by Suc_Direccion asc ;";
+$sql="SELECT Suc_Codigo, lower(sucDescripcion) as sucDescripcion FROM `sucursal` order by Suc_Direccion asc ;";
 
 $resultado=$cadena->query($sql);
 while($row=$resultado->fetch_assoc()){ ?>
-<option class="text-capitalize" value="<?= $row['Suc_Codigo'];?>"><?= $row['Suc_Direccion'];?></option>
+<option class="text-capitalize" value="<?= $row['Suc_Codigo'];?>"><?= $row['sucDescripcion'];?></option>
 <?php }
 
 

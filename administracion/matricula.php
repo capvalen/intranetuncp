@@ -165,6 +165,14 @@ if(isset($_GET['cursor'])){
 				<p>¿Desea matricular al alumno en este ciclo?</p>
 				<p><strong>Alumno: </strong> <span class="text-capitalize" ><?= $rowAlumno['Alu_Apellido'].', '. $rowAlumno['Alu_Nombre']; ?></span> </p>
 				<p><strong>Curso:</strong> <span class="text-capitalize" id="spanCursoConf">Inglés Básico 1 C</span> </p>
+				<div class="mb-3" id="divTipoMatricula">
+					<label for="">Tipo de matrícula</label>
+					<select name="" id="sltTipoMatricula" class="selectpicker" data-seach='true' data-width='100%'>
+						<?php include 'php/OPT_tipoMatricula.php'; ?>
+					</select>
+					<p>Accede a descuento: <span id="spanCantDscto">0.00</span></p>
+				</div>
+
 				
 		  	<div class="d-flex justify-content-center blue-text text-darken-1">
           <button class="btn btn-outline-primary" data-dismiss="modal" id="btnRegistrarConfirmado" ><i class="icofont-check-alt"></i> Sí, Registrar</button>
@@ -297,7 +305,7 @@ $('#sltNiveles').on('changed.bs.select', function (e, clickedIndex, isSelected, 
 	}
 });
 $('#btnRegistrarConfirmado').click(function () {
-	$.ajax({url: 'php/registrarAlumnoCurso.php', type: 'POST', data:{ codAlu: '<?= $rowAlumno['Alu_Codigo']; ?>', codSec: $('#btnRegistrarConfirmado').attr('data-seccion'), idIdioma: $('#btnRegistrarConfirmado').attr('data-idIdioma'), idNivel: $('#btnRegistrarConfirmado').attr('data-idNivel')  }}).done(function (resp) { console.log(resp)
+	$.ajax({url: 'php/registrarAlumnoCurso.php', type: 'POST', data:{ codAlu: '<?= $rowAlumno['Alu_Codigo']; ?>', codSec: $('#btnRegistrarConfirmado').attr('data-seccion'), idIdioma: $('#btnRegistrarConfirmado').attr('data-idIdioma'), idNivel: $('#btnRegistrarConfirmado').attr('data-idNivel'), idDscto: $.idDscto  }}).done(function (resp) { console.log(resp)
 		$('#modalConfirmarRegistro').modal('hide');
 		if(resp=='todo ok'){ 
 			$('#h1Bien').text('Alumno registrado al curso');
@@ -357,6 +365,7 @@ $('.btnRegistrarAlumno').click(function () {
 	$('#btnRegistrarConfirmado').attr('data-seccion', $(this).attr('data-seccion') );
 	$('#btnRegistrarConfirmado').attr('data-idIdioma', $(this).attr('data-idIdioma') );
 	$('#btnRegistrarConfirmado').attr('data-idNivel', $(this).attr('data-idNivel') );
+	$('#sltTipoMatricula').selectpicker('val', 'Normal' ).selectpicker('refresh');
 	$('#modalConfirmarRegistro').modal('show');
 });
 
@@ -406,7 +415,23 @@ $('#btnSaveAlumno').click(function () {
 			$('#modalAdvertencia').modal('show');
 		}
 	})
-})
+});
+
+$('#sltTipoMatricula').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+	if( $('#sltTipoMatricula').selectpicker('val')!= null ){
+    var buscar = $('#sltTipoMatricula').selectpicker('val');
+		var padre = $('#divTipoMatricula').find(`option[value='${buscar}']`);
+    $.idDscto= padre.attr('data-id');
+    var tipo = padre.attr('data-tipoDscto');
+		var dscto = padre.attr('data-cantDscto');
+		if(tipo=='PORCENTAJE'){
+			$('#spanCantDscto').text(parseFloat(dscto).toFixed(0)+'%');
+		}else{
+			$('#spanCantDscto').text('S/ ' + parseFloat(dscto).toFixed(2));
+		}
+
+	}
+});
 
 
 </script>
