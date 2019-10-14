@@ -1,0 +1,12 @@
+<option class="text-capitalize" value="1">01</option>
+<option class="text-capitalize" value="2">02</option>
+<option class="text-capitalize" value="3">03</option>
+<option class="text-capitalize" value="4">04</option>
+<option class="text-capitalize" value="5">05</option>
+<option class="text-capitalize" value="6">06</option>
+<option class="text-capitalize" value="7">07</option>
+<option class="text-capitalize" value="8">08</option>
+<option class="text-capitalize" value="9">09</option>
+<option class="text-capitalize" value="10">10</option>
+<option class="text-capitalize" value="11">11</option>
+<option class="text-capitalize" value="12">12</option>

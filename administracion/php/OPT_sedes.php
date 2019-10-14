@@ -1,7 +1,7 @@
 <?php
 include 'conexionInfocat.php';
 
-$sql="SELECT Suc_Codigo, lower(Suc_Direccion) as Suc_Direccion FROM `sucursal` order by Suc_Direccion desc ;";
+$sql="SELECT Suc_Codigo, lower(Suc_Direccion) as Suc_Direccion FROM `sucursal` order by Suc_Direccion asc ;";
 
 $resultado=$cadena->query($sql);
 while($row=$resultado->fetch_assoc()){ ?>

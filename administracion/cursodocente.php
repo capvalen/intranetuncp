@@ -300,27 +300,27 @@ $('#btnUbicarAlumno').click(function () {
 	$.ajax({url: 'php/encontrarAlumnosCoincidentes.php', type: 'POST', data:{texto: $('#txtUbicarAlumno').val() }}).done(function (resp) {
 		//console.log(resp)
 		pantallaOver(false);
-			var datos = JSON.parse(resp); var docDni ='';
-			if(datos.length>0){
-				$.each(datos, function (index, elem) {
-					if(elem.Alu_NroDocumento == null ){ docDni='';}else{docDni = elem.Alu_NroDocumento}
-					$('#segundaParte tbody').append(`<tr>
-					<td> ${index+1} </td>
-					<td class='text-capitalize tdNombre'> ${elem.Alu_Apellido.toLowerCase() +', '+ elem.Alu_Nombre.toLowerCase()}</td>
-					<td>${docDni}</td>
-					<td><button class="btn btn-outline-success btn-sm btnElegirAlumno" data-id="${elem.Alu_Codigo}"><i class="icofont-ui-rate-add"></i></button></td>
-				</tr>`)
-				});
-
-			}else{
+		var datos = JSON.parse(resp); var docDni ='';
+		if(datos.length>0){
+			$.each(datos, function (index, elem) {
+				if(elem.Alu_NroDocumento == null ){ docDni='';}else{docDni = elem.Alu_NroDocumento}
 				$('#segundaParte tbody').append(`<tr>
-					<td colspan="3"> <i class="icofont-not-allowed"></i> No existen alumnos coincidentes con lo solicitado </td>
-				</tr>`)
-			}
-		});
-		$('#primeraParte').addClass('d-none');
-		$('#segundaParte').addClass('animated fadeIn').removeClass('d-none');
-		pantallaOver(false);
+				<td> ${index+1} </td>
+				<td class='text-capitalize tdNombre'> ${elem.Alu_Apellido.toLowerCase() +', '+ elem.Alu_Nombre.toLowerCase()}</td>
+				<td>${docDni}</td>
+				<td><button class="btn btn-outline-success btn-sm btnElegirAlumno" data-id="${elem.Alu_Codigo}"><i class="icofont-ui-rate-add"></i></button></td>
+			</tr>`)
+			});
+
+		}else{
+			$('#segundaParte tbody').append(`<tr>
+				<td colspan="3"> <i class="icofont-not-allowed"></i> No existen alumnos coincidentes con lo solicitado </td>
+			</tr>`)
+		}
+	});
+	$('#primeraParte').addClass('d-none');
+	$('#segundaParte').addClass('animated fadeIn').removeClass('d-none');
+	pantallaOver(false);
 	}
 });
 <?php if($resultadoCursos->num_rows >0){ ?>

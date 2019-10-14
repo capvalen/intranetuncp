@@ -36,6 +36,12 @@
 						<?php if(isset($_GET['year'])){ include 'php/returnMesesDocenteCiclaje.php'; }else{ echo "<option value='-1'>Seleccione primero el año</option>"; } ?>
 					</select>
 				</div>
+				<div class="col">
+				<label for=""><small>Idioma:</small></label>
+					<select class="selectpicker" id="sltPIdiomas" data-live-search="true" data-width="100%">
+						<?php if(isset($_GET['year'])){ include 'php/OPT_idiomas.php'; }else{ echo "<option value='-1'>Seleccione primero el año</option>"; } ?>
+					</select>
+				</div>
 				<div class="col d-flex align-items-end">
 					<a class="btn btn-outline-primary" href="ciclos.php?nuevo"><i class="icofont-bulb-alt"></i> Crear ciclo</a>
 				</div>
@@ -48,18 +54,39 @@
 	<div class="container">
 		<div class="card col-6">
 			<div class="card-body">
-				<label for="">Sede:</label>
-				<select class="selectpicker" id="sltPAnios" data-live-search="true" data-width="100%">
+				<label for="">Sucursal:</label>
+				<select class="text-capitalize selectpicker" id="sltPSucursales" data-live-search="true" data-width="100%">
 					<?php include 'php/OPT_sedes.php'; ?>
 				</select>
 				<label for="">Idioma:</label>
-				<select class="selectpicker" id="sltPAnios" data-live-search="true" data-width="100%">
+				<select class="text-capitalize selectpicker" id="sltPIdiomas" data-live-search="true" data-width="100%">
 					<?php include 'php/OPT_idiomas.php'; ?>
 				</select>
 				<label for="">Nivel:</label>
-				<select class="selectpicker" id="sltPAnios" data-live-search="true" data-width="100%">
+				<select class="text-capitalize selectpicker" id="sltPAniosNiveles" data-live-search="true" data-width="100%">
 					<?php include 'php/OPT_niveles.php'; ?>
 				</select>	
+				<label for="">Ciclo:</label>
+				<select class="text-capitalize selectpicker" id="sltPCiclos" data-live-search="true" data-width="100%">
+					<?php include 'php/OPT_ciclos.php'; ?>
+				</select>	
+				<label for="">Horario:</label>
+				<select class="text-capitalize selectpicker" id="sltPHorario" data-live-search="true" data-width="100%">
+					<?php include 'php/OPT_horarios.php'; ?>
+				</select>	
+				<label for="">Docente:</label>
+				<select class="text-capitalize selectpicker" id="sltPDocentes" data-live-search="true" data-width="100%">
+				</select>	
+			
+				<label for="">Mes:</label>
+				<select class="text-capitalize selectpicker" id="sltPMeses" data-live-search="true" data-width="100%">
+					<?php include 'php/OPT_mesesTodos.php'; ?>
+				</select>	
+				<label for="">Año:</label>
+				<select class="text-capitalize selectpicker" id="sltPAnios" data-live-search="true" data-width="100%">
+					<?php include 'php/OPT_AniosCiclos.php'; ?>
+				</select>
+				<button class="btn btn-outline-primary" id="btnCrearCiclo"><i class="icofont-save"></i> Crear ciclo</button>
 			</div>
 		</div>
 	</div>
@@ -100,7 +127,7 @@
 				while($rowCursos =$resultadoCursos ->fetch_assoc()){ ?>
 				<tr>
 					<td><?= $i;?></td>
-					<td><a href="ciclos.php?code=<?= $rowCursos['Sec_Codigo'];?>"><?= $rowCursos['Sec_Codigo'];?></a></td>
+					<td><?= $rowCursos['Sec_Codigo'];?></td>
 					<td><?= $rowCursos['Idi_Nombre'];?></td>
 					<td><?= $rowCursos['Niv_Detalle'];?></td>
 					<td><?= $rowCursos['Sec_NroCiclo'];?></td>
@@ -133,18 +160,17 @@
 
 <script>
 $('.selectpicker').selectpicker();
-<?php if(!isset($_GET['year']) && !isset($_GET['month'])): ?>
-$('#sltPAnios').selectpicker('val',-1);
-$('#sltPMeses').prop('disabled', true).selectpicker('refresh');
-<?php elseif( isset($_GET['year']) && !isset($_GET['month'])): ?>
-$('#sltPAnios').selectpicker('val',<?= $_GET['year']?>).selectpicker('refresh');
-$('#sltPMeses').prop('disabled', false).selectpicker('val',-1).selectpicker('refresh');
-<?php else: ?>
-$('#sltPAnios').selectpicker('val',<?= $_GET['year']?>).selectpicker('refresh');
-$('#sltPMeses').selectpicker('val', <?= $_GET['month']?>).selectpicker('refresh');
-<?php endif; ?>
-
-
+<?php if(!isset($_GET['nuevo'])): ?>
+	<?php if(!isset($_GET['year']) && !isset($_GET['month'])): ?>
+	$('#sltPAnios').selectpicker('val',-1);
+	$('#sltPMeses').prop('disabled', true).selectpicker('refresh');
+	<?php elseif( isset($_GET['year']) && !isset($_GET['month'])): ?>
+	$('#sltPAnios').selectpicker('val',<?= $_GET['year']?>).selectpicker('refresh');
+	$('#sltPMeses').prop('disabled', false).selectpicker('val',-1).selectpicker('refresh');
+	<?php else: ?>
+	$('#sltPAnios').selectpicker('val',<?= $_GET['year']?>).selectpicker('refresh');
+	$('#sltPMeses').selectpicker('val', <?= $_GET['month']?>).selectpicker('refresh');
+	<?php endif; ?>
 
 $('#sltPAnios').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
 	if( $('#sltPAnios').selectpicker('val')!= null ){
@@ -156,6 +182,42 @@ $('#sltPMeses').on('changed.bs.select', function (e, clickedIndex, isSelected, p
 		location.href = "ciclos.php?year="+$('#sltPAnios').selectpicker('val')+'&month='+$('#sltPMeses').selectpicker('val');
 	}
 });
+<?php else: ?>
+
+<?php if(isset($_GET['nuevo'])): ?>
+$('.selectpicker').selectpicker('val', -1).selectpicker('refresh');
+
+
+$('#btnCrearCiclo').click(function () {
+	$.ajax({url: 'php/insertCiclo.php', type: 'POST', data:{
+		sucursal: $('#sltPSucursales').val(), idioma: $('#sltPIdiomas').val(), nivel: $('#sltPAniosNiveles').val(), ciclo: $('#sltPCiclos').val(), horario: $('#sltPHorario').val(), mes: $('#sltPMeses').val(), anio: $('#sltPAnios').val(), docente: $('#sltPDocentes').val()
+	}}).done(function (resp) {
+		console.log(resp)
+		if(resp.length == 18){
+			location.href = "cursodocente.php?cursor="+resp;
+		}else{
+			$('#h1Advertencia').text('Ocurrió un error al intentar insertar ciclo nuevo, comuníquelo al área de soporte');
+			$('#modalAdvertencia').modal('show');
+		}
+	})
+
+});
+$('#sltPIdiomas').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+  pantallaOver(true);
+	if($('#sltPIdiomas').val()!=null){
+		$.post('php/OPT_docentes.php', {idioma: $('#sltPIdiomas').val() }).done(function (resp) {
+			console.log(resp);
+			$('#sltPDocentes').children().remove();
+			$('#sltPDocentes').append(resp);
+			$('#sltPDocentes').selectpicker('refresh').selectpicker('render').selectpicker('val', -1);
+			pantallaOver(false);
+		});
+	}
+});
+<?php endif; ?>
+
+
+<?php endif; ?>
 
 </script>
 </body>
