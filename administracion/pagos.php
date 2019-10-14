@@ -92,7 +92,7 @@ if(isset($_GET['cursor'])){
         <input type="text" class="form-control" id="txtCodRecibo">
         <div class="alert alert-secondary my-3" role="alert"><i class="icofont-diamond"></i> Tipo de pago: <span id="spanMotivo"></span></div>
         <label for=""><small>Monto</small></label>
-        <input type="number" class="form-control" value="0.00" min=0 id="txtMontoPago">
+        <input type="number" class="form-control" readonly=true value="0.00" min=0 id="txtMontoPago" disabled=true>
        
         <div class="row col justify-content-end mx-0 mt-3">
           <button type="button" class="btn btn-outline-primary float-right" id="btnInsertPay"><i class="icofont-save"></i> Insertar pago</button>
