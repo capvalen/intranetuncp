@@ -89,6 +89,9 @@ $('#txtBuscarInfo').click(function () {
     });
   }
 });
+$('#txtDNI').keyup(function (e) {
+	if (e.which ==13){ $('#txtBuscarInfo').click(); }
+})
 function pantallaOver(tipo) {
 	if(tipo){$('#overlay').css('display', 'initial');}
 	else{ $('#overlay').css('display', 'none'); }

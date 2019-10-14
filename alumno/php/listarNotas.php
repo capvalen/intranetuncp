@@ -15,6 +15,8 @@ $rowAlumno=$resultadoAlumno->fetch_assoc();
       <thead>
         <tr>
           <th>Periodo</th>
+          <th>Sucursal</th>
+          <th>Docente</th>
           <th>Idioma</th>
           <th>Nivel</th>
           <th>Ciclo</th>
@@ -24,21 +26,25 @@ $rowAlumno=$resultadoAlumno->fetch_assoc();
       <tbody>     
 <?php
 $sql="SELECT s.Mes_Codigo , i.Idi_Nombre, n.Niv_Detalle, s.Sec_NroCiclo,
-ono.not_Prom, lower(a.Alu_Nombre) as Alu_Nombre, lower(a.Alu_Apellido) as Alu_Apellido
+ono.not_Prom, lower(a.Alu_Nombre) as Alu_Nombre, lower(a.Alu_Apellido) as Alu_Apellido, su.sucDescripcion, lower(concat(em.Emp_Apellido, ', ', em.Emp_Nombre)) as empDocente
 FROM `registroalumno` ra
   inner join alumno a on a.Alu_Codigo = ra.Alu_Codigo
   inner join seccion s on s.Sec_Codigo = ra.Sec_Codigo
   inner join idioma i on s.Idi_Codigo = i.Idi_Codigo
   inner join nivel n on n.Niv_Codigo = s.Niv_Codigo
   inner join onota ono on ono.Reg_Codigo = ra.Reg_Codigo
+  inner join sucursal su on su.Suc_Codigo = s.Suc_Codigo
+  inner join empleado em on em.Emp_Codigo = s.Emp_Codigo
   where a.Alu_NroDocumento = '{$_POST['dni']}'
-  order by i.Idi_Nombre asc, n.Niv_Detalle asc, s.Sec_NroCiclo asc";
+  order by i.Idi_Nombre asc, n.Niv_Detalle asc, s.Sec_NroCiclo asc; ";
 
 $resultado=$esclavo->query($sql);
 if($resultado->num_rows >= 1){
 while($row=$resultado->fetch_assoc()){ ?>
 <tr>
   <td><?= $row['Mes_Codigo']; ?></td>
+  <td class="text-capitalize"><?= $row['sucDescripcion']; ?></td>
+  <td class="text-capitalize"><?= $row['empDocente']; ?></td>
   <td><?= $row['Idi_Nombre']; ?></td>
   <td><?= $row['Niv_Detalle']; ?></td>
   <td><?= $row['Sec_NroCiclo']; ?></td>

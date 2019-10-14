@@ -20,7 +20,7 @@
 	<h2 class="d-print-none"><i class="icofont-people"></i> Ciclos</h2>
 	
 	<?php if(!isset($_GET['nuevo'])): ?>
-	<div class="card mb-3 col-8">
+	<div class="card mb-3 ">
 		<div class="card-body pt-1">
 		<p class="card-text m-0"><small class="text-muted"><i class="icofont-filter"></i> Filtro</small></p>
 			<div class="form-row">
@@ -37,9 +37,21 @@
 					</select>
 				</div>
 				<div class="col">
+				<label for=""><small>Sede:</small></label>
+					<select class="selectpicker" id="sltPMeses" data-live-search="true" data-width="100%">
+						<?php if(isset($_GET['month'])){ include 'php/returnSedesCiclaje.php'; }else{ echo "<option value='-1'>Seleccione primero el mes</option>"; } ?>
+					</select>
+				</div>
+				<div class="col">
 				<label for=""><small>Idioma:</small></label>
 					<select class="selectpicker" id="sltPIdiomas" data-live-search="true" data-width="100%">
-						<?php if(isset($_GET['year'])){ include 'php/OPT_idiomas.php'; }else{ echo "<option value='-1'>Seleccione primero el año</option>"; } ?>
+						<?php if(isset($_GET['campus'])){ include 'php/OPT_idiomas.php'; }else{ echo "<option value='-1'>Seleccione primero mes</option>"; } ?>
+					</select>
+				</div>
+				<div class="col">
+				<label for=""><small>Nivel:</small></label>
+					<select class="selectpicker" id="sltPNiveles" data-live-search="true" data-width="100%">
+						<?php if(isset($_GET['language'])){ include 'php/returnNivelesCiclaje.php'; }else{ echo "<option value='-1'>Seleccione primero idioma</option>"; } ?>
 					</select>
 				</div>
 				<div class="col d-flex align-items-end">
@@ -94,6 +106,11 @@
 	
 	<?php if(isset($_GET['month'])):
 	include "php/conexionInfocat.php"; 
+	$filtroExtra ='';
+	if(isset($_GET['language'])){ $filtroExtra.=" AND  s.Idi_Codigo='{$_GET['language']}' "; }
+	if(isset($_GET['level'])){ $filtroExtra.=" AND  s.Niv_Codigo='{$_GET['level']}' "; }
+	if(isset($_GET['campus'])){ $filtroExtra.=" AND  s.Suc_Codigo='{$_GET['campus']}' "; }
+
 	$sqlCursos = "SELECT s.*, i.Idi_Nombre, n.Niv_Detalle, lower(hc.Hor_HoraInicio) as Hor_HoraInicio, lower(hc.Hor_HoraSalida) as Hor_HoraSalida, lower(su.Suc_Direccion) as Suc_Direccion, lower(concat(em.Emp_Apellido, ', ', em.Emp_Nombre)) as docNombre FROM `seccion` s
 	inner join idioma i on i.Idi_Codigo = s.Idi_Codigo
 	inner join nivel n on n.Niv_Codigo = s.Niv_Codigo
@@ -101,8 +118,8 @@
 	inner join horarioclases hc on hc.Hor_Codigo = s.Hor_Codigo
 	inner join sucursal su on su.Suc_Codigo = s.Suc_Codigo
 	inner join empleado em on em.Emp_Codigo = s.Emp_Codigo
-	where year(ma.Mes_Inicio)= {$_GET['year']} and month(ma.Mes_Inicio)= {$_GET['month']}
-	order by ma.Mes_Inicio desc; "; //echo $sqlCursos;
+	where year(ma.Mes_Inicio)= {$_GET['year']} and month(ma.Mes_Inicio)= {$_GET['month']} AND Sec_NroCiclo<>0 {$filtroExtra}
+	order by Idi_Nombre, Niv_Detalle, Sec_NroCiclo, Sec_Seccion asc; "; //echo $sqlCursos;
 	$resultadoCursos=$cadena->query($sqlCursos); $i=1; ?>
 	<div class="container-fluid">
 		<table class="table table-hover">
@@ -161,15 +178,25 @@
 <script>
 $('.selectpicker').selectpicker();
 <?php if(!isset($_GET['nuevo'])): ?>
-	<?php if(!isset($_GET['year']) && !isset($_GET['month'])): ?>
 	$('#sltPAnios').selectpicker('val',-1);
+	$('#sltPMeses').selectpicker('val',-1);
+	$('#sltPIdiomas').selectpicker('val',-1);
+	$('#sltPNiveles').selectpicker('val',-1);
 	$('#sltPMeses').prop('disabled', true).selectpicker('refresh');
-	<?php elseif( isset($_GET['year']) && !isset($_GET['month'])): ?>
+	$('#sltPIdiomas').prop('disabled', true).selectpicker('refresh');
+	$('#sltPNiveles').prop('disabled', true).selectpicker('refresh');
+
+	<?php if( isset($_GET['year'])): ?>
 	$('#sltPAnios').selectpicker('val',<?= $_GET['year']?>).selectpicker('refresh');
 	$('#sltPMeses').prop('disabled', false).selectpicker('val',-1).selectpicker('refresh');
-	<?php else: ?>
-	$('#sltPAnios').selectpicker('val',<?= $_GET['year']?>).selectpicker('refresh');
+	<?php endif; if( isset($_GET['month'])): ?>
 	$('#sltPMeses').selectpicker('val', <?= $_GET['month']?>).selectpicker('refresh');
+	$('#sltPIdiomas').prop('disabled', false).selectpicker('val',-1).selectpicker('refresh');
+	<?php endif; if( isset($_GET['language'])): ?>
+	$('#sltPIdiomas').selectpicker('val', '<?= $_GET['language']?>').selectpicker('refresh');	
+	$('#sltPNiveles').prop('disabled', false).selectpicker('val',-1).selectpicker('refresh');
+	<?php endif; if( isset($_GET['level'])): ?>
+	$('#sltPNiveles').selectpicker('val', '<?= $_GET['level']?>').selectpicker('refresh');	
 	<?php endif; ?>
 
 $('#sltPAnios').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
@@ -180,6 +207,16 @@ $('#sltPAnios').on('changed.bs.select', function (e, clickedIndex, isSelected, p
 $('#sltPMeses').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
 	if( $('#sltPMeses').selectpicker('val')!= null ){
 		location.href = "ciclos.php?year="+$('#sltPAnios').selectpicker('val')+'&month='+$('#sltPMeses').selectpicker('val');
+	}
+});
+$('#sltPIdiomas').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+	if( $('#sltPMeses').selectpicker('val')!= null ){
+		location.href = "ciclos.php?year="+$('#sltPAnios').selectpicker('val')+'&month='+$('#sltPMeses').selectpicker('val')+'&language='+$('#sltPIdiomas').selectpicker('val');
+	}
+});
+$('#sltPNiveles').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+	if( $('#sltPMeses').selectpicker('val')!= null ){
+		location.href = "ciclos.php?year="+$('#sltPAnios').selectpicker('val')+'&month='+$('#sltPMeses').selectpicker('val')+'&language='+$('#sltPIdiomas').selectpicker('val')+'&level='+$('#sltPNiveles').selectpicker('val');
 	}
 });
 <?php else: ?>
