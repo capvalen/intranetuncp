@@ -90,6 +90,7 @@
 				</select>	
 				<label for="">Docente:</label>
 				<select class="text-capitalize selectpicker" id="sltPDocentes" data-live-search="true" data-width="100%">
+				<?php include 'php/OPT_todosDocentes.php'; ?>
 				</select>	
 			
 				<label for="">Mes:</label>
@@ -146,7 +147,7 @@
 				while($rowCursos =$resultadoCursos ->fetch_assoc()){ ?>
 				<tr>
 					<td><?= $i;?></td>
-					<td><?= $rowCursos['Sec_Codigo'];?></td>
+					<td><button class="btn btn-outline-danger border-0 btn-sm btnEliminarSeccion" data-delete='<?= $rowCursos['Sec_Codigo'];?>'> <i class="icofont-close"></i> </button> <span><?= $rowCursos['Sec_Codigo'];?></span></td>
 					<td class="text-capitalize"><?= $rowCursos['sucDescripcion'];?></td>
 					<td><?= $rowCursos['Idi_Nombre'];?></td>
 					<td><?= $rowCursos['Niv_Detalle'];?></td>
@@ -173,6 +174,22 @@
 </div>
 
 <!-- Fin de #wrapper  -->
+</div>
+
+<div id="modalEliminarCurso" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<button class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h5 class="modal-title text-danger" id="my-modal-title">Eliminar</h5>
+				<p>Está seguro que desea eliminar el curso actual?</p>
+				<p><strong>Nota: </strong> El curso no debe contener alumnos para poder ser aliminado</p>
+				<button class="btn btn-outline-danger"  id="btnRemoveCurso"> <i class="icofont-close"></i> Sí, eliminar definitivamente</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <?php include "php/footer.php"; ?>
@@ -231,6 +248,21 @@ $('#sltPNiveles').on('changed.bs.select', function (e, clickedIndex, isSelected,
 		location.href = "ciclos.php?year="+$('#sltPAnios').selectpicker('val')+'&month='+$('#sltPMeses').selectpicker('val')+'&campus='+$('#sltPSedes').selectpicker('val')+'&language='+$('#sltPIdiomas').selectpicker('val')+'&level='+$('#sltPNiveles').selectpicker('val');
 	}
 });
+$('tbody').on('click', '.btnEliminarSeccion', function (e) {
+	$('#btnRemoveCurso').attr('data-remove', $(this).attr('data-delete'))
+	$('#modalEliminarCurso').modal('show');
+});
+$('#btnRemoveCurso').click(function() {
+	$.ajax({url: 'php/removeCiclo.php', type: 'POST', data: { registro: $(this).attr('data-remove') }}).done(function(resp) {
+		console.log(resp);
+		if(resp=='todo ok'){
+			location.reload();
+		}else{
+			$('#h1Advertencia').text('Ocurrió un error al intentar eliminar ciclo, comuníquelo al área de soporte');
+			$('#modalAdvertencia').modal('show');
+		}
+	});
+});
 <?php else: ?>
 
 <?php if(isset($_GET['nuevo'])): ?>
@@ -251,7 +283,7 @@ $('#btnCrearCiclo').click(function () {
 	})
 
 });
-$('#sltPIdiomas').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+/* $('#sltPIdiomas').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
   pantallaOver(true);
 	if($('#sltPIdiomas').val()!=null){
 		$.post('php/OPT_docentes.php', {idioma: $('#sltPIdiomas').val() }).done(function (resp) {
@@ -262,7 +294,7 @@ $('#sltPIdiomas').on('changed.bs.select', function (e, clickedIndex, isSelected,
 			pantallaOver(false);
 		});
 	}
-});
+}); */
 <?php endif; ?>
 
 

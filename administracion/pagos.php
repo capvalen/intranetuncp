@@ -11,6 +11,10 @@
 .cardAcordeon{
   cursor:pointer;
 }
+.alert-secondary {
+    color: #196cc7;
+    background-color: #ffffff;
+}
 </style>
 	
 <div class="wrapper">
@@ -51,7 +55,7 @@ if(isset($_GET['cursor'])){
         <div class="card-body">
         <?php if($resultadoAlumno->num_rows>0){$rowAlumno = $resultadoAlumno->fetch_assoc(); $_POST['idAlumno'] = $rowAlumno['Alu_Codigo']; ?>
           <h5>Datos del alumno</h5>
-          <p><strong>Cod. Int.:</strong> <span><?= $rowAlumno['Alu_Codigo']; ?></span></p>
+          <p id="pCodInt" data-id='<?= $rowAlumno['Alu_Codigo']; ?>'><strong>Cod. Int.:</strong> <span><?= $rowAlumno['Alu_Codigo']; ?></span></p>
           <p><strong>D.N.I.:</strong> <span><?= $rowAlumno['Alu_NroDocumento']; ?></span></p>
           <p><strong>Apellidos:</strong> <span class="text-capitalize"><?= $rowAlumno['Alu_Apellido']; ?></span></p>
           <p><strong>Nombres:</strong> <span class="text-capitalize"><?= $rowAlumno['Alu_Nombre']; ?></span></p>
@@ -88,12 +92,16 @@ if(isset($_GET['cursor'])){
         <label for=""><small>Motivo</small></label>
         <select name="" id="sltTipoPago" class="form-control">
         </select>
+        <label for=""><small>Motivo de Pago</small></label>
+        <select name="" id="sltMotivoPago" class="form-control">
+        <?php include 'php/OPT_tipoMatricula.php'; ?>
+        </select>
+        <div class="alert alert-secondary my-3" role="alert"><i class="icofont-diamond"></i> Motivo: <span id="spanMotivo"></span></div>
         <label for=""><small>Código de recibo</small></label>
         <input type="text" class="form-control" id="txtCodRecibo">
-        <div class="alert alert-secondary my-3" role="alert"><i class="icofont-diamond"></i> Tipo de pago: <span id="spanMotivo"></span></div>
-        <label for=""><small>Monto</small></label>
+        <label for=""><small>Monto (S/) </small></label>
         <input type="number" class="form-control" readonly=true value="0.00" min=0 id="txtMontoPago" disabled=true>
-       
+        <div class="alert alert-danger d-none mt-3" id="alertPagos" role="alert"><i class="icofont-warning-alt"></i> <span style="font-size: 0.8rem;"></span> </div>
         <div class="row col justify-content-end mx-0 mt-3">
           <button type="button" class="btn btn-outline-primary float-right" id="btnInsertPay"><i class="icofont-save"></i> Insertar pago</button>
         </div>
@@ -171,7 +179,7 @@ $('#btnBuscarDniAlumno').click(function () {
         $('#modalBuscarAlumno tbody').append(resp);
         console.log(resp)
         pantallaOver(false)
-        $('#modalBuscarAlumno').modal('show')
+        $('#modalBuscarAlumno').modal('show');
       })
     }
   }
@@ -183,23 +191,46 @@ $('.btnAddPagoDyno').click(function () {
   $('#btnInsertPay').attr('data-ciclo', $(this).parent().parent().attr('data-ciclo'))
 
   $.ajax({url: 'php/OPT_detalleConPagos.php', type:'POST', data:{idioma: $('#btnInsertPay').attr('data-idioma'), nivel: $('#btnInsertPay').attr('data-ciclo'), registro: $('#btnInsertPay').attr('reg_cod') }}).done(function (resp) {// console.log(resp)
+    $('#sltMotivoPago').selectpicker('val', 'Normal').selectpicker('refresh');
     $('#sltTipoPago').children().remove(); $('#sltTipoPago').append(resp);
     $('#sltTipoPago').change();
     $('#modalAddPay').modal('show');
     pantallaOver(false);
   })
 });
-$('#sltTipoPago').change(function () {
-  var motivo = $(`#sltTipoPago option[value='${$('#sltTipoPago').val()}']`).attr('data-motivo')
-  $('#txtMontoPago').val(parseFloat($(`#sltTipoPago option[value='${$('#sltTipoPago').val()}']`).attr('data-valor')).toFixed(2));
+$('#sltTipoPago').change(function () { calculoPension(); });
+$('#sltMotivoPago').change(function () { calculoPension(); });
+function calculoPension(){
+  var motivo = $('#sltMotivoPago').selectpicker('val'); /* $(`#sltTipoPago option[value='${$('#sltTipoPago').val()}']`).attr('data-motivo')*/
+  var monto = parseFloat($(`#sltTipoPago option[value='${$('#sltTipoPago').val()}']`).attr('data-valor')).toFixed(2) 
+  var dscto = 0; 
+  var padre = $(`#sltMotivoPago option[value='${$('#sltMotivoPago').val()}']`);
+  $.idDscto = padre.attr('data-id');
+  //console.log(motivo)
+  if(motivo !='Normal' && $('#sltTipoPago').val()!='Matr0001'){
+    switch (padre.attr('data-tipodscto')) { 
+      case 'MONTO': dscto = parseFloat( padre.attr('data-cantdscto')).toFixed(2); monto = monto - dscto; motivo += ' S/ -'+dscto; break;
+      case 'PORCENTAJE': dscto = parseFloat( padre.attr('data-cantdscto')).toFixed(0); monto = monto - monto*(dscto/100);  motivo += ' -'+dscto+'%'; break;
+      default:
+        break;
+    }
+  }else if(motivo !='Normal' && $('#sltTipoPago').val()=='Matr0001'){
+    motivo = 'Matrículas no tienen ningún descuento'; $.idDscto = 1;
+  }
+  $('#txtMontoPago').val(parseFloat(monto).toFixed(2));
   $('#spanMotivo').text(motivo);
-});
+
+}
 $('#btnInsertPay').click(function () {
-  $('#alertPagos').addClass('d-none')
+  $('#alertPagos').addClass('d-none');
   if($('#txtCodRecibo').val()=='' || ( $('#txtMontoPago').val()=='' || $('#txtMontoPago').val()<0 ) ){
     $('#alertPagos span').text('Tiene campos mal rellenados o en blanco, revise por favor.').parent().removeClass('d-none')
   }else{
-    $.ajax({url: 'php/insertarPago.php', type: 'POST', data:{reg: $('#btnInsertPay').attr('reg_cod'), pagCod: $('#sltTipoPago').val(), recibo: $('#txtCodRecibo').val(), monto: $('#txtMontoPago').val() }}).done(function (resp) {
+    var motivo = $('#sltMotivoPago').selectpicker('val');
+    if(motivo !='Normal' && $('#sltTipoPago').val()=='Matr0001'){
+      motivo = 'Normal';
+    }
+    $.ajax({url: 'php/insertarPago.php', type: 'POST', data:{reg: $('#btnInsertPay').attr('reg_cod'), pagCod: $('#sltTipoPago').val(), recibo: $('#txtCodRecibo').val(), monto: $('#txtMontoPago').val(), motivo: motivo  }}).done(function (resp) {
       console.log(resp);
       if(resp=='todo ok'){
         $('#h1Bien').text('Pago insertado con éxito');

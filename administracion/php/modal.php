@@ -1,6 +1,6 @@
 <?php
 $nomArchivo = basename($_SERVER['PHP_SELF']); 
-$noVerEn = ['matricula.php'];
+$noVerEn = ['matricula.php', 'ciclos.php'];
 if( !in_array($nomArchivo, $noVerEn) ): ?>
 
 
