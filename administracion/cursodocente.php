@@ -48,11 +48,11 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 	<div class="row">
 		<div class="col">
 			<p>Temporada: <?= $rowdatosCurso['Mes_Codigo']; ?></p>
-			<p>Curso: <?= $rowdatosCurso['Idi_Nombre']; ?></p>
+			<p>Curso: <span id="p1Curso"><?= $rowdatosCurso['Idi_Nombre']; ?></span></p>
 			<p>Detalle: <?= $rowdatosCurso['Niv_Detalle']; ?></p>
 		</div>
 		<div class="col">
-			<p>Ciclo: <?= $rowdatosCurso['Sec_NroCiclo']; ?></p>
+			<p>Ciclo: <span id="p1Ciclo"><?= $rowdatosCurso['Sec_NroCiclo']; ?></span></p>
 			<p>Sección: <?= $rowdatosCurso['Sec_Seccion']; ?></p>
 			<p>Sucursal: <?= $rowdatosCurso['Suc_Direccion']; ?></p>
 		</div>
@@ -66,7 +66,10 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 	<?php if(isset($_GET['cursor'])){ ?>
 	<div class="card">
 		<div class="card-body d-flex justify-content-between">
-			<button class="btn btn-outline-primary" id="btnAsignarAlumno"><i class="icofont-badge"></i> Asignar alumno</button>
+			<div>
+				<button class="btn btn-outline-primary" id="btnAsignarAlumno"><i class="icofont-badge"></i> Asignar alumno</button>
+				<button class="btn btn-outline-warning" id="btnReubicarAlumno"><i class="icofont-magic"></i> Re/Ubicar alumno</button>
+			</div>
 			<?php if($resultadoCursos->num_rows >0){ ?>
 				<button class="btn btn-outline-primary" id="btnGuardarNotas"><i class="icofont icofont-save"></i> Guardar cambios</button>
 			<?php } ?>
@@ -190,10 +193,44 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 						<p>Primero, ubique al alumno por D.N.I o por sus Apellidos:</p>
 						<input type="text" class="form-control text-center" autocomplete='off' id="txtUbicarAlumno">
 						<div class="d-flex justify-content-center mt-2">
-							<button class="btn btn-outline-success " id="btnUbicarAlumno"><i class="icofont-search-1"></i> Ubicar alumno</button>
+							<button class="btn btn-outline-success " id="btnUbicarAlumno"><i class="icofont-search-1"></i> Buscar alumno</button>
 						</div>
 					</div>
 					<div class='d-none ' id="segundaParte">
+						<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>N°</th>
+								<th>Apellidos y Nombres</th>
+								<th>D.N.I.</th>
+							</tr>
+						</thead>
+						<tbody>
+							
+						</tbody>
+						</table>
+					</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<div class="modal fade" id="modalReubicarAlumno" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+			
+				<div class="modal-body">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h5 class="modal-title"><i class="icofont-mail"></i> Ubicación de alumno al curso</h5>
+					<div id="primeraParteUbica">
+						<p>Primero, ubique al alumno por D.N.I o por sus Apellidos:</p>
+						<input type="text" class="form-control text-center" autocomplete='off' id="txtReUbicarAlumno">
+						<div class="d-flex justify-content-center mt-2">
+							<button class="btn btn-outline-success " id="btnReUbicarBuscaAlumno"><i class="icofont-search-1"></i> Buscar alumno</button>
+						</div>
+					</div>
+					<div class='d-none ' id="segundaParteUbica">
 						<table class="table table-hover">
 						<thead>
 							<tr>
@@ -215,7 +252,7 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">Asignar nuevo alumno al curso</h5>
+					<h5 class="modal-title"><i class="icofont-address-book"></i> Asignar nuevo alumno al curso</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -223,6 +260,35 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 				<div class="modal-body">
 					<p>¿Desea realmente matricular al alumno: <strong class="text-capitalize" id="txtNombreChosen"></strong>?</p>
 					<button class="btn btn-outline-primary" id="btnInsertChosen"><i class="icofont-contact-add"></i> Sí, matricular</button>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="modalChosenUbicaAlumno" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title"><i class="icofont-address-book"></i> Asignar nuevo alumno al curso</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body container-fluid">
+					<p>Alumno: <strong class="text-capitalize" id="txtNombreChosenUbica"></strong> </p>
+					<div class="form-inline mt-1">
+						<label for="">Tipo de proceso:</label>
+						<select class="selectpicker ml-2" id="sltPTipoUbica" data-seach='true' data-width='50%'>
+							<option value="1">Ubicación</option>
+							<option value="2">Reubicación</option>
+						</select>
+					</div>
+					<div class="form-inline mt-1">
+						<label for="">Calificación:</label>
+						<input class="form-control col-4 ml-1" type="number" id="txtUbicaCalificacion">
+					</div>
+					<p class="my-1">¿Es todo correcto para asignandar al nuevo alumno?</p>
+					<button class="btn btn-outline-primary " id="btnUbicaChosen"><i class="icofont-contact-add"></i> Sí, <span id="spanBtnUbica">ubicar</span></button>
 				</div>
 				
 			</div>
@@ -317,10 +383,10 @@ $('#btnUbicarAlumno').click(function () {
 				<td colspan="3"> <i class="icofont-not-allowed"></i> No existen alumnos coincidentes con lo solicitado </td>
 			</tr>`)
 		}
+		$('#primeraParte').addClass('d-none');
+		$('#segundaParte').addClass('animated fadeIn').removeClass('d-none');
+		pantallaOver(false);
 	});
-	$('#primeraParte').addClass('d-none');
-	$('#segundaParte').addClass('animated fadeIn').removeClass('d-none');
-	pantallaOver(false);
 	}
 });
 <?php if($resultadoCursos->num_rows >0){ ?>
@@ -404,6 +470,60 @@ $('#btnRemoveChosen').click(function () {
 			location.reload();
 		});
 	})
+});
+$('#btnReubicarAlumno').click(function() {
+	$('#primeraParteUbica').removeClass('d-none');
+	$('#segundaParteUbica').removeClass('animated fadeIn').addClass('d-none');
+	$('#modalReubicarAlumno').modal('show');
+});
+$('#txtReUbicarAlumno').keyup(function (e) {
+	if (e.which ==13){ $('#btnReUbicarBuscaAlumno').click(); }
+})
+$('#btnReUbicarBuscaAlumno').click(function () {
+	if($('#txtReUbicarAlumno').val()!=""){
+	pantallaOver(true);
+	$('#segundaParteUbica tbody').children().remove();
+	
+	$.ajax({url: 'php/encontrarAlumnosCoincidentes.php', type: 'POST', data:{texto: $('#txtReUbicarAlumno').val() }}).done(function (resp) {
+		//console.log(resp)
+		pantallaOver(false);
+		var datos = JSON.parse(resp); var docDni ='';
+		if(datos.length>0){
+			$.each(datos, function (index, elem) {
+				if(elem.Alu_NroDocumento == null ){ docDni='';}else{docDni = elem.Alu_NroDocumento}
+				$('#segundaParteUbica tbody').append(`<tr>
+				<td> ${index+1} </td>
+				<td class='text-capitalize tdNombre'> ${elem.Alu_Apellido.toLowerCase() +', '+ elem.Alu_Nombre.toLowerCase()}</td>
+				<td>${docDni}</td>
+				<td><button class="btn btn-outline-success btn-sm btnUbicaElegirAlumno" data-id="${elem.Alu_Codigo}"><i class="icofont-ui-rate-add"></i></button></td>
+			</tr>`)
+			});
+
+		}else{
+			$('#segundaParteUbica tbody').append(`<tr>
+				<td colspan="3"> <i class="icofont-not-allowed"></i> No existen alumnos coincidentes con lo solicitado </td>
+			</tr>`)
+		}
+		$('#primeraParteUbica').addClass('d-none');
+		$('#segundaParteUbica').addClass('animated fadeIn').removeClass('d-none');
+		pantallaOver(false);
+	});
+	}
+});
+$('tbody').on('click', '.btnUbicaElegirAlumno', function () {
+	$('#txtNombreChosenUbica').text( $(this).parent().parent().find('.tdNombre').text())
+	$('#btnUbicaChosen').attr('data-id', $(this).attr('data-id'));
+	$('#modalReubicarAlumno').modal('hide');
+	$('#modalChosenUbicaAlumno').modal('show');
+});
+$('#sltPTipoUbica').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+	if($('#sltPTipoUbica').val()==1){ $('#spanBtnUbica').text('ubicar'); }
+	else if($('#sltPTipoUbica').val()==2){ $('#spanBtnUbica').text('reubicar'); }
+});
+$('#btnUbicaChosen').click(function() { 
+	$.ajax({url: 'php/insertarAlumnoReubicacion.php', type: 'POST', data: {codAlu: $(this).attr('data-id'), codSec: '<?= $_GET['cursor']; ?>', tipoProceso: $(`#sltPTipoUbica option[value="${$('#sltPTipoUbica').val()}"]`).text(), calificacion: $('#txtUbicaCalificacion').val(), idiomaC: $('#p1Curso').text()+ $('#p1Ciclo').text() }}).done(function(resp) {
+		console.log(resp) 
+	});
 });
 <?php } ?>
 </script>

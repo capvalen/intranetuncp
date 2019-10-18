@@ -206,12 +206,14 @@ if(isset($_GET['cursor'])){
 						<option value="0">Femenino</option>
 						<option value="1">Masculino</option>
 					</select>
-					<label for="">Facultad:</label>
-					<select class="selectpicker" id="SltPFacultad" data-search='true' data-width='100%'>
-						<?php include 'php/OPT_facultades.php'; ?>
-					</select>
-					<label for="">Fecha de nacimiento:</label>
-					<input type="date" class="form-control" id="txtCrearFecha" value="<?= date('Y-m-d'); ?>">
+					<div class="d-none">
+						<label for="">Facultad:</label>
+						<select class="selectpicker" id="SltPFacultad" data-search='true' data-width='100%'>
+							<?php include 'php/OPT_facultades.php'; ?>
+						</select>
+						<label for="">Fecha de nacimiento:</label>
+						<input type="date" class="form-control" id="txtCrearFecha" value="<?= date('Y-m-d'); ?>">
+					</div>
 					<button class="btn btn-outline-primary mt-3" id="btnSaveAlumno"><i class="icofont-save"></i> Guardar Alumno</button>
 				</div>
 			
@@ -384,22 +386,29 @@ $('#txtCrearDni').keyup(function (e) {
 })
 $('#btnBuscarDni').click(function () {
 	pantallaOver(true);
-	$.ajax({url: 'php/apiReniec.php', type: 'POST', data: {dni: $('#txtCrearDni').val() }}).done(function (resp) {
-		console.log(resp);
-		if(resp =='ya registrado'){
-			//ya fue
-		}else{
-			var datos = JSON.parse(resp);
-			console.log(datos)
-			$('#txtCrearApellidos').val($.trim(datos[0]+ ' '+ datos[1]) );
-			$('#txtCrearNombres').val(datos[2]);
-			$('#btnBuscarDni').addClass('d-none');
-			$('#datosEncontrados').removeClass('d-none');
-			$('#txtCrearApellidos').focus();
+	// $.ajax({url: 'php/apiReniec.php', type: 'POST', data: {dni: $('#txtCrearDni').val() }}).done(function (resp) {
+	// 	console.log(resp);
+	// 	if(resp =='ya registrado'){
+	// 		//ya fue
+	// 	}else{
+	// 		var datos = JSON.parse(resp);
+	// 		console.log(datos)
+	// 		$('#txtCrearApellidos').val($.trim(datos[0]+ ' '+ datos[1]) );
+	// 		$('#txtCrearNombres').val(datos[2]);
+	// 		$('#btnBuscarDni').addClass('d-none');
+	// 		$('#datosEncontrados').removeClass('d-none');
+	// 		$('#txtCrearApellidos').focus();
 
-		}
-		pantallaOver(false);
-	})
+	// 	}
+	// 	$('#btnBuscarDni').addClass('d-none');
+	// 		$('#datosEncontrados').removeClass('d-none');
+	// 		$('#txtCrearApellidos').focus();
+	// 	pantallaOver(false);
+	// })
+	$('#btnBuscarDni').addClass('d-none');
+	$('#datosEncontrados').removeClass('d-none');
+	$('#txtCrearApellidos').focus();
+	pantallaOver(false);
 });
 $('#btnSaveAlumno').click(function () {
 	pantallaOver(true);

@@ -12,6 +12,17 @@
 .colNormal, .colHorarios{font-size: .8em;}
 .border-dark{border: 2px solid #525252!important; border-bottom: 0!important;}
 .border-dark:last-child{border-bottom: 2px solid #525252!important; }
+@media print{
+	header {
+    position: fixed;
+    top: 0;
+  }
+	footer {
+    position: fixed;
+    bottom: 0;
+  }
+	
+}
 </style>
 	
 <div class="wrapper">
@@ -67,9 +78,15 @@
 			order by i.Idi_Nombre, year(STR_TO_DATE(s.Mes_Codigo, '%m%Y')), month(STR_TO_DATE(s.Mes_Codigo, '%m%Y')) asc ;"; //  and Sec_Detalle = 'Habilitado'
 	?> 
 
-	<div class="">
+	<div class="content-block">
 		<div class="">
-			<h3 class="text-center">Hoja de seguimiento de Alumno</h3>
+			<div class="row">
+				<div class="col-3 "><img src="images/ceid_print.png" class="d-none d-print-block img-fluid "></div>
+				<div class="col d-flex align-items-center justify-content-center">
+					<h3 class="">Hoja de seguimiento de Alumno</h3>
+				</div>
+				<div class="col-3 d-flex justify-content-end "> <img class="d-none d-print-block" src="images/uncp-logo.png?v=1" style="height: 80px;"> </div>
+			</div>
 			<p><strong>Apellidos y nombres: </strong> <span class="text-capitalize"><?= $rowAlumno['Alu_Apellido'].', '.$rowAlumno['Alu_Nombre'];?></span></p>
 		<?php 
 			$resultadoDetalles=$cadena->query($sqlDetalles);
@@ -125,6 +142,10 @@
 			<?php } // fin de bucle while ?>
 		</div>
 	</div>
+	
+	<footer>
+	<span>17/10/2019</span>
+	</footer>
 	<?php
 		}else{ //fin de busqueda de cursos ?>
 		<p>El alumno no tiene cursos asignados aún.</p>
