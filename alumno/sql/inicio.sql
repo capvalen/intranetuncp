@@ -158,3 +158,12 @@ return @pension ;
 
 END$$
 DELIMITER ;
+
+
+
+CREATE TABLE `situación` ( `idSituacion` INT NOT NULL AUTO_INCREMENT , `sitDescripcion` VARCHAR(250) NOT NULL , PRIMARY KEY (`idSituacion`)) ENGINE = InnoDB;
+INSERT INTO `situación` (`idSituacion`, `sitDescripcion`) VALUES
+(1, 'En trámite'),
+(2, 'Procede'),
+(3, 'No procede: Deuda a la fecha'),
+(4, 'No procede: Fuera de tiempo ');

@@ -21,10 +21,33 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 					</ul>
 				</li>
 				<li>
-						<a href="#" class="d-flex align-items-center"><i class="icofont-business-man"></i> Sub dirección Adm.</span></a>
+					<a href="#pageSubAcademicoAdm" data-toggle="collapse" aria-expanded="false" class="d-flex align-items-center"><i class="icofont-business-man"></i> Sub Dirección Adm. </span> <i class="icofont-caret-down ml-auto"></i></a>
+					<ul class="collapse list-unstyled" id="pageSubAcademicoAdm">
+						<li>
+							<a href="ciclos.php"><i class="icofont-folder-open"></i> Ciclos</a>
+						</li>
+						<li>
+							<a href="mesacademico.php"><i class="icofont-folder-open"></i> Mes académico</a>
+						</li>
+						<li>
+							<a href="matricula.php"><i class="icofont-book-mark"></i> Matrícular alumno</a>
+						</li>
+						<li>
+							<a href="pagos.php"><i class="icofont-money"></i> Pagos</a>
+						</li>
+						<li>
+								<a href="reservas.php"><i class="icofont-contacts"></i> Reserva de matrícula</a>
+						</li>
+						<li>
+								<a href="seguimiento.php"><i class="icofont-attachment"></i> Seguimiento académico</a>
+						</li>
+						<li>
+							<a href="tramites.php"><i class="icofont-attachment"></i> Trámite documentario</a>
+						</li>
+					</ul>
 				</li>
 				<li>
-					<a href="#pageSubAcademico" data-toggle="collapse" aria-expanded="false" class="d-flex align-items-center"><i class="icofont-business-man"></i> Sub dirección Académica </span> <i class="icofont-caret-down ml-auto"></i></a>
+					<a href="#pageSubAcademico" data-toggle="collapse" aria-expanded="false" class="d-flex align-items-center"><i class="icofont-business-man"></i> Sub Dirección Académica </span> <i class="icofont-caret-down ml-auto"></i></a>
 					<ul class="collapse list-unstyled" id="pageSubAcademico">
 						<li>
 							<a href="ciclos.php"><i class="icofont-folder-open"></i> Ciclos</a>
@@ -39,10 +62,13 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 							<a href="pagos.php"><i class="icofont-money"></i> Pagos</a>
 						</li>
 						<li>
-							<a href="tramites.php"><i class="icofont-attachment"></i> Trámite documentario</a>
+								<a href="reservas.php"><i class="icofont-contacts"></i> Reserva de matrícula</a>
 						</li>
 						<li>
 								<a href="seguimiento.php"><i class="icofont-attachment"></i> Seguimiento académico</a>
+						</li>
+						<li>
+							<a href="tramites.php"><i class="icofont-attachment"></i> Trámite documentario</a>
 						</li>
 					</ul>
 				</li>
@@ -62,10 +88,13 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 							<a href="pagos.php"><i class="icofont-money"></i> Pagos</a>
 						</li>
 						<li>
-							<a href="tramites.php"><i class="icofont-attachment"></i> Trámite documentario</a>
+								<a href="reservas.php"><i class="icofont-contacts"></i> Reserva de matrícula</a>
 						</li>
 						<li>
 								<a href="seguimiento.php"><i class="icofont-attachment"></i> Seguimiento académico</a>
+						</li>
+						<li>
+							<a href="tramites.php"><i class="icofont-attachment"></i> Trámite documentario</a>
 						</li>
 					</ul>
 				</li>
@@ -85,10 +114,10 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 							<a href="pagos.php"><i class="icofont-money"></i> Pagos</a>
 						</li>
 						<li>
-							<a href="tramites.php"><i class="icofont-attachment"></i> Trámite documentario</a>
+								<a href="seguimiento.php"><i class="icofont-attachment"></i> Seguimiento académico</a>
 						</li>
 						<li>
-								<a href="seguimiento.php"><i class="icofont-attachment"></i> Seguimiento académico</a>
+							<a href="tramites.php"><i class="icofont-attachment"></i> Trámite documentario</a>
 						</li>
 					</ul>
 				</li>

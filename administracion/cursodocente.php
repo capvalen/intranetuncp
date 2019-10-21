@@ -190,7 +190,7 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 					</button>
 					<h5 class="modal-title"><i class="icofont-mail"></i> Asignar nuevo alumno al curso</h5>
 					<div id="primeraParte">
-						<p>Primero, ubique al alumno por D.N.I o por sus Apellidos:</p>
+						<p class="mb-1"><small>Primero ubique al alumno por D.N.I o por sus Apellidos:</small></p>
 						<input type="text" class="form-control text-center" autocomplete='off' id="txtUbicarAlumno">
 						<div class="d-flex justify-content-center mt-2">
 							<button class="btn btn-outline-success " id="btnUbicarAlumno"><i class="icofont-search-1"></i> Buscar alumno</button>

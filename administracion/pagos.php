@@ -100,7 +100,7 @@ if(isset($_GET['cursor'])){
         <label for=""><small>Código de recibo</small></label>
         <input type="text" class="form-control" id="txtCodRecibo">
         <label for=""><small>Monto (S/) </small></label>
-        <input type="number" class="form-control" readonly=true value="0.00" min=0 id="txtMontoPago" disabled=true>
+        <input type="number" class="form-control" value="0.00" min=0 id="txtMontoPago">
         <div class="alert alert-danger d-none mt-3" id="alertPagos" role="alert"><i class="icofont-warning-alt"></i> <span style="font-size: 0.8rem;"></span> </div>
         <div class="row col justify-content-end mx-0 mt-3">
           <button type="button" class="btn btn-outline-primary float-right" id="btnInsertPay"><i class="icofont-save"></i> Insertar pago</button>
