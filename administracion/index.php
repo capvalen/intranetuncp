@@ -49,6 +49,12 @@ include "php/conexionInfocat.php";
     75% {color: #c173ce;}
     100% {color: #33dbdb;}
 }
+#cardMayor{
+  border-radius: 1.25rem; box-shadow: 4px 2px 27px #a9a6a666;
+}
+#divPapa{position: relative;}
+#spanFlotante{position: absolute; bottom: 8px; right: 8px; color: #646769;}
+#spanFlotante:active{color: #2f2f2f;}
 </style>
 <nav class="navbar navbar-expand-lg navbar-light " style="background-color: #fff;">
   <a href="#!" class="navbar-brand">
@@ -63,18 +69,20 @@ include "php/conexionInfocat.php";
   <div class="container">
     <h1 class="display-4 text-center">Estudiar idiomas es conocer el mundo</h1>
     <p class="lead text-center">Ingresar al centro de Idiomas - UNCP:</p>
-    <div class="card  col-md-4 col-sm-12 mx-auto">
+    <div class="card border-0 col-md-4 col-sm-12 mx-auto" id="cardMayor">
       <div class="card-body ">
+        <h5 class="text-center">Login</h5>
         <div class="row d-flex justify-content-center mb-3">
           <label class="text-muted" for=""><i class="icofont-id"></i> <small>Usuario</small></label>
           <input type="text" class="text-center form-control" id="txtNegocioLog" autocomplete="off"> 
         </div>
-        <div class="row d-flex justify-content-center mb-3">
+        <div class="row d-flex justify-content-center mb-3" id="divPapa">
           <label class="text-muted" for=""><i class="icofont-finger-print"></i> <small>Contraseña</small></label>
           <input type="password" class="text-center form-control" id="txtlocalLog" autocomplete="off">
+          <span id="spanFlotante"><i class="icofont-eye-alt"></i></span>
         </div>
         <div class="row d-flex justify-content-center mb-3">
-        <button class="btn btn-outline-primary" id="btnAcceder"><i class="icofont-search-1"></i> Acceder</button>
+        <button class="btn btn-primary" id="btnAcceder">INGRESAR</button>
     
         </div>
       </div>
@@ -108,7 +116,8 @@ include "php/conexionInfocat.php";
   </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+
 <script>
 $(document).ready(function () {
 	$('#txtNegocioLog').focus();
@@ -128,7 +137,7 @@ $('#btnAcceder').click(function() {
 			//if (parseInt(iduser)>0){//console.log('el id es '+data)
 			if( resp=='concedido' ){
 				console.log(resp)
-				window.location="tramites.php";
+				window.location="perfil.php";
 			}else if(resp=='inhabilitado'){
 				$('#spanError2').text('Tu usuario fue inhabilitado temporalmente. No inista y llame a soporte informático.');
 				$('#divError').removeClass('hidden');
@@ -152,6 +161,15 @@ $('#btnAcceder').click(function() {
 				console.log('error en los datos')}
 		}
 	});
+});
+$('#spanFlotante').mousedown(function() {
+  $('#txtlocalLog').get(0).type = 'text';
+});
+$('#spanFlotante').mouseup(function() {
+  $('#txtlocalLog').get(0).type = 'password';
+});
+$('#spanFlotante').mouseleave(function() {
+  $('#txtlocalLog').get(0).type = 'password';
 });
 </script>
 </body>

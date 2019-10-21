@@ -6,7 +6,7 @@
 include 'conexionInfocat.php';
 $local="/";
 
-$sqlCons= "SELECT lower(Emp_Nombre) as Emp_Nombre, e.Emp_Codigo, concat(lower(Emp_Apellido), ', ', lower(Emp_Nombre)) as nomCompleto, Emp_Estado FROM `usuario` u
+$sqlCons= "SELECT lower(Emp_Nombre) as Emp_Nombre, e.Emp_Codigo, concat(lower(Emp_Apellido), ', ', lower(Emp_Nombre)) as nomCompleto, trim(Emp_Estado) as Emp_Estado, u.Rol_Id, u.Suc_Codigo FROM `usuario` u
 inner join empleado e on e.Emp_Codigo= u.Emp_Codigo where Usu_Descripcion = '{$_POST['user']}' and Usu_Pasword = '{$_POST['pws']}'; ";
 $log = mysqli_query($cadena, $sqlCons);
 //echo $sqlCons;
@@ -17,8 +17,9 @@ if ($log->num_rows>0){
 		
 		setcookie('ckAtiende', $row['Emp_Nombre'], $expira, $local);
 		setcookie('cknomCompleto', $row['nomCompleto'] , $expira, $local);
-		setcookie('ckPower', 105, $expira, $local); //$row['usuPoder']
+		setcookie('ckPower', $row['Rol_Id'], $expira, $local); //$row['usuPoder']
 		setcookie('ckidUsuario', $row['Emp_Codigo'], $expira, $local);
+		setcookie('ckidSucursal', $row['Suc_Codigo'], $expira, $local);
 		
 	
 		echo 'concedido';

@@ -1,4 +1,5 @@
 <?php 
+include "variablesGenerales.php"; 
 $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 <!-- Sidebar  -->
 <nav id="sidebar">
@@ -12,6 +13,7 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 
 		<ul class="list-unstyled components">
 				<p class="text-center"><small>Versión 1.0</small></p>
+			<?php if( in_array($_COOKIE['ckPower'], $secretaria) && $_COOKIE['ckidSucursal']=='SUC001' ): ?>
 				<li>
 					<a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="d-flex align-items-center"><i class="icofont-support"></i> <span class="liText">Secretaría</span> <i class="icofont-caret-down ml-auto"></i></a>
 					<ul class="collapse list-unstyled" id="pageSubmenu">
@@ -20,9 +22,11 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 						</li>
 					</ul>
 				</li>
+			<?php endif; ?>
+			<?php if( in_array($_COOKIE['ckPower'], $subAdministracion) && $_COOKIE['ckidSucursal']=='SUC001' ): ?>
 				<li>
-					<a href="#pageSubAcademicoAdm" data-toggle="collapse" aria-expanded="false" class="d-flex align-items-center"><i class="icofont-business-man"></i> Sub Dirección Adm. </span> <i class="icofont-caret-down ml-auto"></i></a>
-					<ul class="collapse list-unstyled" id="pageSubAcademicoAdm">
+					<a href="#pageSubAdministracion" data-toggle="collapse" aria-expanded="false" class="d-flex align-items-center"><i class="icofont-business-man"></i> Sub Dirección Adm. </span> <i class="icofont-caret-down ml-auto"></i></a>
+					<ul class="collapse list-unstyled" id="pageSubAdministracion">
 						<li>
 							<a href="ciclos.php"><i class="icofont-folder-open"></i> Ciclos</a>
 						</li>
@@ -46,6 +50,8 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 						</li>
 					</ul>
 				</li>
+				<?php endif; ?>
+				<?php if( in_array($_COOKIE['ckPower'], $subAcademica) && $_COOKIE['ckidSucursal']=='SUC001' ): ?>
 				<li>
 					<a href="#pageSubAcademico" data-toggle="collapse" aria-expanded="false" class="d-flex align-items-center"><i class="icofont-business-man"></i> Sub Dirección Académica </span> <i class="icofont-caret-down ml-auto"></i></a>
 					<ul class="collapse list-unstyled" id="pageSubAcademico">
@@ -72,6 +78,8 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 						</li>
 					</ul>
 				</li>
+				<?php endif; ?>
+				<?php if( in_array($_COOKIE['ckPower'], $subRegistro) && $_COOKIE['ckidSucursal']=='SUC001' ): ?>
 				<li>
 					<a href="#pageRegistros" data-toggle="collapse" aria-expanded="false" class="d-flex align-items-center"><i class="icofont-pen-holder"></i> Área de registro </span> <i class="icofont-caret-down ml-auto"></i></a>
 					<ul class="collapse list-unstyled" id="pageRegistros">
@@ -98,6 +106,8 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 						</li>
 					</ul>
 				</li>
+				<?php endif; ?>
+				<?php if( $_COOKIE['ckidSucursal']=='SUC002' ): ?>
 				<li>
 						<a href="#pageHuancas" data-toggle="collapse" aria-expanded="false" class="d-flex align-items-center"><i class="icofont-ui-home"></i> Sede Huancas</span> <i class="icofont-caret-down ml-auto"></i></a>
 					<ul class="collapse list-unstyled" id="pageHuancas">
@@ -121,12 +131,17 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 						</li>
 					</ul>
 				</li>
+				<?php endif; ?>
+				<?php if( $_COOKIE['ckidSucursal']=='SUC010' ): ?>
 				<li>
 						<a href="#" class="d-flex align-items-center"><i class="icofont-ui-home"></i> Sede Tarma</span></a>
 				</li>
+				<?php endif; ?>
+				<?php if( in_array($_COOKIE['ckPower'], $subAdministracion) ): ?>
 				<li <?php if($nomArchivo =='configuraciones.php') echo 'class="active"'; ?>>
 						<a href="configuraciones.php" class="d-flex align-items-center"><i class="icofont-ui-settings"></i> Configuraciones</span></a>
 				</li>
+				<?php endif; ?>
 		</ul>
 </nav>
 <!-- Fin Sidebar  -->

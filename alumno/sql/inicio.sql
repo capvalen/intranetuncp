@@ -167,3 +167,55 @@ INSERT INTO `situación` (`idSituacion`, `sitDescripcion`) VALUES
 (2, 'Procede'),
 (3, 'No procede: Deuda a la fecha'),
 (4, 'No procede: Fuera de tiempo ');
+
+
+
+ALTER TABLE `usuario` ADD `Suc_Codigo` VARCHAR(6) NOT NULL DEFAULT 'SUC001' AFTER `Rol_Id`;
+ALTER TABLE `rol` ADD `rolActivo` INT NOT NULL DEFAULT '0' AFTER `Rol_Descripcion`;
+
+INSERT INTO `rol` (`Rol_Id`, `Rol_Detalle`, `Rol_Descripcion`, `rolActivo`) VALUES ('109', 'Dirección Administrativa', 'Full access', '1'), ('110', 'Sub Dirección Administrativa', 'Semi Access', '1'), ('111', 'Área de registros', 'Sólo permite registrar datos', '1');
+
+ALTER TABLE `usuario` ADD `usuActivo` INT NOT NULL DEFAULT '1' AFTER `Suc_Codigo`;
+
+
+DELIMITER $$
+CREATE FUNCTION `totalAlumnosMes`() RETURNS int(11)
+    NO SQL
+BEGIN
+declare alumnos int default 0;
+SELECT count(reg_codigo) into alumnos FROM `seccion` s 
+inner join registroalumno ra on ra.Sec_Codigo = s.Sec_Codigo
+where Mes_Codigo = date_format( curdate() ,'%m%Y') and ra.reg_codigo like 'SUC%';
+
+return alumnos;
+
+END$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE FUNCTION `totalCursosMes`() RETURNS int(11)
+    NO SQL
+BEGIN
+declare cursos int default 0;
+SELECT count(Sec_Codigo) into cursos  FROM `seccion`
+where Mes_Codigo = date_format( curdate() ,'%m%Y') and Sec_Codigo like 'SUC%';
+
+return cursos;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE FUNCTION `totalReservaMes`() RETURNS int(11)
+    NO SQL
+BEGIN
+declare reservas int default 0;
+SELECT count(reg_codigo) into reservas  FROM `seccion` s 
+inner join registroalumno ra on ra.Sec_Codigo = s.Sec_Codigo
+where Mes_Codigo = date_format( curdate() ,'%m%Y') and ra.reg_codigo like 'RESERVA%';
+
+return reservas;
+
+END$$
+DELIMITER ;

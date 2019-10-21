@@ -61,11 +61,11 @@
 	<table class="table table-hover">
 	<thead>
 		<tr>
-			<td>Cod. Registro</td>
-			<<!-- td>Cod. Sección</td> -->
-			<td>Alumno</td>
-			<td>Situación</td>
-			<td>Documento</td>
+			<th>Cod. Registro</th>
+			<!--<td>Cod. Sección</td> -->
+			<th>Alumno</th>
+			<th>Situación</th>
+			<th>Documento</th>
 		</tr>
 	</thead>
 		<tbody>
@@ -82,9 +82,9 @@
 		while($rowReserva = $respuestaReserva->fetch_assoc()){
 		?>
 			<tr>
-				<td><?=$rowReserva['Reg_Codigo']; ?></td>
+				<td><button class="btn btn-outline-danger btn-sm border-0 btnEliminarReserva" data-reg='<?=$rowReserva['Reg_Codigo']; ?>'> <i class="icofont-close"></i> </button> <?=$rowReserva['Reg_Codigo']; ?></td>
 				<!-- <td><?=$rowReserva['Sec_Codigo']; ?></td> -->
-				<td class="text-capitalize"><?=$rowReserva['aluNombre']; ?></td>
+				<td class="text-capitalize tdNombre"><?=$rowReserva['aluNombre']; ?></td>
 				<td><?=$rowReserva['AlSe_Condicion']; ?></td>
 				<td><?=$rowReserva['Reg_EstadoFinal']; ?></td>
 			</tr>
@@ -157,6 +157,24 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="modalRemoveReserva" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title text-danger">Retirar reserva</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>¿Desea realmente retirar la reserva del alumno: <strong class="text-capitalize" id="txtNombreRemove"></strong>?</p>
+					<button class="btn btn-outline-danger float-right" id="btnRemoveChosen"><i class="icofont-trash"></i> Sí, retirar</button>
+				</div>
+				
+			</div>
+		</div>
+	</div>
 
 <?php include "php/footer.php"; ?>
 
@@ -267,11 +285,26 @@ $('#btnInsertChosenReserva').click(function() {
 			console.log(resp)
 			if(resp.length==18){
 				console.log( 'grabo' );
+				location.reload();
 			}
 		});
 	}
 });
 <?php endif; ?>
+$('tbody').on('click', '.btnEliminarReserva', function (e) {
+	var padre = $(this).parent().parent();
+	$('#txtNombreRemove').text( padre.find('.tdNombre').text());
+	$('#modalRemoveReserva').modal('show');
+	$('#btnRemoveChosen').attr('data-id', $(this).attr('data-reg'));
+});
+$('#btnRemoveChosen').click(function() {
+	$.ajax({url: 'php/removeReserva.php', type: 'POST', data: { reg: $('#btnRemoveChosen').attr('data-id') }}).done(function(resp) {
+		console.log(resp)
+		if(resp =='todo ok'){
+			location.reload();
+		}
+	});
+});
 <?php endif; ?>
 
 </script>
