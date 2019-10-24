@@ -34,7 +34,8 @@ if( $resultadoCursos->num_rows>0){
       inner join seccion s on s.Sec_Codigo = ra.Sec_Codigo
       inner join idioma i on s.Idi_Codigo = i.Idi_Codigo
       inner join nivel n on n.Niv_Codigo = s.Niv_Codigo
-      where Alu_Codigo = '{$_POST['idAlumno']}' and s.Idi_Codigo ='{$rowCursos['Idi_Codigo']}'";
+      where Alu_Codigo = '{$_POST['idAlumno']}' and s.Idi_Codigo ='{$rowCursos['Idi_Codigo']}'
+      order by Niv_Detalle, Mes_Codigo, s.Sec_NroCiclo asc; ";
       //echo $sqlCiclos;
       $resultadoCiclos = $esclavo->query($sqlCiclos);
       if($resultadoCiclos->num_rows>0){

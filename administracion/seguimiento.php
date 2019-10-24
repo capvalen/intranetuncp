@@ -10,8 +10,12 @@
 <style>
 .colSubInt{border-bottom: 2px solid #525252; }
 .colNormal, .colHorarios{font-size: .8em;}
-.border-dark{border: 2px solid #525252!important; border-bottom: 0!important;}
-.border-dark:last-child{border-bottom: 2px solid #525252!important; }
+.border-negro{ }
+.border-negro{
+	border: 2px solid #525252!important;
+}
+/* .border-dark:last-child{border-bottom: 2px solid #525252!important; } */
+
 @media print{
 	header {
     position: fixed;
@@ -22,6 +26,9 @@
     bottom: 0;
   }
 	
+}
+.bloqueEntero  {
+	page-break-inside: avoid;
 }
 </style>
 	
@@ -57,7 +64,7 @@
 	?>
 
 	<?php if(isset($_GET['cursor']) || isset($_GET['patron']) ){ 
-		
+		$cursoAnt='';
 		
 		$resultadoAlumno=$cadena->query($sqlAlumno);
 		if($resultadoAlumno->num_rows>=1){
@@ -81,20 +88,21 @@
 	<div class="content-block">
 		<div class="">
 			<div class="row">
-				<div class="col-3 "><img src="images/ceid_print.png" class="d-none d-print-block img-fluid "></div>
+				<div class="col-3 "><img src="images/ceid_print.jpg" class="d-none d-print-block img-fluid " style="max-width: 88%;"></div>
 				<div class="col d-flex align-items-center justify-content-center">
-					<h3 class="">Hoja de seguimiento de Alumno</h3>
+					<h3 class="">HOJA DE SEGUIMIENTO ACADÉMICO</h3>
 				</div>
 				<div class="col-3 d-flex justify-content-end "> <img class="d-none d-print-block" src="images/uncp-logo.png?v=1" style="height: 80px;"> </div>
 			</div>
-			<p><strong>Apellidos y nombres: </strong> <span class="text-capitalize"><?= $rowAlumno['Alu_Apellido'].', '.$rowAlumno['Alu_Nombre'];?></span></p>
+			<h5><strong>Apellidos y nombres: </strong> <span class="text-uppercase"><?= $rowAlumno['Alu_Apellido'].', ';?></span> <span class="text-capitalize"><?=$rowAlumno['Alu_Nombre']; ?></span></h5>
 		<?php 
 			$resultadoDetalles=$cadena->query($sqlDetalles);
-			if($resultadoDetalles->num_rows>=1){
-			while($rowDetalles=$resultadoDetalles->fetch_assoc()){
+			if($resultadoDetalles->num_rows>=1){ $i=0;
+			while($rowDetalles=$resultadoDetalles->fetch_assoc()){ $i++;
+				$cursoAnt = $rowDetalles['Idi_Nombre'];;
 
 		 ?>
-			<div class="container-fluid bloqueEntero border border-dark">
+			<div class="container-fluid bloqueEntero border-negro" >
 				<div class="row">
 					<div class="col colHorarios"><?= $rowDetalles['Idi_Nombre']; ?></div>
 					<div class="col-3 colHorarios"><?= $rowDetalles['Niv_Detalle'].'-'.$rowDetalles['Sec_NroCiclo']; ?></div>
@@ -144,7 +152,7 @@
 	</div>
 	
 	<footer>
-	<span>17/10/2019</span>
+	<span><?= date('d/m/Y'); ?></span>
 	</footer>
 	<?php
 		}else{ //fin de busqueda de cursos ?>

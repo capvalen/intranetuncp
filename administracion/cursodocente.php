@@ -523,6 +523,17 @@ $('#sltPTipoUbica').on('changed.bs.select', function (e, clickedIndex, isSelecte
 $('#btnUbicaChosen').click(function() { 
 	$.ajax({url: 'php/insertarAlumnoReubicacion.php', type: 'POST', data: {codAlu: $(this).attr('data-id'), codSec: '<?= $_GET['cursor']; ?>', tipoProceso: $(`#sltPTipoUbica option[value="${$('#sltPTipoUbica').val()}"]`).text(), calificacion: $('#txtUbicaCalificacion').val(), idiomaC: $('#p1Curso').text()+ $('#p1Ciclo').text() }}).done(function(resp) {
 		console.log(resp) 
+		$('#modalChosenUbicaAlumno').modal('hide');
+		if(resp=='todo ok'){
+			$('#h1Bien').text('Alumno ha sido ubicado al curso');
+			$('#modalGuardadoCorrecto').modal('show');
+		}else if(resp=='ya registrado'){
+			$('#h1Advertencia').text('El alumno ya se encontraba registrado en el curso ' + $('#spanCursoConf').text());
+			$('#modalAdvertencia').modal('show');
+		}else{
+			$('#h1Advertencia').text('Error desconocido, comuníquelo al área de soporte');
+			$('#modalAdvertencia').modal('show');
+		}
 	});
 });
 <?php } ?>
