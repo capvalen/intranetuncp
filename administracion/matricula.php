@@ -16,7 +16,7 @@
 <div class="wrapper">
 <?php include "php/menu-wrapper.php";
 if(isset($_GET['cursor'])){
-	$sqlAlumno = "SELECT `Alu_Codigo`, lower(`Alu_Nombre`) as Alu_Nombre, lower(`Alu_Apellido`) as Alu_Apellido, `Alu_NroDocumento`, date_format(`Alu_FechaNacimiento`, '%d/%m/%Y') as Alu_FechaNacimiento FROM `alumno` where Alu_NroDocumento = '{$_GET['cursor']}';";
+	$sqlAlumno = "SELECT `Alu_Codigo`, lower(`Alu_Nombre`) as Alu_Nombre, lower(`Alu_Apellido`) as Alu_Apellido, `Alu_NroDocumento`, date_format(`Alu_FechaNacimiento`, '%d/%m/%Y') as Alu_FechaNacimiento, date_format(`Alu_FechaNacimiento`, '%Y-%m-%d') as Alu_FechaNacimiento2 FROM `alumno` where Alu_NroDocumento = '{$_GET['cursor']}';";
 	$resultadoAlumno= $cadena->query($sqlAlumno);
 	
 }
@@ -49,11 +49,12 @@ if(isset($_GET['cursor'])){
         <div class="card-body">
         <?php if($resultadoAlumno->num_rows>0){ ?>
           <div class="row">
-						<h5>Datos del alumno</h5>
+						<small class='text-muted'>Datos del alumno</small>
 						<p class="d-none"><strong>Cod. Int.:</strong> <span><?= $rowAlumno['Alu_Codigo']; ?></span></p>
 						<div class='col'><strong>D.N.I.:</strong> <span><?= $rowAlumno['Alu_NroDocumento']; ?></span></div>
 						<div class='col'><strong>Apellidos:</strong> <span class="text-capitalize"><?= $rowAlumno['Alu_Apellido']; ?></span></div>
 						<div class='col'><strong>Nombres:</strong> <span class="text-capitalize"><?= $rowAlumno['Alu_Nombre']; ?></span></div>
+						<div class='col-1'><button class="btn btn-outline-primary btn-sm"  id="btnEditStudent"> <i class="icofont-edit"></i> </button> </div>
 						<p class="d-none"><strong>Fecha de Nacimiento:</strong> <span><?= $rowAlumno['Alu_FechaNacimiento']; ?></span></p>
 					</div>
         </div>
@@ -249,6 +250,38 @@ if(isset($_GET['cursor'])){
 	</div>
 </div>	
 
+
+
+<?php if (isset($_GET['cursor'])): ?>
+<div id="modalEditStudent" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+	<div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<button class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h5 class="modal-title" id="my-modal-title">Actualización de alumno</h5>
+				<p>Rellene cuidadosamente los siguientes campos: </p>
+				<label for="">D.N.I.</label>
+				<input class="form-control" type="text" id="txtDNIAlumno" value="<?= $rowAlumno['Alu_NroDocumento']; ?>">
+				<label for="">Apellidos</label>
+				<input class="form-control text-capitalize" type="text" id="txtApellidosAlumno" value="<?= $rowAlumno['Alu_Apellido']; ?>">
+				<label for="">Nombres</label>
+				<input class="form-control text-capitalize" type="text" id="txtNombresAlumno" value="<?= $rowAlumno['Alu_Nombre']; ?>">
+				<label for="">Fecha de nacimiento</label>
+				<input class="form-control" type="date" id="txtFechaAlumno" value="<?= $rowAlumno['Alu_FechaNacimiento2']; ?>">
+				<div class="alert alert-danger d-none mt-3" id="alertEdit" role="alert"><i class="icofont-warning-alt"></i> <span style="font-size: 0.8rem;"></span> </div>
+			</div>
+			<div class="modal-footer">
+			
+				<button class="btn btn-outline-primary"  id="btnGuardarDocente"> <i class="icofont-refresh"></i> Actualizar datos </button>
+			</div>
+		</div>
+	</div>
+</div>
+<?php endif;?>
+
+
 <?php include "php/footer.php"; ?>
 
 <script>
@@ -441,7 +474,34 @@ $('#sltTipoMatricula').on('changed.bs.select', function (e, clickedIndex, isSele
 
 	}
 });
-
+$('#btnEditStudent').click(function() {
+	$('#modalEditStudent').modal('show');
+});
+$('#btnGuardarDocente').click(function() {
+	$('#alertPagos').addClass('d-none');
+	if( $('#txtDNIAlumno').val()=='' || $('#txtApellidosAlumno').val()=='' || $('#txtNombresAlumno').val()=='' ){
+		$('#alertPagos span').text('Los campos DNI y Nombres no pueden quedar vacíos.').parent().removeClass('d-none')
+	}else{
+		$.ajax({url: 'php/updateDataAlumno.php', type: 'POST', data: {idAlu: '<?= $rowAlumno['Alu_Codigo']; ?>',
+			dni: $('#txtDNIAlumno').val(), apellidos: $('#txtApellidosAlumno').val(), nombre: $('#txtNombresAlumno').val(), fNac: $('#txtFechaAlumno').val() }}).done(function(resp) {
+			console.log(resp)
+			$('#modalEditStudent').modal('hidden');
+			if(resp=='todo ok'){
+				$('#h1Bien').text('Datos de alumno actualizado correctamente');
+				$('#modalGuardadoCorrecto').modal('show');
+			}else{
+				$('#h1Advertencia').text('Error desconocido, comuníquelo al área de soporte');
+				$('#modalAdvertencia').modal('show');
+			}
+			$('#modalGuardadoCorrecto').on('hidden.bs.modal', function (e) {
+				location.reload();
+			});
+			$('#modalAdvertencia').on('hidden.bs.modal', function (e) {
+				location.reload();
+			});
+		});
+	}
+});
 
 </script>
 </body>

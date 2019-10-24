@@ -219,3 +219,22 @@ return reservas;
 
 END$$
 DELIMITER ;
+
+
+
+DELIMITER $$
+CREATE FUNCTION `proxIdDocente`(`apellido` VARCHAR(200), `nombre` VARCHAR(200)) RETURNS varchar(10) CHARSET utf8mb4
+    NO SQL
+BEGIN
+declare codigo varchar(10);
+declare temp varchar(10) default 1;
+
+
+select upper(concat(date_format(curdate(),'%y'), substr(apellido, 1, 1), substr(nombre, 1, 1))) into codigo;
+
+select count(Emp_Codigo)+1 into temp from empleado e where e.Emp_Codigo like concat(codigo,'%');
+
+return concat( codigo ,LPAD(temp, 2, '0')) ;
+
+END$$
+DELIMITER ;
