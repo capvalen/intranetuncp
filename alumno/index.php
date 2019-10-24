@@ -58,6 +58,15 @@
 </nav>
   <div class="container">
     <h1 class="display-3 text-center" style="color: #097bd4;">Record de notas CEID-UNCP</h1>
+    <h4>¿Qué deseas hacer?</h4>
+    <div class="row">
+      <div class="col">
+        <h5 class="lead">Generar pre matrícula</h5>
+      </div>
+      <div class="col">
+        <h5 class="lead">Ver notas</h5>
+      </div>
+    </div>
     <p class="lead">Bienvenido alumno de CEID, por favor rellene su DNI para poner visualizar sus record de notas: </p>
     <label class="lead text-muted" id="labelDNI" for="">Mi D.N.I. es:</label>
     <div class="row">

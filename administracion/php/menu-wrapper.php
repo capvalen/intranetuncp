@@ -13,6 +13,9 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 
 		<ul class="list-unstyled components">
 				<p class="text-center"><small>Versión 1.0</small></p>
+				<li>
+					<a href="perfil.php" class="d-flex align-items-center"><i class="icofont-home"></i> <span class="liText">Principal</span> </a>
+				</li>
 			<?php if( in_array($_COOKIE['ckPower'], $secretaria) && $_COOKIE['ckidSucursal']=='SUC001' ): ?>
 				<li>
 					<a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="d-flex align-items-center"><i class="icofont-support"></i> <span class="liText">Secretaría</span> <i class="icofont-caret-down ml-auto"></i></a>
@@ -25,7 +28,7 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 			<?php endif; ?>
 			<?php if( in_array($_COOKIE['ckPower'], $subAdministracion) && $_COOKIE['ckidSucursal']=='SUC001' ): ?>
 				<li>
-					<a href="#pageSubAdministracion" data-toggle="collapse" aria-expanded="false" class="d-flex align-items-center"><i class="icofont-business-man"></i> Sub Dirección Adm. </span> <i class="icofont-caret-down ml-auto"></i></a>
+					<a href="#pageSubAdministracion" data-toggle="collapse" aria-expanded="false" class="d-flex align-items-center"><i class="icofont-business-man"></i> Área administrativa </span> <i class="icofont-caret-down ml-auto"></i></a>
 					<ul class="collapse list-unstyled" id="pageSubAdministracion">
 						<li>
 							<a href="ciclos.php"><i class="icofont-folder-open"></i> Ciclos</a>
@@ -53,7 +56,7 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 				<?php endif; ?>
 				<?php if( in_array($_COOKIE['ckPower'], $subAcademica) && $_COOKIE['ckidSucursal']=='SUC001' ): ?>
 				<li>
-					<a href="#pageSubAcademico" data-toggle="collapse" aria-expanded="false" class="d-flex align-items-center"><i class="icofont-business-man"></i> Sub Dirección Académica </span> <i class="icofont-caret-down ml-auto"></i></a>
+					<a href="#pageSubAcademico" data-toggle="collapse" aria-expanded="false" class="d-flex align-items-center"><i class="icofont-business-man"></i> Área Académica </span> <i class="icofont-caret-down ml-auto"></i></a>
 					<ul class="collapse list-unstyled" id="pageSubAcademico">
 						<li>
 							<a href="ciclos.php"><i class="icofont-folder-open"></i> Ciclos</a>
@@ -170,7 +173,7 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 				<li class="nav-item dropdown ">
 					<a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><ion-icon name="settings"></ion-icon> Opciones</a>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown07">
-						<a class="dropdown-item" href="#"><i class="icofont-id"></i> Mi perfil</a>
+						<a class="dropdown-item" href="perfil.php"><i class="icofont-id"></i> Mi perfil</a>
 						<a class="dropdown-item" href="php/desconectar.php"><i class="icofont-exit"></i> Cerrar sesión</a>
 					</div>
 				</li>

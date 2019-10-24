@@ -18,10 +18,11 @@
 	<!-- Contenido de la Página  -->
 
 		
-	<h2 class="d-print-none"><i class="icofont-briefcase"></i> Bienvendo a CEID UNCP</h2>
+	<h2 class="d-print-none"><i class="icofont-briefcase"></i> Bienvenido al Centro de Idiomas</h2>
 	
-	<p>Actualmente estamos trabajando para añadir más funcionalidades. Sea paciente.</p>
-	<?php $sqlResumen = "select totalCursosMes() as cursos, totalReservaMes() as reservas, totalAlumnosMes() as alumnos; ";
+	<p>Seleccione una opción para empezar</p>
+	<?php if(in_array($_COOKIE['ckPower'], $subRegistro)){
+	$sqlResumen = "select totalCursosMes() as cursos, totalReservaMes() as reservas, totalAlumnosMes() as alumnos; ";
 	$respuestaResumen = $cadena->query($sqlResumen);
 	$rowResumen = $respuestaResumen->fetch_assoc();
 	 ?>
@@ -52,6 +53,75 @@
 			</div>
 		</div>
 	</div>
+	<?php } ?>
+	<div class="row">
+	
+		<?php if(in_array($_COOKIE['ckPower'], $subRegistro) || $_COOKIE['ckidSucursal']=='SUC002' ){ ?>
+		<div class="col-3 my-3 d-flex align-items-stretch">
+			<div class="card" style="width: 100%;">
+				<div class="card-body">
+					<h5><a class="text-decoration-none" href="ciclos.php"><i class="icofont-black-board"></i> Ciclos</a></h5>
+				</div>
+			</div>
+		</div>
+		<?php } ?>
+		<?php if(in_array($_COOKIE['ckPower'], $subRegistro) ){ ?>
+		<div class="col-3 my-3 d-flex align-items-stretch">
+			<div class="card" style="width: 100%;">
+				<div class="card-body">
+					<h5><a class="text-decoration-none" href="mesacademico.php"><i class="icofont-certificate"></i> Mes académico</a></h5>
+				</div>
+			</div>
+		</div>
+		<?php } ?>
+		<?php if(in_array($_COOKIE['ckPower'], $subRegistro) || $_COOKIE['ckidSucursal']=='SUC002' ){ ?>
+		<div class="col-3 my-3 d-flex align-items-stretch">
+			<div class="card" style="width: 100%;">
+				<div class="card-body">
+					<h5><a class="text-decoration-none" href="matricula.php"><i class="icofont-quill-pen"></i> Matrícula de alumno</a></h5>
+				</div>
+			</div>
+		</div>
+		<?php } ?>
+		<?php if( in_array($_COOKIE['ckPower'], $subAdministracion) || in_array($_COOKIE['ckPower'], $subRegistro) || $_COOKIE['ckidSucursal']=='SUC002' ){ ?>
+		<div class="col my-3 d-flex align-items-stretch">
+			<div class="card" style="width: 100%;">
+				<div class="card-body">
+					<h5><a href="pagos.php"><i class="icofont-paper"></i> Pagos</a></h5>
+				</div>
+			</div>
+		</div>
+		<?php } ?>
+		<?php if(in_array($_COOKIE['ckPower'], $subAcademica) || in_array($_COOKIE['ckPower'], $subRegistro) ){ ?>
+		<div class="col-3 my-3 d-flex align-items-stretch">
+			<div class="card" style="width: 100%;">
+				<div class="card-body">
+					<h5><a class="text-decoration-none" href="reservas.php"><i class="icofont-pen-nib"></i> Reserva de matrícula</a></h5>
+				</div>
+			</div>
+		</div>
+		<?php } ?>
+		<?php if(in_array($_COOKIE['ckPower'], $secretaria) || in_array($_COOKIE['ckPower'], $subAdministracion) || in_array($_COOKIE['ckPower'], $subAcademica) || in_array($_COOKIE['ckPower'], $subRegistro) || $_COOKIE['ckidSucursal']=='SUC002' ){ ?>
+		<div class="col-3 my-3 d-flex align-items-stretch">
+			<div class="card" style="width: 100%;">
+				<div class="card-body">
+					<h5><a class="text-decoration-none" href="seguimiento.php"><i class="icofont-certificate-alt-2"></i> Seguimiento académico</a></h5>
+				</div>
+			</div>
+		</div>
+		<?php } ?>
+		<?php if(in_array($_COOKIE['ckPower'], $secretaria) || in_array($_COOKIE['ckPower'], $subAdministracion) || in_array($_COOKIE['ckPower'], $subAcademica) || in_array($_COOKIE['ckPower'], $subRegistro) ){ ?>
+		<div class="col-3 my-3 d-flex align-items-stretch">
+			<div class="card" style="width: 100%;">
+				<div class="card-body">
+					<h5><a class="text-decoration-none" href="tramite.php"><i class="icofont-paper"></i> Trámite documentario</a></h5>
+				</div>
+			</div>
+		</div>
+		<?php } ?>
+	
+	</div>
+	
 <!-- Fin de Contenido de la Página  -->
 </div>
 
