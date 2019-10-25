@@ -238,3 +238,6 @@ return concat( codigo ,LPAD(temp, 2, '0')) ;
 
 END$$
 DELIMITER ;
+
+
+ALTER TABLE `configuraciones` ADD `idConfiguraciones` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`idConfiguraciones`);

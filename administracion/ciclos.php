@@ -38,12 +38,14 @@
 						<?php if(isset($_GET['year'])){ include 'php/returnMesesDocenteCiclaje.php'; }else{ echo "<option value='-1'>Seleccione primero el año</option>"; } ?>
 					</select>
 				</div>
+				<?php if($_COOKIE['ckidSucursal']=='SUC001'){ ?>
 				<div class="col">
 				<label for=""><small>Sede:</small></label>
 					<select class="selectpicker text-capitalize" id="sltPSedes" data-live-search="true" data-width="100%">
 						<?php if(isset($_GET['month'])){ include 'php/OPT_sedes.php'; }else{ echo "<option value='-1'>Seleccione primero el mes</option>"; } ?>
 					</select>
 				</div>
+				<?php } ?>
 				<div class="col">
 				<label for=""><small>Idioma:</small></label>
 					<select class="selectpicker text-capitalize" id="sltPIdiomas" data-live-search="true" data-width="100%">
@@ -107,12 +109,15 @@
 	</div>
 	<?php endif; ?>
 	
-	<?php if(isset($_GET['campus'])):
+	
+	<?php if( isset($_GET['month']) && $_COOKIE['ckidSucursal']!='SUC001'){ $_GET['campus']=$_COOKIE['ckidSucursal'] ; }
+	if(isset($_GET['campus'])):
 	include "php/conexionInfocat.php"; 
 	$filtroExtra ='';
 	if(isset($_GET['campus'])){ $filtroExtra.=" AND  s.Suc_Codigo='{$_GET['campus']}' "; }
 	if(isset($_GET['language'])){ $filtroExtra.=" AND  s.Idi_Codigo='{$_GET['language']}' "; }
 	if(isset($_GET['level'])){ $filtroExtra.=" AND  s.Niv_Codigo='{$_GET['level']}' "; }
+	
 
 	$sqlCursos = "SELECT s.*, i.Idi_Nombre, n.Niv_Detalle, lower(hc.Hor_HoraInicio) as Hor_HoraInicio, lower(hc.Hor_HoraSalida) as Hor_HoraSalida, lower(su.Suc_Direccion) as Suc_Direccion, lower(concat(em.Emp_Apellido, ', ', em.Emp_Nombre)) as docNombre, lower(sucDescripcion) as sucDescripcion FROM `seccion` s
 	inner join idioma i on i.Idi_Codigo = s.Idi_Codigo
@@ -213,7 +218,7 @@ $('.selectpicker').selectpicker();
 	<?php endif; if( isset($_GET['month'])): ?>
 	$('#sltPMeses').selectpicker('val', <?= $_GET['month']?>).selectpicker('refresh');
 	$('#sltPSedes').prop('disabled', false).selectpicker('val',-1).selectpicker('refresh');
-	<?php endif; if( isset($_GET['campus'])): ?>
+	<?php endif; if( isset($_GET['campus']) ): ?>
 	$('#sltPSedes').selectpicker('val', '<?= $_GET['campus']?>').selectpicker('refresh');
 	$('#sltPIdiomas').prop('disabled', false).selectpicker('val',-1).selectpicker('refresh');
 	<?php endif; if( isset($_GET['language'])): ?>
