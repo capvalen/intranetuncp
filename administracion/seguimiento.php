@@ -20,6 +20,7 @@
 	header {
     position: fixed;
     top: 0;
+		right:0;
   }
 	footer {
     position: fixed;
@@ -151,9 +152,9 @@
 		</div>
 	</div>
 	
-	<footer>
+	<header class="d-flex justify-content-end">
 	<span><?= date('d/m/Y'); ?></span>
-	</footer>
+	</header>
 	<?php
 		}else{ //fin de busqueda de cursos ?>
 		<p>El alumno no tiene cursos asignados aún.</p>
