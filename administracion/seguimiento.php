@@ -15,13 +15,13 @@
 	border: 2px solid #525252!important;
 }
 /* .border-dark:last-child{border-bottom: 2px solid #525252!important; } */
-
-@media print{
-	header {
-    position: fixed;
-    top: 0;
+header {
+    position: absolute; /* fixed */
+    top: -30px; /* 0; */
 		right:0;
   }
+@media print{
+	
 	footer {
     position: fixed;
     bottom: 0;
@@ -109,7 +109,7 @@
 					<div class="col-3 colHorarios"><?= $rowDetalles['Niv_Detalle'].'-'.$rowDetalles['Sec_NroCiclo']; ?></div>
 					<div class="col-3 colHorarios"><?= $rowDetalles['Hor_HoraInicio'].'-'.$rowDetalles['Hor_HoraSalida']; ?></div>
 					<div class="col-4 text-capitalize "><?= $rowDetalles['nomDocente']; ?></div>
-					<div class="col"><strong><?php if( $rowDetalles['not_Prom']<=9){ echo str_pad($rowDetalles['not_Prom'], 2, "0", STR_PAD_LEFT); }else{ echo $rowDetalles['not_Prom']; } ?></strong></div>
+					<div class="col"><strong><?php if($rowDetalles['nomDocente']=='reserva matricula'){echo ''; }elseif( $rowDetalles['not_Prom']<=9){ echo str_pad($rowDetalles['not_Prom'], 2, "0", STR_PAD_LEFT); }else{ echo $rowDetalles['not_Prom']; } ?></strong></div>
 				</div>
 				<div class="row">
 					<div class="col-2"><?= $rowDetalles['Mes_Inicio'].'-'.$rowDetalles['Mes_Detalle']; ?></div>

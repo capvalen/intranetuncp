@@ -15,7 +15,7 @@ if( !in_array($nomArchivo, $noVerEn) ): ?>
       </div>
   </div>
   
-  <div class="toast ml-auto mr-3 mt-3" role="alert" id="tostadaInfo" data-delay="700" data-autohide="false">
+<!--   <div class="toast ml-auto mr-3 mt-3" role="alert" id="tostadaInfo" data-delay="700" data-autohide="false">
       <div class="toast-header">
         <strong class="mr-auto text-primary" ><i class="icofont-warning-alt"></i> <span id="toastInfoTitle"></span></strong>
         <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
@@ -24,7 +24,7 @@ if( !in_array($nomArchivo, $noVerEn) ): ?>
       </div>
       <div class="toast-body" id="toastInfo">
       </div>
-  </div>
+  </div> -->
 
 
 <?php endif; ?>
