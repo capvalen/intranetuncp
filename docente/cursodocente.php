@@ -11,6 +11,9 @@ input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none; 
     margin: 0; 
 }
+input[type=number] {
+    -moz-appearance:textfield;
+}
 .editado{
 	background-color: #ffffe5!important;
 	border-color: #ffc107!important;
@@ -130,10 +133,10 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 					<td><?= $rowCursos['Alu_Codigo'];?></td>
 					<td class="text-capitalize"><?= $rowCursos['Alu_Apellido'];?></td>
 					<td class="text-capitalize"><?= $rowCursos['Alu_Nombre'];?></td>
-					<td><input type="number" class="form-control text-center txtNotas" id="txtNota1" max="20" min="0" step="1" autocomplete="nope" value="<?php if($rowCursos['not_1']==null){ echo 0;} else {echo $rowCursos['not_1'];} ?>"></td>
-					<td><input type="number" class="form-control text-center txtNotas" id="txtNota2" max="20" min="0" step="1" autocomplete="nope" value="<?php if($rowCursos['not_2']==null){ echo 0;} else {echo $rowCursos['not_2'];} ?>"></td>
-					<td><input type="number" class="form-control text-center txtNotas" id="txtNota3" max="20" min="0" step="1" autocomplete="nope" value="<?php if($rowCursos['not_3']==null){ echo 0;} else {echo $rowCursos['not_3'];} ?>"></td>
-					<td><input type="number" class="form-control text-center" id="txtPromedio" disabled value="<?php if($rowCursos['not_Prom']==null){ echo 0;} else {echo $rowCursos['not_Prom'];} ?>"></td>
+					<td><input type="text" class="form-control text-center txtNotas" id="txtNota1" max="20" min="0" step="1" autocomplete="nope" value="<?php if($rowCursos['not_1']==null){ echo '00';} else {echo str_pad($rowCursos['not_1'], 2, 0, STR_PAD_LEFT);} ?>"></td>
+					<td><input type="text" class="form-control text-center txtNotas" id="txtNota2" max="20" min="0" step="1" autocomplete="nope" value="<?php if($rowCursos['not_2']==null){ echo '00';} else {echo str_pad($rowCursos['not_2'], 2, 0, STR_PAD_LEFT);} ?>"></td>
+					<td><input type="text" class="form-control text-center txtNotas" id="txtNota3" max="20" min="0" step="1" autocomplete="nope" value="<?php if($rowCursos['not_3']==null){ echo '00';} else {echo str_pad($rowCursos['not_3'], 2, 0, STR_PAD_LEFT);} ?>"></td>
+					<td><input type="text" class="form-control text-center" id="txtPromedio" disabled value="<?php if($rowCursos['not_Prom']==null){ echo '00';} else {echo str_pad($rowCursos['not_Prom'], 2, 0, STR_PAD_LEFT);} ?>"></td>
 				</tr>
 				<?php $i++; }
 				}else{?>
@@ -225,12 +228,12 @@ $('.txtNotas').focusout(function () {
 		if( $(this).val()>20 ){
 			$(this).val(20).change();
 		}else if($(this).val()<0){
-			$(this).val(0).change();
+			$(this).val(n(0)).change();
 		}else{	
-			$(this).val(numAnt.toFixed(0)).change();
+			$(this).val(n(numAnt.toFixed(0))).change();
 		}
 	}else{
-		$(this).val(0).change();
+		$(this).val(n(0)).change();
 	}
 })
 $('.txtNotas').change(function () {
@@ -242,10 +245,16 @@ $('.txtNotas').change(function () {
 	nprom= (nota1 + nota2+ nota3)/3;
 	padre.find('#txtPromedio').val(n(parseFloat(nprom).toFixed(0)));
 	padre.find('#txtPromedio').addClass('editado');
-})
+});
+$('.txtNotas').keyup( function (e) {
+	if(e.which ==13){ $(this).change(); $(this).parent().next().find('input').focus(); }
+});
 function n(n){
     return n > 9 ? "" + n: "0" + n;
 }
+$(".txtNotas").focus(function() {
+   $(this).select();
+});
 $('#btnGuardarNotas').click(function () {
 	pantallaOver(true);
 	var alumnoRegistro = [];

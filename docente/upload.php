@@ -9,7 +9,7 @@
 	?>
 </head>
 <body>
-	
+
 <div class="wrapper">
 <?php include "php/menu-wrapper.php"; ?>
 
