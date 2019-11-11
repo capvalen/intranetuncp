@@ -31,15 +31,17 @@
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+		<button class="btn btn-outline-primary mt-3"  id="btnAddUsuario"> <i class="icofont-ui-add"></i> Nuevo usuario</button>
 			<p>Usuarios activos:</p>
-			<table class="table table-light">
-				<thead class="thead-light">
+			<table class="table table-hover">
+				<thead class="">
 					<tr>
 						<th>#</th>
 						<th>Nombre usuario</th>
 						<th>Nick</th>
 						<th>Acceso</th>
 						<th>Sucursal</th>
+						<th>@</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -47,7 +49,7 @@
 				inner join empleado e on e.Emp_Codigo = u.Emp_Codigo
 				inner join sucursal s on s.Suc_Codigo = u.Suc_Codigo
 				inner join rol r on r.Rol_Id = u.Rol_Id
-				where usuActivo=1; ";
+				where usuActivo=1 order by e.Emp_Apellido asc; ";
 				$resultadoUsers = $cadena->query($sqlUsers); $i=1;
 				while($rowUsers = $resultadoUsers->fetch_assoc()){ ?>
 					<tr data-user="<?= $rowUsers['Emp_Codigo']; ?>">
@@ -64,6 +66,10 @@
 								<?php include "php/OPT_sedes.php"; ?>
 							</select>
 						</td>
+						<td>
+							<button class="btn btn-outline-secondary btn-sm border-0" onClick="changePwd('<?= $rowUsers['Emp_Codigo']; ?>')"> <i class="icofont-key-hole"></i> </button>
+							<button class="btn btn-outline-danger btn-sm border-0" onClick="deleteUser('<?= $rowUsers['Emp_Codigo']; ?>')"> <i class="icofont-close"></i> </button>
+						</td>
 					</tr>
 					<?php $i++; } ?>
 				</tbody>
@@ -79,6 +85,7 @@
 						<th>#</th>
 						<th>Nombre usuario</th>
 						<th>D.N.I.</th>
+						<th>@</th>
 			
 					</tr>
 				</thead>
@@ -91,6 +98,10 @@
 						<td><?= $i; ?></td>
 						<td class="text-capitalize"><?= $rowDocentes['nomDocente']; ?></td>
 						<td class="text-capitalize"><?= $rowDocentes['Emp_NroDocumento']; ?></td>
+						<td>
+							<button class="btn btn-outline-secondary btn-sm border-0" onClick="changePwdDocente('<?= $rowDocentes['Emp_Codigo']; ?>')"> <i class="icofont-key-hole"></i> </button>
+							<button class="btn btn-outline-danger btn-sm border-0" onClick="deleteDocente('<?= $rowDocentes['Emp_Codigo']; ?>')"> <i class="icofont-close"></i> </button>
+						</td>
 					</tr>
 					<?php $i++; } ?>
 				</tbody>
@@ -130,6 +141,60 @@
 		</div>
 	</div>
 </div>
+<div id="modalAddUsuario" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+	<div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<button class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h5 class="modal-title" id="my-modal-title">Nuevo Usuario</h5>
+				<label for="">D.N.I.</label>
+				<input class="form-control" type="text" id="txtDNIUsuario">
+				<label for="">Apellidos</label>
+				<input class="form-control" type="text" id="txtApellidosUsuario">
+				<label for="">Nombres</label>
+				<input class="form-control" type="text" id="txtNombresUsuario">
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-outline-primary"  id="btnGuardarUsuario"> <i class="icofont-search-1"></i> </button>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="modalNuevoPwd" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<button class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h5 class="modal-title" id="my-modal-title">Nueva contraseña</h5>
+				<p>Ingrese la nueva clave para éste usuario:</p>
+				<input id="txtClave1" class="form-control mb-3" type="password" name="">
+				<input id="txtClave2" class="form-control mb-3" type="password" name="">
+				<button class="btn btn-outline-primary float-right"  id="btnGuardarPwd"> <i class="icofont-refresh"></i> Cambiar clave </button>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="modalNuevoPwdDocente" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<button class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h5 class="modal-title" id="my-modal-title">Nueva contraseña</h5>
+				<p>Ingrese la nueva clave para éste docente:</p>
+				<input id="txtClave3" class="form-control mb-3" type="password" name="">
+				<input id="txtClave4" class="form-control mb-3" type="password" name="">
+				<button class="btn btn-outline-primary float-right"  id="btnGuardarPwdDocente"> <i class="icofont-refresh"></i> Cambiar clave </button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <?php include "php/footer.php"; ?>
 
 <script>
@@ -186,6 +251,104 @@ $('#btnGuardarDocente').click(function() {
 		});
 
 	});
+});
+$('#btnAddUsuario').click(function() {
+	$('#modalAddUsuario').modal('show');
+});
+$('#btnGuardarUsuario').click(function() {
+	$.ajax({url: 'php/insertarUsuario.php', type: 'POST', data: {dni: $('#txtDNIUsuario').val(), apellido: $('#txtApellidosUsuario').val(), nombre: $('#txtNombresUsuario').val() }}).done(function(resp) {
+		console.log(resp)
+		$('#modalAddUsuario').modal('hide');
+		if(resp=='todo ok'){
+			$('#h1Bien').text('Usuario registrado con éxito');
+			$('#modalGuardadoCorrecto').modal('show');
+		}else if(resp=='ya registrado'){
+			$('#h1Advertencia').text('El Usuario ya se encontraba registrado ');
+			$('#modalAdvertencia').modal('show');
+		}else{
+			$('#h1Advertencia').text('Error desconocido, comuníquelo al área de soporte');
+			$('#modalAdvertencia').modal('show');
+		}
+		$('#modalGuardadoCorrecto').on('hidden.bs.modal', function (e) {
+			location.reload();
+		});
+		$('#modalAdvertencia').on('hidden.bs.modal', function (e) {
+			location.reload();
+		});
+
+	});
+});
+function deleteUser(idEmpleado) {
+	$.ajax({url: 'php/deleteEmpleado.php', type: 'POST', data: { idEmpleado }}).done(function(resp) {
+		console.log(resp)
+		if(resp == 'todo ok'){
+			location.reload();
+		}
+	});
+}
+function changePwd(idEmpleado) {
+	$.idEmpleado = idEmpleado;
+	$('#modalNuevoPwd').modal('show');
+}
+$('#btnGuardarPwd').click(function() {
+	if($('#txtClave1').val() == $('#txtClave2').val() ){
+		$.ajax({url: 'php/actualizarPwd.php', type: 'POST', data: { idEmpleado: $.idEmpleado , clave: $('#txtClave1').val() }}).done(function(resp) {
+			console.log(resp)
+			$('#modalNuevoPwd').modal('hide');
+			if(resp=='todo ok'){
+				$('#h1Bien').text('Datos actualizados correctamente');
+				$('#modalGuardadoCorrecto').modal('show');
+			}else{
+				$('#h1Advertencia').text('Error desconocido, comuníquelo al área de soporte');
+				$('#modalAdvertencia').modal('show');
+			}
+			$('#modalGuardadoCorrecto').on('hidden.bs.modal', function (e) {
+				location.reload();
+			});
+			$('#modalAdvertencia').on('hidden.bs.modal', function (e) {
+				location.reload();
+			});
+		});
+	}else{
+		$('#h1Advertencia').text('Las claves no coinciden');
+		$('#modalAdvertencia').modal('show');
+	}
+});
+function deleteDocente(idDocente) {
+	$.ajax({url: 'php/deleteDocente.php', type: 'POST', data: { idDocente }}).done(function(resp) {
+		console.log(resp)
+		if(resp == 'todo ok'){
+			location.reload();
+		}
+	});
+}
+function changePwdDocente(idDocente) {
+	$.idDocente = idDocente;
+	$('#modalNuevoPwdDocente').modal('show');
+}
+$('#btnGuardarPwdDocente').click(function() {
+	if($('#txtClave3').val() == $('#txtClave4').val() ){
+		$.ajax({url: 'php/actualizarPwdDocente.php', type: 'POST', data: { idDocente: $.idDocente , clave: $('#txtClave3').val() }}).done(function(resp) {
+			console.log(resp)
+			$('#modalNuevoPwdDocente').modal('hide');
+			if(resp=='todo ok'){
+				$('#h1Bien').text('Datos actualizados correctamente');
+				$('#modalGuardadoCorrecto').modal('show');
+			}else{
+				$('#h1Advertencia').text('Error desconocido, comuníquelo al área de soporte');
+				$('#modalAdvertencia').modal('show');
+			}
+			$('#modalGuardadoCorrecto').on('hidden.bs.modal', function (e) {
+				location.reload();
+			});
+			$('#modalAdvertencia').on('hidden.bs.modal', function (e) {
+				location.reload();
+			});
+		});
+	}else{
+		$('#h1Advertencia').text('Las claves no coinciden');
+		$('#modalAdvertencia').modal('show');
+	}
 });
 
 

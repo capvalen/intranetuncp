@@ -241,3 +241,6 @@ DELIMITER ;
 
 
 ALTER TABLE `configuraciones` ADD `idConfiguraciones` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`idConfiguraciones`);
+
+
+ALTER TABLE `empleado` ADD `Emp_displayWeb` BIT(1) NOT NULL DEFAULT b'1' AFTER `pwd`;
