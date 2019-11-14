@@ -1,3 +1,11 @@
+<?php 
+include "php/variablesGenerales.php";
+if (!isset($_COOKIE['ckPower'])){ header('Location: index.php'); }
+
+if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], $subBasico) ){
+	header('Location: sinPermiso.php'); }
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,7 +17,7 @@
 
 <style>
 .colSubInt{border-bottom: 2px solid #525252; }
-.colNormal, .colHorarios{font-size: .8em;}
+/* .colNormal, .colHorarios{font-size: .8em;} */
 .border-negro{ }
 .border-negro{
 	border: 2px solid #525252!important;
@@ -72,7 +80,7 @@ header {
 			$rowAlumno=$resultadoAlumno->fetch_assoc();
 
 			$sqlDetalles = "SELECT ra.*, i.Idi_Nombre, n.Niv_Detalle, s.Sec_NroCiclo, year(ma.Mes_Inicio) as Mes_Inicio, ma.Mes_Detalle, su.Suc_Direccion,
-			lower(concat(e.Emp_Apellido, ' ' , e.Emp_Nombre)) as nomDocente, h.Hor_HoraInicio, h.Hor_HoraSalida, ono.not_Prom, lower(AlSe_Condicion) as AlSe_Condicion
+			lower(concat(e.Emp_Apellido, ' ' , e.Emp_Nombre)) as nomDocente, h.Hor_HoraInicio, h.Hor_HoraSalida, ono.not_Prom, lower(AlSe_Condicion) as AlSe_Condicion, su.sucDescripcion
 			FROM `registroalumno` ra
 			inner join seccion s on s.Sec_Codigo = ra.Sec_Codigo
 			inner join idioma i on s.Idi_Codigo = i.Idi_Codigo
@@ -113,7 +121,7 @@ header {
 				</div>
 				<div class="row">
 					<div class="col-2"><?= $rowDetalles['Mes_Inicio'].'-'.$rowDetalles['Mes_Detalle']; ?></div>
-					<div class="col-2"><?= $rowDetalles['Suc_Direccion']; ?></div>
+					<div class="col-2"><?= $rowDetalles['sucDescripcion']; ?></div>
 					<div class="col container-fluid">
 						<div class="row"><div class="col colNormal text-capitalize"><?= $rowDetalles['AlSe_Condicion']; ?></div></div>
 						<div class="row container-fluid">

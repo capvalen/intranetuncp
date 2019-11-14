@@ -1,3 +1,11 @@
+<?php 
+include "php/variablesGenerales.php";
+if (!isset($_COOKIE['ckPower'])){ header('Location: index.php'); }
+
+if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], $subBasico) ){
+	header('Location: sinPermiso.php'); }
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -136,7 +144,7 @@
 				<input class="form-control" type="text" id="txtNombresDocente">
 			</div>
 			<div class="modal-footer">
-				<button class="btn btn-outline-primary"  id="btnGuardarDocente"> <i class="icofont-search-1"></i> </button>
+				<button class="btn btn-outline-primary"  id="btnGuardarDocente"> <i class="icofont-save"></i> Crear Docente </button>
 			</div>
 		</div>
 	</div>
@@ -157,7 +165,7 @@
 				<input class="form-control" type="text" id="txtNombresUsuario">
 			</div>
 			<div class="modal-footer">
-				<button class="btn btn-outline-primary"  id="btnGuardarUsuario"> <i class="icofont-search-1"></i> </button>
+				<button class="btn btn-outline-primary"  id="btnGuardarUsuario"> <i class="icofont-save"></i> Crear Usuario</button>
 			</div>
 		</div>
 	</div>

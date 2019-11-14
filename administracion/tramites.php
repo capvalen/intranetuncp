@@ -1,3 +1,10 @@
+<?php 
+include "php/variablesGenerales.php";
+if (!isset($_COOKIE['ckPower'])){ header('Location: index.php'); }
+
+if( in_Array($_COOKIE['ckPower'], $subBasico) ){
+	header('Location: sinPermiso.php'); }
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>

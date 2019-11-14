@@ -1,6 +1,7 @@
 <?php 
 
-$secretaria = [108, 102]; //secretaria
+$administradores= [108];
+$secretaria = [102]; //secretaria
 $subAdministracion= [108,109 ]; //administrador, administracion
 $subAcademica=[108, 110 ]; //administrador, academico
 $subRegistro=[108, 111 ]; //administrador, registro

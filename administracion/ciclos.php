@@ -1,3 +1,11 @@
+<?php 
+include "php/variablesGenerales.php";
+if (!isset($_COOKIE['ckPower'])){ header('Location: index.php'); }
+
+if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], $subBasico) ){
+	header('Location: sinPermiso.php'); }
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -21,7 +29,8 @@
 		
 	<h2 class="d-print-none"><i class="icofont-people"></i> Ciclos</h2>
 	
-	<?php if(!isset($_GET['nuevo'])): ?>
+	<?php if( isset($_GET['month']) && $_COOKIE['ckidSucursal']!='SUC001'){ $_GET['campus']=$_COOKIE['ckidSucursal']; }
+	if(!isset($_GET['nuevo'])): ?>
 	<div class="card mb-3 ">
 		<div class="card-body pt-1">
 		<p class="card-text m-0"><small class="text-muted"><i class="icofont-filter"></i> Filtro</small></p>
@@ -110,9 +119,9 @@
 	<?php endif; ?>
 	
 	
-	<?php if( isset($_GET['month']) && $_COOKIE['ckidSucursal']!='SUC001'){ $_GET['campus']=$_COOKIE['ckidSucursal'] ; }
+	<?php 
 	if(isset($_GET['campus'])):
-	include "php/conexionInfocat.php"; 
+	
 	$filtroExtra ='';
 	if(isset($_GET['campus'])){ $filtroExtra.=" AND  s.Suc_Codigo='{$_GET['campus']}' "; }
 	if(isset($_GET['language'])){ $filtroExtra.=" AND  s.Idi_Codigo='{$_GET['language']}' "; }

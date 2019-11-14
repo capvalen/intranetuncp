@@ -28,13 +28,13 @@ if( $resultadoCursos->num_rows>0){
     <?php $resultadoCursos->data_seek(0); $i=0;
       while($rowCursos = $resultadoCursos->fetch_assoc()){ //inicio de tabPane cursos ?>
       <div class="tab-pane fade <?php if($i==0){echo "show active"; } $i++; ?>" id="<?= $rowCursos['Idi_Codigo']; ?>" role="tabpanel" aria-labelledby="home-tab" >
-      <div class="accordion" id="accordionExample">
+      
       <?php
       $sqlCiclos= "SELECT ra.*, s.Niv_Codigo, n.Niv_Detalle, s.Sec_NroCiclo, s.Idi_Codigo, DATE_FORMAT(str_to_date(concat('01',s.Mes_Codigo), '%d%m%Y'), '%Y-%m-%d') as Mes_Codigo FROM `registroalumno` ra
       inner join seccion s on s.Sec_Codigo = ra.Sec_Codigo
       inner join idioma i on s.Idi_Codigo = i.Idi_Codigo
       inner join nivel n on n.Niv_Codigo = s.Niv_Codigo
-      where Alu_Codigo = '{$_POST['idAlumno']}' and s.Idi_Codigo ='{$rowCursos['Idi_Codigo']}'
+      where Alu_Codigo = '{$_POST['idAlumno']}' and s.Idi_Codigo ='{$rowCursos['Idi_Codigo']}' and n.Niv_Codigo<>'TN'
       order by Niv_Detalle, Mes_Codigo, s.Sec_NroCiclo asc; ";
       //echo $sqlCiclos;
       $resultadoCiclos = $esclavo->query($sqlCiclos);
@@ -45,23 +45,19 @@ if( $resultadoCursos->num_rows>0){
        ?>
         
         
-        <div class="card">
-          <div class="card-header cardAcordeon" id="" data-toggle="collapse" data-target="#<?= $rowCiclos['Reg_Codigo'];?>" aria-expanded="false" aria-controls="collapseOne">
-            <h2 class="mb-0">
-              <button class="btn btn-link text-decoration-none" type="button"><?= $rowCiclos['Niv_Detalle'].' '.$rowCiclos['Sec_NroCiclo']. ' (' . $meses[$fecha->format('n')-1] .' '. $fecha->format('Y').')' ; ?></button> <span class="float-right text-primary"><i class="icofont-rounded-down"></i></span>
-            </h2>
-          </div>
-
-          <div id="<?= $rowCiclos['Reg_Codigo'];?>" data-idioma='<?= $rowCiclos['Idi_Codigo'];?>' data-ciclo='<?= $rowCiclos['Niv_Codigo'];?>' class="collapse " aria-labelledby="headingOne" data-parent="#accordionExample">
-          <div class="card-body">
-            <button class="btn btn-outline-success mb-3 btnAddPagoDyno"><i class="icofont-plus"></i> Agregar nuevo pago</button>
+        <div class="card p-2 mb-2" >
+          <div class="card-body " id="<?= $rowCiclos['Reg_Codigo'];?>" data-idioma='<?= $rowCiclos['Idi_Codigo'];?>' data-ciclo='<?= $rowCiclos['Niv_Codigo'];?>'>
+            <div class="d-flex justify-content-between ">
+              <h5 class='d-inline-flex'><?= $rowCiclos['Niv_Detalle'].' '.$rowCiclos['Sec_NroCiclo']. ' (' . $meses[$fecha->format('n')-1] .' '. $fecha->format('Y').')' ; ?></h5>
+              <button class="btn btn-outline-secondary btn-sm mb-3 btnAddPagoDyno "><i class="icofont-plus"></i> Agregar pago en <?= $rowCiclos['Niv_Detalle'].' '.$rowCiclos['Sec_NroCiclo']; ?> </button>
+            </div>
             <?php $sqlPagos="SELECT Cod_DetPag, dp.Pag_Codigo, round(dp.Monto_Pagado,2) as Monto_Pagado, pg.Pag_Detalle, dp.Cod_Recibo  FROM `detallepago` dp
             inner join pago pg on pg.Pag_Codigo = dp.Pag_Codigo 
             where reg_Codigo='{$rowCiclos['Reg_Codigo']}' order by Pag_Codigo asc ";
             $resultadoPagos = $apoyo->query($sqlPagos);
             if($resultadoPagos->num_rows>0){
             ?>
-            <table class="table table-hover">
+            <table class="table table-sm table-hover">
               <thead>
                 <tr>
                   <th>N°</th>
@@ -90,9 +86,10 @@ if( $resultadoCursos->num_rows>0){
             <?php } ?>
 
           </div>
-          </div>
-              
+      
         </div>
+        
+    
         
         
       
@@ -100,12 +97,14 @@ if( $resultadoCursos->num_rows>0){
       }else{ // fin de if resultadoCiclos ?>
       <p>Aún no tiene registrado ciclos</p>
       <?php } // ?>
-      </div>
-      </div> <!-- fin de tabPane cursos -->
+          </div> <!-- fin de tabPane cursos -->
+      
+
       <?php } // ?>
-    </div> <!-- fin de tabContent padre cursos -->
+        </div> <!-- fin de tabContent padre cursos -->
+    </div>
   </div>
-</div>
+
     
 <?php 
   }else{ ?>

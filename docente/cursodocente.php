@@ -222,6 +222,12 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 <?php include "php/footer.php"; ?>
 
 <script>
+$("table input").click(function () {
+   $(this).select();
+});
+$('.txtNotas').focus(function () {
+	$(this).select();
+});
 $('.txtNotas').focusout(function () {
 	var numAnt=parseFloat($(this).val());
 	if($.isNumeric($(this).val())){
@@ -246,8 +252,14 @@ $('.txtNotas').change(function () {
 	padre.find('#txtPromedio').val(n(parseFloat(nprom).toFixed(0)));
 	padre.find('#txtPromedio').addClass('editado');
 });
-$('.txtNotas').keyup( function (e) {
-	if(e.which ==13){ $(this).change(); $(this).parent().next().find('input').focus(); }
+$('.txtNotas').keyup(function(e) {
+	if( $(this).val()>=3 ){
+		if( $(this).attr('id')=='txtNota3'){
+			$(this).parent().parent().next().find('#txtNota1').focus();
+		}else{
+			$(this).parent().next().find('input').focus();
+		}
+	}
 });
 function n(n){
     return n > 9 ? "" + n: "0" + n;

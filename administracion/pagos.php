@@ -1,3 +1,10 @@
+<?php 
+include "php/variablesGenerales.php";
+if (!isset($_COOKIE['ckPower'])){ header('Location: index.php'); }
+
+if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], $subBasico) ){
+	header('Location: sinPermiso.php'); }
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -35,7 +42,7 @@ if(isset($_GET['cursor'])){
 		
 	<h2 class="d-print-none"><i class="icofont-people"></i> Pagos</h2>
 	
-	<div class="card col-8">
+	<div class="card col-6">
 		<div class="card-body pt-1">
 		<p class="card-text m-0"><small class="text-muted"><i class="icofont-filter"></i> Filtro</small></p>
 			<div class="form-inline">
@@ -50,16 +57,22 @@ if(isset($_GET['cursor'])){
   </div>
   <?php if(isset($_GET['cursor']) || isset($_GET['patron'])){ ?>
   <div class="row mt-3">
-    <div class="col-4">
-      <div class="card">
+    <div class="col-12">
+      <div class="card mb-3">
         <div class="card-body">
         <?php if($resultadoAlumno->num_rows>0){$rowAlumno = $resultadoAlumno->fetch_assoc(); $_POST['idAlumno'] = $rowAlumno['Alu_Codigo']; ?>
           <h5>Datos del alumno</h5>
-          <p id="pCodInt" data-id='<?= $rowAlumno['Alu_Codigo']; ?>'><strong>Cod. Int.:</strong> <span><?= $rowAlumno['Alu_Codigo']; ?></span></p>
-          <p><strong>D.N.I.:</strong> <span><?= $rowAlumno['Alu_NroDocumento']; ?></span></p>
-          <p><strong>Apellidos:</strong> <span class="text-capitalize"><?= $rowAlumno['Alu_Apellido']; ?></span></p>
-          <p><strong>Nombres:</strong> <span class="text-capitalize"><?= $rowAlumno['Alu_Nombre']; ?></span></p>
-          <p><strong>Fecha de Nacimiento:</strong> <span><?= $rowAlumno['Alu_FechaNacimiento']; ?></span></p>
+          <div class="row">
+            <div class="col">
+              <p><strong>D.N.I.:</strong> <span><?= $rowAlumno['Alu_NroDocumento']; ?></span></p>
+              <p><strong>Apellidos:</strong> <span class="text-capitalize"><?= $rowAlumno['Alu_Apellido']; ?></span></p>
+              <p><strong>Nombres:</strong> <span class="text-capitalize"><?= $rowAlumno['Alu_Nombre']; ?></span></p>
+            </div>
+            <div class="col">
+              <p id="pCodInt" data-id='<?= $rowAlumno['Alu_Codigo']; ?>'><strong>Cod. Int.:</strong> <span><?= $rowAlumno['Alu_Codigo']; ?></span></p>
+              <p><strong>Fecha de Nacimiento:</strong> <span><?= $rowAlumno['Alu_FechaNacimiento']; ?></span></p>
+            </div>
+          </div>
         </div>
         <?php }else{ ?>
           <p>No se encontraron registros de alumnos con el DNI proporcionado</p>
@@ -190,7 +203,7 @@ $('.btnAddPagoDyno').click(function () {
   $('#btnInsertPay').attr('data-idioma', $(this).parent().parent().attr('data-idioma'))
   $('#btnInsertPay').attr('data-ciclo', $(this).parent().parent().attr('data-ciclo'))
 
-  $.ajax({url: 'php/OPT_detalleConPagos.php', type:'POST', data:{idioma: $('#btnInsertPay').attr('data-idioma'), nivel: $('#btnInsertPay').attr('data-ciclo'), registro: $('#btnInsertPay').attr('reg_cod') }}).done(function (resp) {// console.log(resp)
+  $.ajax({url: 'php/OPT_detalleConPagos.php', type:'POST', data:{idioma: $('#btnInsertPay').attr('data-idioma'), nivel: $('#btnInsertPay').attr('data-ciclo'), registro: $('#btnInsertPay').attr('reg_cod') }}).done(function (resp) { //console.log(resp)
     $('#sltMotivoPago').selectpicker('val', 'Normal').selectpicker('refresh');
     $('#sltTipoPago').children().remove(); $('#sltTipoPago').append(resp);
     $('#sltTipoPago').change();

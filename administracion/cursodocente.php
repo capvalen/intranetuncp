@@ -1,3 +1,11 @@
+<?php 
+include "php/variablesGenerales.php";
+if (!isset($_COOKIE['ckPower'])){ header('Location: index.php'); }
+
+if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], $subBasico) ){
+	header('Location: sinPermiso.php'); }
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,6 +19,10 @@ input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none; 
     margin: 0; 
 }
+input[type=number] {
+    -moz-appearance:textfield;
+}
+
 .editado{
 	background-color: #ffffe5!important;
 	border-color: #ffc107!important;
@@ -45,23 +57,29 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 		</ol>
 	</nav>
 	<h3>Datos del curso</h3>
-	<div class="row">
-		<div class="col">
-			<p>Temporada: <?= $rowdatosCurso['Mes_Codigo']; ?></p>
-			<p>Curso: <span id="p1Curso"><?= $rowdatosCurso['Idi_Nombre']; ?></span></p>
-			<p>Detalle: <?= $rowdatosCurso['Niv_Detalle']; ?></p>
-		</div>
-		<div class="col">
-			<p>Ciclo: <span id="p1Ciclo"><?= $rowdatosCurso['Sec_NroCiclo']; ?></span></p>
-			<p>Sección: <?= $rowdatosCurso['Sec_Seccion']; ?></p>
-			<p>Sucursal: <?= $rowdatosCurso['Suc_Direccion']; ?></p>
-		</div>
-		<div class="col">
-			<p>Inicio: <?= $rowdatosCurso['Hor_HoraInicio']; ?></p>
-			<p>Final: <?= $rowdatosCurso['Hor_HoraSalida']; ?></p>
-		</div>
+	
+	<div class="card mb-3">
 		
+		<div class="card-body row">
+			<div class="col">
+				<p><strong>Curso:</strong> <span id="p1Curso"><?= $rowdatosCurso['Idi_Nombre']; ?></span></p>
+				<p><strong>Detalle:</strong> <?= $rowdatosCurso['Niv_Detalle']; ?></p>
+				<p><strong>Ciclo:</strong> <span id="p1Ciclo"><?= $rowdatosCurso['Sec_NroCiclo']; ?></span></p>
+			</div>
+			<div class="col">
+				<p><strong>Temporada:</strong> <?= $rowdatosCurso['Mes_Codigo']; ?></p>
+				<p><strong>Sección:</strong> <?= $rowdatosCurso['Sec_Seccion']; ?></p>
+				<p><strong>Sucursal:</strong> <?= $rowdatosCurso['sucDescripcion']; ?></p>
+			</div>
+			<div class="col">
+				<p><strong>Inicio:</strong> <span class='text-capitalize'><?= strtolower($rowdatosCurso['Hor_HoraInicio']); ?></span></p>
+				<p><strong>Final:</strong> <span class='text-capitalize'><?= strtolower($rowdatosCurso['Hor_HoraSalida']); ?></span></p>
+				<p><strong>Docente:</strong> <span class='text-capitalize'><?= strtolower($rowdatosCurso['nomDocente']); ?></span></p>
+			</div>
+		</div>
+			
 	</div>
+	
 
 	<?php if(isset($_GET['cursor'])){ ?>
 	<div class="card">
@@ -318,6 +336,12 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 <?php include "php/footer.php"; ?>
 
 <script>
+$("table input").click(function () {
+   $(this).select();
+});
+$('.txtNotas').focus(function () {
+	$(this).select();
+});
 $('.txtNotas').focusout(function () {
 	var numAnt=parseFloat($(this).val());
 	if($.isNumeric($(this).val())){
@@ -331,7 +355,7 @@ $('.txtNotas').focusout(function () {
 	}else{
 		$(this).val(0).change();
 	}
-})
+});
 $('.txtNotas').change(function () {
 	var padre = $(this).parent().parent();
 	var nota1=0, nota2=0, nota3=0, nprom=0;
@@ -341,7 +365,16 @@ $('.txtNotas').change(function () {
 	nprom= (nota1 + nota2+ nota3)/3;
 	padre.find('#txtPromedio').val(n(parseFloat(nprom).toFixed(0)));
 	padre.find('#txtPromedio').addClass('editado');
-})
+});
+$('.txtNotas').keyup(function(e) {
+	if( $(this).val()>=3 ){
+		if( $(this).attr('id')=='txtNota3'){
+			$(this).parent().parent().next().find('#txtNota1').focus();
+		}else{
+			$(this).parent().next().find('input').focus();
+		}
+	}
+});
 function n(n){
     return n > 9 ? "" + n: "0" + n;
 }
@@ -536,6 +569,7 @@ $('#btnUbicaChosen').click(function() {
 		}
 	});
 });
+
 <?php } ?>
 </script>
   </body>
