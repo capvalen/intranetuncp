@@ -116,7 +116,7 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
       </ul>
     </li>
     <?php endif; ?>
-    <?php if( in_array($_COOKIE['ckPower'], $subAcademica) ): ?>
+    <?php if( in_array($_COOKIE['ckPower'], $subSucursal) ): ?>
     <li>
       <a href="#pageHuancas" data-toggle="collapse" aria-expanded="false" class="d-flex align-items-center"><i
           class="icofont-ui-home"></i> Sede Huancas</span> <i class="icofont-caret-down ml-auto"></i></a>
@@ -125,13 +125,22 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
           <a href="ciclos.php"><i class="icofont-folder-open"></i> Ciclos</a>
         </li>
         <li>
+          <a href="mesacademico.php"><i class="icofont-folder-open"></i> Mes académico</a>
+        </li>
+        <li>
           <a href="matricula.php"><i class="icofont-book-mark"></i> Matrícular alumno</a>
         </li>
         <li>
           <a href="pagos.php"><i class="icofont-money"></i> Pagos</a>
         </li>
         <li>
+          <a href="reservas.php"><i class="icofont-contacts"></i> Reserva de matrícula</a>
+        </li>
+        <li>
           <a href="seguimiento.php"><i class="icofont-attachment"></i> Seguimiento académico</a>
+        </li>
+        <li>
+          <a href="tramites.php"><i class="icofont-attachment"></i> Trámite documentario</a>
         </li>
       </ul>
     </li>

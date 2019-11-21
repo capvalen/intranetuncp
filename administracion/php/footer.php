@@ -12,5 +12,7 @@
 <script src="js/anatsunamun.js?version=1.0.4"></script>
 <script type="text/javascript" src="js/bootstrap-select.js?version=1.0.5"></script>
 <script type="text/javascript" src="js/bootstrap-material-datetimepicker.js"></script>
+<script src="alertify.min.js"></script>
+
 
 <?php include "php/modal.php"; ?>

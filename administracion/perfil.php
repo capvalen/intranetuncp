@@ -1,3 +1,5 @@
+<?php 
+if (!isset($_COOKIE['ckPower'])){ header('Location: index.php'); } ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -18,9 +20,9 @@
 	<!-- Contenido de la Página  -->
 
 		
-	<h2 class="d-print-none"><i class="icofont-briefcase"></i> Bienvenido al Centro de Idiomas</h2>
-	
-	<p>Seleccione una opción para empezar</p>
+	<h2 class="d-print-none text-secondary my-2"><i class="icofont-briefcase"></i> Bienvenido al Centro de Idiomas</h2>
+
+	<h5> Hola, <span class='text-capitalize'><?= $_COOKIE['ckAtiende']; ?></span>, seleccione una opción para empezar</h5>
 	<?php if(in_array($_COOKIE['ckPower'], $subRegistro)){
 	$sqlResumen = "select totalCursosMes() as cursos, totalReservaMes() as reservas, totalAlumnosMes() as alumnos; ";
 	$respuestaResumen = $cadena->query($sqlResumen);
@@ -55,30 +57,36 @@
 	</div>
 	<?php } ?>
 	<div class="row">
+
+	<?php if(in_array($_COOKIE['ckPower'], $subRegistro) || $_COOKIE['ckidSucursal']=='SUC002' ){ ?>
+		<div class="col-3 my-3 d-flex align-items-stretch">
+			<div class="card" style="width: 100%;">
+				<div class="card-body">
+					<h5><a class="text-decoration-none" href="mesacademico.php"><i class="icofont-certificate"></i> Mes académico</a></h5>
+					<span><small>Si desea crear un ciclo nuevo, debe crear un Mes académico primero.</small></span>
+				</div>
+			</div>
+		</div>
+		<?php } ?>
+
 	
 		<?php if(in_array($_COOKIE['ckPower'], $subRegistro) || $_COOKIE['ckidSucursal']=='SUC002' ){ ?>
 		<div class="col-3 my-3 d-flex align-items-stretch">
 			<div class="card" style="width: 100%;">
 				<div class="card-body">
 					<h5><a class="text-decoration-none" href="ciclos.php"><i class="icofont-black-board"></i> Ciclos</a></h5>
+					<span><small>Sección donde puede crear cursos y editar al alumnado.</small></span>
 				</div>
 			</div>
 		</div>
 		<?php } ?>
-		<?php if(in_array($_COOKIE['ckPower'], $subRegistro) ){ ?>
-		<div class="col-3 my-3 d-flex align-items-stretch">
-			<div class="card" style="width: 100%;">
-				<div class="card-body">
-					<h5><a class="text-decoration-none" href="mesacademico.php"><i class="icofont-certificate"></i> Mes académico</a></h5>
-				</div>
-			</div>
-		</div>
-		<?php } ?>
+		
 		<?php if(in_array($_COOKIE['ckPower'], $subRegistro) || $_COOKIE['ckidSucursal']=='SUC002' ){ ?>
 		<div class="col-3 my-3 d-flex align-items-stretch">
 			<div class="card" style="width: 100%;">
 				<div class="card-body">
 					<h5><a class="text-decoration-none" href="matricula.php"><i class="icofont-quill-pen"></i> Matrícula de alumno</a></h5>
+					<span><small>Sección de matrículas de alumno bajo un proceso normal.</small></span>
 				</div>
 			</div>
 		</div>
@@ -88,15 +96,17 @@
 			<div class="card" style="width: 100%;">
 				<div class="card-body">
 					<h5><a href="pagos.php"><i class="icofont-paper"></i> Pagos</a></h5>
+					<span><small>Sección para registrar pagos del alumnado en sus diferentes ciclos.</small></span>
 				</div>
 			</div>
 		</div>
 		<?php } ?>
-		<?php if(in_array($_COOKIE['ckPower'], $subAcademica) || in_array($_COOKIE['ckPower'], $subRegistro) ){ ?>
+		<?php if(in_array($_COOKIE['ckPower'], $subAcademica) || in_array($_COOKIE['ckPower'], $subRegistro) || $_COOKIE['ckidSucursal']=='SUC002' ){ ?>
 		<div class="col-3 my-3 d-flex align-items-stretch">
 			<div class="card" style="width: 100%;">
 				<div class="card-body">
 					<h5><a class="text-decoration-none" href="reservas.php"><i class="icofont-pen-nib"></i> Reserva de matrícula</a></h5>
+					<span><small>Sección de reserva de un mes para el derecho de continuar estudiando.</small></span>
 				</div>
 			</div>
 		</div>
@@ -106,15 +116,17 @@
 			<div class="card" style="width: 100%;">
 				<div class="card-body">
 					<h5><a class="text-decoration-none" href="seguimiento.php"><i class="icofont-certificate-alt-2"></i> Seguimiento académico</a></h5>
+					<span><small>Sección para poder visualizar un historial académico de un determinado estudiante.</small></span>
 				</div>
 			</div>
 		</div>
 		<?php } ?>
-		<?php if(in_array($_COOKIE['ckPower'], $secretaria) || in_array($_COOKIE['ckPower'], $subAdministracion) || in_array($_COOKIE['ckPower'], $subAcademica) || in_array($_COOKIE['ckPower'], $subRegistro) ){ ?>
+		<?php if(in_array($_COOKIE['ckPower'], $secretaria) || in_array($_COOKIE['ckPower'], $subAdministracion) || in_array($_COOKIE['ckPower'], $subAcademica) || in_array($_COOKIE['ckPower'], $subRegistro) || $_COOKIE['ckidSucursal']=='SUC002' ){ ?>
 		<div class="col-3 my-3 d-flex align-items-stretch">
 			<div class="card" style="width: 100%;">
 				<div class="card-body">
 					<h5><a class="text-decoration-none" href="tramite.php"><i class="icofont-paper"></i> Trámite documentario</a></h5>
+					<span><small>Área sólo para realizar trámites documentarios y poder hacerles seguimiento.</small></span>
 				</div>
 			</div>
 		</div>

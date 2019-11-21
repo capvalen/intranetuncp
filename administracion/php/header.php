@@ -13,6 +13,8 @@
 <link rel="stylesheet" href="css/bootstrap-select.min.css?version=0.4" >
 <link rel="stylesheet" href="css/bootstrap-material-datetimepicker.css?version=0.1" >
 <link rel="stylesheet" href="css/animate.css?version=0.0" >
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.12.0/build/css/alertify.min.css"/>
+
 
 
 <title>CEID Intranet</title>

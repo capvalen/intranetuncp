@@ -235,6 +235,7 @@ function calculoPension(){
 
 }
 $('#btnInsertPay').click(function () {
+  pantallaOver(true);
   $('#alertPagos').addClass('d-none');
   if($('#txtCodRecibo').val()=='' || ( $('#txtMontoPago').val()=='' || $('#txtMontoPago').val()<0 ) ){
     $('#alertPagos span').text('Tiene campos mal rellenados o en blanco, revise por favor.').parent().removeClass('d-none')
@@ -243,12 +244,27 @@ $('#btnInsertPay').click(function () {
     if(motivo !='Normal' && $('#sltTipoPago').val()=='Matr0001'){
       motivo = 'Normal';
     }
-    $.ajax({url: 'php/insertarPago.php', type: 'POST', data:{reg: $('#btnInsertPay').attr('reg_cod'), pagCod: $('#sltTipoPago').val(), recibo: $('#txtCodRecibo').val(), monto: $('#txtMontoPago').val(), motivo: motivo  }}).done(function (resp) {
+    var registro = $('#btnInsertPay').attr('reg_cod');
+    $.ajax({url: 'php/insertarPago.php', type: 'POST', data:{reg: registro, pagCod: $('#sltTipoPago').val(), recibo: $('#txtCodRecibo').val(), monto: $('#txtMontoPago').val(), motivo: motivo  }}).done(function (resp) {
+      pantallaOver(false);
       console.log(resp);
       if(resp=='todo ok'){
-        $('#h1Bien').text('Pago insertado con éxito');
+        /* $('#h1Bien').text('Pago insertado con éxito');
+       
+			  $('#modalGuardadoCorrecto').modal('show'); */
         $('#modalAddPay').modal('hide');
-			  $('#modalGuardadoCorrecto').modal('show');
+        alertify.notify('<i class="icofont-check-circled"></i> Pago insertado con éxito', 'success' );
+        $(`#${registro}`).find('tbody').append(`
+          <tr >
+                  <td>-</td>
+                  <td>-</td>
+                  <td>${$(`#sltTipoPago option[value="${$('#sltTipoPago').val()}"]`).text()}</td>
+                  <td>${$('#txtCodRecibo').val()}</td>
+                  <td>${$('#txtMontoPago').val()}</td>
+                </tr>`)
+      }else{
+        $('#modalAddPay').modal('hide');
+        alertify.notify('<i class="icofont-close-circled"></i> Hubo un error interno, es posible que no se haya registrado su proceso', 'danger' );
       }
     })
   }

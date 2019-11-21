@@ -28,6 +28,9 @@ input[type=number] {
 	border-color: #ffc107!important;
 	color: #ea7b1b;
 }
+thead th{
+	border-top: none!important;
+}
 </style>
 	
 <div class="wrapper">
@@ -89,7 +92,7 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 				<button class="btn btn-outline-warning" id="btnReubicarAlumno"><i class="icofont-magic"></i> Re/Ubicar alumno</button>
 			</div>
 			<?php if($resultadoCursos->num_rows >0){ ?>
-				<button class="btn btn-outline-primary" id="btnGuardarNotas"><i class="icofont icofont-save"></i> Guardar cambios</button>
+				<button class="btn btn-outline-primary" id="btnGuardarNotas"><i class="icofont icofont-save"></i> Guardar notas</button>
 			<?php } ?>
 		</div>
 	</div>
@@ -199,14 +202,14 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 		</div>
 	</div>
 	<div class="modal fade" id="modalAsignarAlumno" tabindex="-1" role="dialog">
-		<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
 			<div class="modal-content">
 			
 				<div class="modal-body">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<h5 class="modal-title"><i class="icofont-mail"></i> Asignar nuevo alumno al curso</h5>
+					<h5 class="modal-title mb-3"><i class="icofont-mail"></i> Asignar nuevo alumno al curso</h5>
 					<div id="primeraParte">
 						<p class="mb-1"><small>Primero ubique al alumno por D.N.I o por sus Apellidos:</small></p>
 						<input type="text" class="form-control text-center" autocomplete='off' id="txtUbicarAlumno">
@@ -215,12 +218,13 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 						</div>
 					</div>
 					<div class='d-none ' id="segundaParte">
-						<table class="table table-hover">
+						<table class="table table-hover table-sm">
 						<thead>
 							<tr>
 								<th>N°</th>
 								<th>Apellidos y Nombres</th>
 								<th>D.N.I.</th>
+								<th>@</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -233,14 +237,14 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 	</div>
 	</div>
 	<div class="modal fade" id="modalReubicarAlumno" tabindex="-1" role="dialog">
-		<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
 			<div class="modal-content">
 			
 				<div class="modal-body">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<h5 class="modal-title"><i class="icofont-mail"></i> Ubicación de alumno al curso</h5>
+					<h5 class="modal-title mb-3"><i class="icofont-mail"></i> Ubicación de alumno al curso</h5>
 					<div id="primeraParteUbica">
 						<p>Primero, ubique al alumno por D.N.I o por sus Apellidos:</p>
 						<input type="text" class="form-control text-center" autocomplete='off' id="txtReUbicarAlumno">
@@ -249,12 +253,13 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 						</div>
 					</div>
 					<div class='d-none ' id="segundaParteUbica">
-						<table class="table table-hover">
+						<table class="table table-hover table-sm">
 						<thead>
 							<tr>
 								<th>N°</th>
 								<th>Apellidos y Nombres</th>
 								<th>D.N.I.</th>
+								<th>@</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -269,13 +274,11 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 	<div class="modal fade" id="modalChosenAlumno" tabindex="-1" role="dialog">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title"><i class="icofont-address-book"></i> Asignar nuevo alumno al curso</h5>
+				<div class="modal-body">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-				</div>
-				<div class="modal-body">
+					<h5 class="modal-title"><i class="icofont-address-book"></i> Asignar nuevo alumno al curso</h5>
 					<p>¿Desea realmente matricular al alumno: <strong class="text-capitalize" id="txtNombreChosen"></strong>?</p>
 					<button class="btn btn-outline-primary" id="btnInsertChosen"><i class="icofont-contact-add"></i> Sí, matricular</button>
 				</div>
@@ -459,7 +462,8 @@ $('tbody').on('click', '.btnElegirAlumno', function () {
 	$('#txtNombreChosen').text( $(this).parent().parent().find('.tdNombre').text())
 	$('#btnInsertChosen').attr('data-id', $(this).attr('data-id'));
 	$('#modalAsignarAlumno').modal('hide');
-	$('#modalChosenAlumno').modal('show');
+	//$('#modalChosenAlumno').modal('show');
+	$('#btnInsertChosen').click();
 });
 function goBack() {
   window.history.back();
@@ -469,14 +473,17 @@ $('#btnInsertChosen').click(function () {
 	$.ajax({url: 'php/insertarAlumnoaCurso.php', type: 'POST', data: {codSec: '<?= $_GET['cursor'];?>', codAlu: $('#btnInsertChosen').attr('data-id')}}).done(function (resp) { //console.log(resp);
 		$('#modalChosenAlumno').modal('hide');
 		if(resp=='todo ok'){
-			$('#h1Bien').text('Alumno registrado al curso');
-			$('#modalGuardadoCorrecto').modal('show');
+			/* $('#h1Bien').text('Alumno registrado al curso');
+			$('#modalGuardadoCorrecto').modal('show'); */
+			alertify.notify('<i class="icofont-check-circled"></i> Alumno registrado al curso con éxito', 'success' );
 		}else if(resp=='ya registrado'){
-			$('#h1Advertencia').text('El alumno ya se encontraba registrado en el curso ' + $('#spanCursoConf').text());
-			$('#modalAdvertencia').modal('show');
+			/* $('#h1Advertencia').text('El alumno ya se encontraba registrado en el curso ' + $('#spanCursoConf').text());
+			$('#modalAdvertencia').modal('show'); */
+			alertify.notify('<i class="icofont-check-circled"></i> El alumno ya se encontraba registrado en este curso', 'success' );
 		}else{
-			$('#h1Advertencia').text('Error desconocido, comuníquelo al área de soporte');
-			$('#modalAdvertencia').modal('show');
+		/* 	$('#h1Advertencia').text('Error desconocido, comuníquelo al área de soporte');
+			$('#modalAdvertencia').modal('show'); */
+			alertify.notify('<i class="icofont-close-circled"></i> Error desconocido, comuníquelo al área de soporte', 'danger' );
 		}
 		
 	})
@@ -553,19 +560,24 @@ $('#sltPTipoUbica').on('changed.bs.select', function (e, clickedIndex, isSelecte
 	if($('#sltPTipoUbica').val()==1){ $('#spanBtnUbica').text('ubicar'); }
 	else if($('#sltPTipoUbica').val()==2){ $('#spanBtnUbica').text('reubicar'); }
 });
-$('#btnUbicaChosen').click(function() { 
+$('#btnUbicaChosen').click(function() {
+	pantallaOver(true);
 	$.ajax({url: 'php/insertarAlumnoReubicacion.php', type: 'POST', data: {codAlu: $(this).attr('data-id'), codSec: '<?= $_GET['cursor']; ?>', tipoProceso: $(`#sltPTipoUbica option[value="${$('#sltPTipoUbica').val()}"]`).text(), calificacion: $('#txtUbicaCalificacion').val(), idiomaC: $('#p1Curso').text()+ $('#p1Ciclo').text() }}).done(function(resp) {
 		console.log(resp) 
+		pantallaOver(false);
 		$('#modalChosenUbicaAlumno').modal('hide');
 		if(resp=='todo ok'){
-			$('#h1Bien').text('Alumno ha sido ubicado al curso');
-			$('#modalGuardadoCorrecto').modal('show');
+			/* $('#h1Bien').text('Alumno ha sido ubicado al curso');
+			$('#modalGuardadoCorrecto').modal('show'); */
+			alertify.notify('<i class="icofont-check-circled"></i> Alumno registrado al curso con éxito', 'success' );
 		}else if(resp=='ya registrado'){
-			$('#h1Advertencia').text('El alumno ya se encontraba registrado en el curso ' + $('#spanCursoConf').text());
-			$('#modalAdvertencia').modal('show');
+			/* $('#h1Advertencia').text('El alumno ya se encontraba registrado en el curso ' + $('#spanCursoConf').text());
+			$('#modalAdvertencia').modal('show'); */
+			alertify.notify('<i class="icofont-check-circled"></i> El alumno ya se encontraba registrado en este curso', 'success' );
 		}else{
-			$('#h1Advertencia').text('Error desconocido, comuníquelo al área de soporte');
-			$('#modalAdvertencia').modal('show');
+			/* $('#h1Advertencia').text('Error desconocido, comuníquelo al área de soporte');
+			$('#modalAdvertencia').modal('show'); */
+			alertify.notify('<i class="icofont-close-circled"></i> Error desconocido, comuníquelo al área de soporte', 'danger' );
 		}
 	});
 });
