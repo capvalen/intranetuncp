@@ -42,7 +42,7 @@ if(isset($_GET['cursor'])){
 		
 	<h2 class="d-print-none"><i class="icofont-people"></i> Pagos</h2>
 	
-	<div class="card col-6">
+	<div class="card col-7">
 		<div class="card-body pt-1">
 		<p class="card-text m-0"><small class="text-muted"><i class="icofont-filter"></i> Filtro</small></p>
 			<div class="form-inline">
@@ -64,9 +64,9 @@ if(isset($_GET['cursor'])){
           <h5>Datos del alumno</h5>
           <div class="row">
             <div class="col">
-              <p><strong>D.N.I.:</strong> <span><?= $rowAlumno['Alu_NroDocumento']; ?></span></p>
-              <p><strong>Apellidos:</strong> <span class="text-capitalize"><?= $rowAlumno['Alu_Apellido']; ?></span></p>
-              <p><strong>Nombres:</strong> <span class="text-capitalize"><?= $rowAlumno['Alu_Nombre']; ?></span></p>
+              <p><strong>D.N.I.:</strong>  <span><a href="alumnos.php?cursor=<?= $rowAlumno['Alu_Codigo']?>"><?= $rowAlumno['Alu_NroDocumento'];?></a></p>
+              <p><strong>Apellidos:</strong> <span class="text-capitalize"><a href="alumnos.php?cursor=<?= $rowAlumno['Alu_Codigo']?>"><?= $rowAlumno['Alu_Apellido']; ?></a></span> </p>
+              <p><strong>Nombres:</strong> <span class="text-capitalize"><a href="alumnos.php?cursor=<?= $rowAlumno['Alu_Codigo']?>"><?= $rowAlumno['Alu_Nombre']; ?></a></span> </p>
             </div>
             <div class="col">
               <p id="pCodInt" data-id='<?= $rowAlumno['Alu_Codigo']; ?>'><strong>Cod. Int.:</strong> <span><?= $rowAlumno['Alu_Codigo']; ?></span></p>
@@ -207,6 +207,7 @@ $('.btnAddPagoDyno').click(function () {
     $('#sltMotivoPago').selectpicker('val', 'Normal').selectpicker('refresh');
     $('#sltTipoPago').children().remove(); $('#sltTipoPago').append(resp);
     $('#sltTipoPago').change();
+    $('#txtCodRecibo').val('');
     $('#modalAddPay').modal('show');
     pantallaOver(false);
   })
@@ -254,14 +255,37 @@ $('#btnInsertPay').click(function () {
 			  $('#modalGuardadoCorrecto').modal('show'); */
         $('#modalAddPay').modal('hide');
         alertify.notify('<i class="icofont-check-circled"></i> Pago insertado con éxito', 'success' );
-        $(`#${registro}`).find('tbody').append(`
-          <tr >
-                  <td>-</td>
-                  <td>-</td>
-                  <td>${$(`#sltTipoPago option[value="${$('#sltTipoPago').val()}"]`).text()}</td>
-                  <td>${$('#txtCodRecibo').val()}</td>
-                  <td>${$('#txtMontoPago').val()}</td>
-                </tr>`)
+        if( $(`#${registro} table`).length >0 ){
+          $(`#${registro}`).find('tbody').append(`/*html*/
+            <tr >
+                    <td>-</td>
+                    <td>-</td>
+                    <td>${$(`#sltTipoPago option[value="${$('#sltTipoPago').val()}"]`).text()}</td>
+                    <td>${$('#txtCodRecibo').val()}</td>
+                    <td>${$('#txtMontoPago').val()}</td>
+                  </tr>`);
+        }else{
+          $(`#${registro} p`).append(`<table class="table table-sm table-hover">
+              <thead>
+                <tr>
+                  <th>N°</th>
+                  <th>Cod. Pago</th>
+                  <th>Concepto</th>
+                  <th>Recibo</th>
+                  <th>Monto</th>
+                </tr>
+              </thead>
+              <tbody>
+              <tr >
+                    <td>-</td>
+                    <td>-</td>
+                    <td>${$(`#sltTipoPago option[value="${$('#sltTipoPago').val()}"]`).text()}</td>
+                    <td>${$('#txtCodRecibo').val()}</td>
+                    <td>${$('#txtMontoPago').val()}</td>
+                  </tr>
+              </tbody>
+            </table>`)
+        }
       }else{
         $('#modalAddPay').modal('hide');
         alertify.notify('<i class="icofont-close-circled"></i> Hubo un error interno, es posible que no se haya registrado su proceso', 'danger' );

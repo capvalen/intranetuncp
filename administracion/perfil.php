@@ -19,10 +19,14 @@ if (!isset($_COOKIE['ckPower'])){ header('Location: index.php'); } ?>
 <div id="content" class="container-fluid pt-5">
 	<!-- Contenido de la Página  -->
 
-		
 	<h2 class="d-print-none text-secondary my-2"><i class="icofont-briefcase"></i> Bienvenido al Centro de Idiomas</h2>
-
 	<h5> Hola, <span class='text-capitalize'><?= $_COOKIE['ckAtiende']; ?></span>, seleccione una opción para empezar</h5>
+		
+
+	<div class="my-3">
+		<img src="images/banner.png" class="img-fluid" width="1000px">
+	</div>
+
 	<?php if(in_array($_COOKIE['ckPower'], $subRegistro)){
 	$sqlResumen = "select totalCursosMes() as cursos, totalReservaMes() as reservas, totalAlumnosMes() as alumnos; ";
 	$respuestaResumen = $cadena->query($sqlResumen);
@@ -121,6 +125,16 @@ if (!isset($_COOKIE['ckPower'])){ header('Location: index.php'); } ?>
 			</div>
 		</div>
 		<?php } ?>
+		
+		<div class="col-3 my-3 d-flex align-items-stretch">
+			<div class="card" style="width: 100%;">
+				<div class="card-body">
+					<h5><a class="text-decoration-none" href="alumnos.php"><i class="icofont-certificate-alt-2"></i> Alumnado</a></h5>
+					<span><small>Sección para actualizar la data del estudiante CEID.</small></span>
+				</div>
+			</div>
+		</div>
+		
 		<?php if(in_array($_COOKIE['ckPower'], $secretaria) || in_array($_COOKIE['ckPower'], $subAdministracion) || in_array($_COOKIE['ckPower'], $subAcademica) || in_array($_COOKIE['ckPower'], $subRegistro) || $_COOKIE['ckidSucursal']=='SUC002' ){ ?>
 		<div class="col-3 my-3 d-flex align-items-stretch">
 			<div class="card" style="width: 100%;">

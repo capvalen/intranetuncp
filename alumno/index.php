@@ -91,6 +91,15 @@
 	background-size: cover;
 	background-position: center;
 }
+#colCertificado{
+	cursor: pointer;
+	color: #fff;
+	font-weight: 700;
+	background-image: url('images/certificado.jpg?v=1.1');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+}
 .colBlack{
 	background-color: black;
 	opacity: 0.8;
@@ -209,6 +218,16 @@ color: white
 						</div>
 					</div>
 				</div>
+				<div class="col-6 mt-3">
+						<div class="colSeleccion d-flex align-items-end rounded" id="colCertificado">
+					<div class="colBlack rounded-bottom" id="">
+							<div class="card-body d-flex justify-content-center align-items-end">
+								<h5 class="lead">Descargar certificado</h5>
+							</div>
+						</div>
+					</div>
+				</div>
+
 			</div>
 		</div>
 		<div class='d-none' id="divNotas">
@@ -248,15 +267,15 @@ color: white
 			</div>
 		</div>
 
-		<div id="divMatricula">
+		<div class="d-none" id="divMatricula">
 		 <h1 class="display-3 text-center" style="color: #097bd4;">Pre-Matrícula</h1>
 		 <div class="root" style="display: flex;">
 				<div class="contenedor">
 					<ul class="progressbar">
-						<li data-tag="1" class="active">Paso 1</li>
-						<li data-tag="2" >Paso 2</li>
-						<li data-tag="3">Paso 3</li>
-						<li data-tag="4">Paso 4</li>
+						<li data-tag="1" class="active">Reconocimiento</li>
+						<li data-tag="2" >Curso</li>
+						<li data-tag="3">Horario</li>
+						<li data-tag="4">Resumen</li>
 						<li data-tag="5">Paso 5</li>
 					</ul>
 				</div>
@@ -271,8 +290,7 @@ color: white
 							</div>
 							<div class="card-footer">
 								<div class="row d-flex justify-content-between px-4">
-									<button class="btn btn-outline-secondary btnAtras"><i class="icofont-caret-left"></i> Atrás </button>
-									<button class="btn btn-outline-secondary btnSiguiente" data-tag='2'>Siguiente <i class="icofont-caret-right"></i></button>
+									<button class="btn btn-outline-secondary border-0 btnSiguiente" data-tag='1'>Siguiente <i class="icofont-caret-right"></i></button>
 								</div>
 							</div>
 						</div>
@@ -280,29 +298,81 @@ color: white
 					<div class="row d-none" id="subPro2">
 						<div class="card w-100">
 							<div class="card-body">
-								<h4>¿Qué proceso deseas hacer?</h4>
-								<ul class="list-group">
-									<li class="list-group-item">Quiero empezar un nuevo curso</li>
-									<li class="list-group-item">Continuar con mis estudios de Inglés</li>
-									<li class="list-group-item">Continuar con mis estudios de Italiano</li>
-								</ul>
-								<hr>
+								<h4 class='pb-3'>¿Qué proceso deseas hacer?</h4>
+								<div class="list-group col-6">
+									<button type="button" class="list-group-item list-group-item-action active" ><i class="icofont-dotted-right"></i> Quiero empezar un nuevo curso</button>
+									<button type="button" class="list-group-item list-group-item-action"><i class="icofont-dotted-right"></i> Continuar con mis estudios de Inglés</button>
+									<button type="button" class="list-group-item list-group-item-action"><i class="icofont-dotted-right"></i> Continuar con mis estudios de Italiano</button>
+								</div>
+							</div>
+							<div class="card-footer">
 								<div class="row d-flex justify-content-between px-4">
-									<button class="btn btn-outline-secondary btnAtras"><i class="icofont-caret-left"></i> Atrás </button>
-									<button class="btn btn-outline-secondary btnSiguiente" data-tag='3' >Siguiente <i class="icofont-caret-right"></i></button>
+									<button class="btn btn-outline-secondary border-0 btnAtras" data-tag='2'><i class="icofont-caret-left"></i> Atrás </button>
+									<button class="btn btn-outline-secondary border-0 btnSiguiente" data-tag='2'>Siguiente <i class="icofont-caret-right"></i></button>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="row d-none" id="subPro3">
-						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam sed veniam modi consequatur, rerum pariatur assumenda.</p>
+					<div class="card w-100">
+						<div class="card-body">
+							<h4 class='pb-3'>Tenemos los siguientes horarios disponibles:</h4>
+							<div class="list-group col-6">
+								<button type="button" class="list-group-item list-group-item-action active" ><i class="icofont-dotted-right"></i> 9:00 - 10:30 a.m.</button>
+								<button type="button" class="list-group-item list-group-item-action " ><i class="icofont-dotted-right"></i> 11:00 - 12:30 p.m.</button>
+								<button type="button" class="list-group-item list-group-item-action " ><i class="icofont-dotted-right"></i> 3:00 - 4:30 p.m.</button>
+							</div>
+						</div>
+						<div class="card-footer">
+							<div class="row d-flex justify-content-between px-4">
+								<button class="btn btn-outline-secondary border-0 btnAtras" data-tag='3'><i class="icofont-caret-left"></i> Atrás </button>
+								<button class="btn btn-outline-secondary border-0 btnSiguiente" data-tag='3'>Siguiente <i class="icofont-caret-right"></i></button>
+							</div>
+						</div>
 					</div>
-				</div>
+					</div>
+					<div class="row d-none" id="subPro4">
+					<div class="card w-100">
+						<div class="card-body">
+							<h4 class='pb-3'>Resumen</h4>
+							<p>Consolidamos que:</p>
+							<p><strong>Alumno: </strong> <span>Carlos Pariona Valencia</span> </p>
+							<p><strong>Curso: </strong> <span>Inglés</span> </p>
+							<p><strong>Turno: </strong> <span>11:00 - 12:30 p.m.</span> </p>
+						<div class="card-footer">
+							<div class="row d-flex justify-content-between px-4">
+								<button class="btn btn-outline-secondary border-0 btnAtras" data-tag='4'><i class="icofont-caret-left"></i> Atrás </button>
+								<button class="btn btn-outline-secondary border-0 btnSiguiente" data-tag='4'>Siguiente <i class="icofont-caret-right"></i></button>
+							</div>
+						</div>
+					</div>
+					</div>
+                        
+            
+                    
+				</div> <!--Fin de SubProcesos-->
 		</div>
-		
-
-		
 	</div>
+        
+			<div class='d-none' id="divCertificados">
+				<h1 class="display-3 text-center" style="color: #097bd4;">Certificados  CEID-UNCP</h1>
+				<p class="lead">Bienvenido alumno, nos es grato encontrarte acá para que descargues tu certificado. </p>
+				<label class="lead text-muted" id="labelDNI" for="">Mi D.N.I. es:</label>
+				<div class="row">
+				<div class="col-md-4 col-sm-12 d-flex justify-content-center">
+					<input type="text" class="text-center form-control" id="txtCertificadoDni" autocomplete="off">
+				</div>
+					<button class="btn btn-outline-primary" id="txtCertificadoBuscar"><i class="icofont-search-1"></i> Consultar</button>
+				</div>
+				<div class="row">
+					<a href="#!" class='btnVolverMenu text-decoration-none text-secondary mt-3'><i class="icofont-rounded-left"></i> Ver menú principal</a>
+				</div>
+		
+				<div id="divCertificadoResultados">
+				
+				</div>
+			</div>
+        
 	<div class='d-none' id="overlay">
 		<div class="text"><span id="hojita"><i class="icofont icofont-leaf"></i></span> <p id="pFrase"> Solicitando los datos... <br> <span>«Pregúntate si lo que estás haciendo hoy <br> te acerca al lugar en el que quieres estar mañana» <br> Walt Disney</span></p>
 	</div>
@@ -340,6 +410,10 @@ $('#colVerNotas').click(function() {
 	$('#divNotas').removeClass('d-none');
 	$('#rowOpciones').addClass('d-none');
 });
+$('#colCertificado').click(function() {
+	$('#divCertificados').removeClass('d-none');
+	$('#rowOpciones').addClass('d-none');
+});
 $('#colTotMatriculas').click(function() {
 	$('#divReservas').removeClass('d-none');
 	$('#rowOpciones').addClass('d-none');
@@ -353,8 +427,8 @@ $('#colMatricula').click(function() {
 	$('#divMatricula').removeClass('d-none');
 	$('#rowOpciones').addClass('d-none');
 });
-$('.progressbar li').click(function() {
-	var proceso = $(this).attr('data-tag')
+/* $('.progressbar li').click(function() {
+	var proceso = $(this).attr('data-tag'); console.log(proceso)
 	$.each( $('.progressbar li') , function(i, objeto){
 		if(i<proceso){
 			$(this).addClass('active')
@@ -369,25 +443,65 @@ $('.progressbar li').click(function() {
 		$(`#subPro${proceso-1}`).addClass('animated bounceOutLeft').addClass('d-none')
 		$(`#subPro${proceso}`).addClass('animated bounceInRight').removeClass('d-none');
 	});
+	
+}); */
+$('.btnSiguiente').click(function() { console.log('sig')
+	var proceso = parseInt($(this).attr('data-tag'));
+	$.each( $('.progressbar li') , function(i, objeto){
+		if(i<=proceso){
+			$(this).addClass('active')
+		}else{
+			$(this).removeClass('active');
+		}
+	});
+
+	/* $(`#subPro${proceso-1}`).addClass('animated bounceOutLeft')
+
+	$(`#subPro${proceso-1}`).on('animationend', function() {
+		$(`#subPro${proceso-1}`).addClass('animated bounceOutLeft').addClass('d-none')
+		$(`#subPro${proceso}`).addClass('animated bounceInRight').removeClass('d-none');
+	}); */
+
+	const element =  document.querySelector(`#subPro${proceso}`)
+	element.classList.add('animated', 'bounceOutLeft')/* .remove('bounceOutRight') */
+	//console.log(proceso)
+	$(`#subPro${proceso+1}`).addClass('animated bounceInRight').removeClass('d-none');
+	ocultarCard($(`#subPro${proceso}`));
+});
+function ocultarCard(elemento){
+	$(elemento).addClass('d-none').removeClass('animated bounceInRight bounceInLeft bounceOutLeft bounceOutRight');
+}
+
+$('.btnAtras').click(function() { console.log('atras')
+	var proceso = parseInt($(this).attr('data-tag'));
+	$.each( $('.progressbar li') , function(i, objeto){
+		if(i<=proceso){
+			$(this).addClass('active')
+		}else{
+			$(this).removeClass('active');
+		}
+	});
+	//console.log(proceso)
+
+	const element =  document.querySelector(`#subPro${proceso}`)
+	element.classList.add('animated', 'bounceOutRight')
+	$(`#subPro${proceso-1}`).addClass('animated bounceInLeft').removeClass('d-none');
+	ocultarCard($(`#subPro${proceso}`));
 	
 });
-$('.btnSiguiente').click(function() {
-	var proceso = $(this).attr('data-tag')
-	$.each( $('.progressbar li') , function(i, objeto){
-		if(i<proceso){
-			$(this).addClass('active')
-		}else{
-			$(this).removeClass('active');
-		}
-	});
 
-	$(`#subPro${proceso-1}`).addClass('animated bounceOutLeft')
-
-	$(`#subPro${proceso-1}`).on('animationend', function() { 
-		$(`#subPro${proceso-1}`).addClass('animated bounceOutLeft').addClass('d-none')
-		$(`#subPro${proceso}`).addClass('animated bounceInRight').removeClass('d-none');
-	});
+$('.list-group-item').click(function() {
+	$('.list-group-item').removeClass('active')
+	$(this).addClass('active');
 	
+});
+$('#txtCertificadoBuscar').click(function() {
+	if( $('#txtCertificadoDni').val()!='' ){
+		$.ajax({url: 'php/buscarCertificado.php', type: 'POST', data: { dni: $('#txtCertificadoDni').val() }}).done(function(resp) {
+			//console.log(resp)
+			$('#divCertificadoResultados').html(resp);
+		});
+	}
 });
 
 </script>

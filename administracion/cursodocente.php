@@ -119,7 +119,7 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 				while($rowCursos =$resultadoCursos ->fetch_assoc()){ ?>
 				<tr class="rowAlumno" data-alu="<?= $rowCursos['Reg_Codigo']; ?>">
 					<td><?= $i;?></td>
-					<td><button class="btn btn-outline-danger btn-sm border-0 btnRemoveStudent"><i class="icofont-close"></i></button> <?= $rowCursos['Alu_Codigo'];?></td>
+					<td><button class="btn btn-outline-danger btn-sm border-0 btnRemoveStudent"><i class="icofont-close"></i></button> <a href="alumnos.php?cursor=<?= $rowCursos['Alu_Codigo']?>"><?= $rowCursos['Alu_Codigo'];?></a></td>
 					<td class="text-capitalize"><?= $rowCursos['Alu_Apellido'];?></td>
 					<td class="text-capitalize"><?= $rowCursos['Alu_Nombre'];?></td>
 					<td><input type="number" class="form-control text-center txtNotas" id="txtNota1" max="20" min="0" step="1" autocomplete="nope" value="<?php if($rowCursos['not_1']==null){ echo 0;} else {echo $rowCursos['not_1'];} ?>"></td>
