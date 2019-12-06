@@ -66,7 +66,7 @@ header {
 		</div>
 	</div>
 	<?php if(isset($_GET['cursor'])){
-	$sqlAlumno = "SELECT lower(a.Alu_Apellido) as Alu_Apellido, lower(a.Alu_Nombre) as Alu_Nombre, a.Alu_Codigo FROM `alumno` a where Alu_NroDocumento = '{$_GET['cursor']}'";
+		$sqlAlumno = "SELECT lower(a.Alu_Apellido) as Alu_Apellido, lower(a.Alu_Nombre) as Alu_Nombre, a.Alu_Codigo FROM `alumno` a where Alu_NroDocumento = '{$_GET['cursor']}'";
 	}else if(isset($_GET['patron'])){
 		$sqlAlumno = "SELECT lower(a.Alu_Apellido) as Alu_Apellido, lower(a.Alu_Nombre) as Alu_Nombre, a.Alu_Codigo FROM `alumno` a where Alu_Codigo = '{$_GET['patron']}'";
 	}
@@ -103,7 +103,7 @@ header {
 				</div>
 				<div class="col-3 d-flex justify-content-end "> <img class="d-none d-print-block" src="images/uncp-logo.png?v=1" style="height: 80px;"> </div>
 			</div>
-			<h5><strong>Apellidos y nombres: </strong> <span class="text-uppercase"><?= $rowAlumno['Alu_Apellido'].', ';?></span> <span class="text-capitalize"><?=$rowAlumno['Alu_Nombre']; ?></span></h5>
+			<h5><strong>Apellidos y nombres: </strong> <span class="text-uppercase"><?= $rowAlumno['Alu_Apellido'].', ';?></span> <span class="text-capitalize"><?=$rowAlumno['Alu_Nombre']; ?></span> <a href="alumnos.php?cursor=<?= $rowAlumno['Alu_Codigo'];?>" class="d-print-none" role="button"><i class="icofont-edit"></i></a></h5>
 		<?php 
 			$resultadoDetalles=$cadena->query($sqlDetalles);
 			if($resultadoDetalles->num_rows>=1){ $i=0;
@@ -277,7 +277,17 @@ $('#btnBuscarAlumno').click(function () {
 	pantallaOver(true);
   if($('#txtBusquedaAlumno').val()!=''){
     if( $.isNumeric($('#txtBusquedaAlumno').val()) ){
-      window.location.href = 'seguimiento.php?cursor='+$('#txtBusquedaAlumno').val();
+			//Ahora se busca porque hay DNI's duplicados, mal trabajo de parte de los ediles 
+			
+      //window.location.href = 'seguimiento.php?cursor='+$('#txtBusquedaAlumno').val();
+			
+      $.ajax({url: 'php/buscarDNIRepetidos.php', type: 'POST', data: {texto:$('#txtBusquedaAlumno').val() }}).done(function (resp) {
+        $('#modalBuscarAlumno tbody').children().remove();
+        $('#modalBuscarAlumno tbody').append(resp);
+        console.log(resp)
+        pantallaOver(false)
+        $('#modalBuscarAlumno').modal('show')
+      });
     }else{ 
       //Buscar texto
       $.ajax({url: 'php/buscarAlumnosApellido2.php', type: 'POST', data: {texto:$('#txtBusquedaAlumno').val() }}).done(function (resp) {
@@ -286,7 +296,7 @@ $('#btnBuscarAlumno').click(function () {
         console.log(resp)
         pantallaOver(false)
         $('#modalBuscarAlumno').modal('show')
-      })
+      });
     }
   }
 })

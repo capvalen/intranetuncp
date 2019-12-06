@@ -1,7 +1,7 @@
 <?php include 'conexionInfocat.php';
 $sqlAlumno="SELECT lower(a.Alu_Nombre) as Alu_Nombre, lower(a.Alu_Apellido) as Alu_Apellido
 FROM alumno a 
-  where a.Alu_NroDocumento = '{$_POST['dni']}'; ";
+  where a.Alu_Codigo = '{$_POST['codAlu']}'; ";
 
 $resultadoAlumno=$esclavo->query($sqlAlumno);
 $rowAlumno=$resultadoAlumno->fetch_assoc();
@@ -35,7 +35,7 @@ FROM `registroalumno` ra
   inner join onota ono on ono.Reg_Codigo = ra.Reg_Codigo
   inner join sucursal su on su.Suc_Codigo = s.Suc_Codigo
   inner join empleado em on em.Emp_Codigo = s.Emp_Codigo
-  where a.Alu_NroDocumento = '{$_POST['dni']}'
+  where a.Alu_Codigo = '{$_POST['codAlu']}'
   order by i.Idi_Nombre asc, n.Niv_Detalle asc, s.Sec_NroCiclo asc; ";
 
 $resultado=$esclavo->query($sql);
