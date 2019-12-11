@@ -38,6 +38,9 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 					<a href="alumnos.php"><i class="icofont-graduate-alt"></i> Alumnado</a>
 				</li>
 				<li>
+					<a href="docente.php"><i class="icofont-graduate"></i> Docente</a>
+				</li>
+				<li>
 					<a href="ciclos.php"><i class="icofont-folder-open"></i> Ciclos</a>
 				</li>
 				<li>
@@ -68,6 +71,9 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 			<ul class="collapse list-unstyled" id="pageSubAcademico">
 				<li>
 					<a href="alumnos.php"><i class="icofont-graduate-alt"></i> Alumnado</a>
+				</li>
+				<li>
+					<a href="docente.php"><i class="icofont-graduate"></i> Docente</a>
 				</li>
 				<li>
 					<a href="ciclos.php"><i class="icofont-folder-open"></i> Ciclos</a>
@@ -102,6 +108,9 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 					<a href="alumnos.php"><i class="icofont-graduate-alt"></i> Alumnado</a>
 				</li>
 				<li>
+					<a href="docente.php"><i class="icofont-graduate"></i> Docente</a>
+				</li>
+				<li>
 					<a href="ciclos.php"><i class="icofont-folder-open"></i> Ciclos</a>
 				</li>
 				<li>
@@ -132,6 +141,9 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 			<ul class="collapse list-unstyled" id="pageHuancas">
 				<li>
 					<a href="alumnos.php"><i class="icofont-graduate-alt"></i> Alumnado</a>
+				</li>
+				<li>
+					<a href="docente.php"><i class="icofont-graduate"></i> Docente</a>
 				</li>
 				<li>
 					<a href="ciclos.php"><i class="icofont-folder-open"></i> Ciclos</a>

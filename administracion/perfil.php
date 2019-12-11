@@ -125,16 +125,7 @@ if (!isset($_COOKIE['ckPower'])){ header('Location: index.php'); } ?>
 			</div>
 		</div>
 		<?php } ?>
-		
-		<div class="col-3 my-3 d-flex align-items-stretch">
-			<div class="card" style="width: 100%;">
-				<div class="card-body">
-					<h5><a class="text-decoration-none" href="alumnos.php"><i class="icofont-certificate-alt-2"></i> Alumnado</a></h5>
-					<span><small>Sección para actualizar la data del estudiante CEID.</small></span>
-				</div>
-			</div>
-		</div>
-		
+
 		<?php if(in_array($_COOKIE['ckPower'], $secretaria) || in_array($_COOKIE['ckPower'], $subAdministracion) || in_array($_COOKIE['ckPower'], $subAcademica) || in_array($_COOKIE['ckPower'], $subRegistro) || $_COOKIE['ckidSucursal']=='SUC002' ){ ?>
 		<div class="col-3 my-3 d-flex align-items-stretch">
 			<div class="card" style="width: 100%;">
@@ -145,6 +136,24 @@ if (!isset($_COOKIE['ckPower'])){ header('Location: index.php'); } ?>
 			</div>
 		</div>
 		<?php } ?>
+		
+		<div class="col-3 my-3 d-flex align-items-stretch">
+			<div class="card" style="width: 100%;">
+				<div class="card-body">
+					<h5><a class="text-decoration-none" href="alumnos.php"><i class="icofont-graduate-alt"></i> Alumnado</a></h5>
+					<span><small>Sección para actualizar la data del estudiante CEID.</small></span>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-3 my-3 d-flex align-items-stretch">
+			<div class="card" style="width: 100%;">
+				<div class="card-body">
+					<h5><a class="text-decoration-none" href="docentes.php"><i class="icofont-graduate"></i> Docentes</a></h5>
+					<span><small>Sección para actualizar la data del docente CEID.</small></span>
+				</div>
+			</div>
+		</div>
 	
 	</div>
 	

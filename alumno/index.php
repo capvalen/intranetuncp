@@ -289,7 +289,7 @@ color: white
 								<input class="form-control col-6" type="text" id="txtDniMatriculante">
 							</div>
 							<div class="card-footer">
-								<div class="row d-flex justify-content-between px-4">
+								<div class="row d-flex d-flex flex-row-reverse px-4">
 									<button class="btn btn-outline-secondary border-0 btnSiguiente" data-tag='1'>Siguiente <i class="icofont-caret-right"></i></button>
 								</div>
 							</div>
@@ -307,7 +307,7 @@ color: white
 							</div>
 							<div class="card-footer">
 								<div class="row d-flex justify-content-between px-4">
-									<button class="btn btn-outline-secondary border-0 btnAtras" data-tag='2'><i class="icofont-caret-left"></i> Atrás </button>
+									<button class="btn btn-outline-secondary border-0 btnAtras" data-tag='1'><i class="icofont-caret-left"></i> Atrás </button>
 									<button class="btn btn-outline-secondary border-0 btnSiguiente" data-tag='2'>Siguiente <i class="icofont-caret-right"></i></button>
 								</div>
 							</div>
@@ -325,7 +325,7 @@ color: white
 						</div>
 						<div class="card-footer">
 							<div class="row d-flex justify-content-between px-4">
-								<button class="btn btn-outline-secondary border-0 btnAtras" data-tag='3'><i class="icofont-caret-left"></i> Atrás </button>
+								<button class="btn btn-outline-secondary border-0 btnAtras" data-tag='2'><i class="icofont-caret-left"></i> Atrás </button>
 								<button class="btn btn-outline-secondary border-0 btnSiguiente" data-tag='3'>Siguiente <i class="icofont-caret-right"></i></button>
 							</div>
 						</div>
@@ -341,7 +341,7 @@ color: white
 							<p><strong>Turno: </strong> <span>11:00 - 12:30 p.m.</span> </p>
 						<div class="card-footer">
 							<div class="row d-flex justify-content-between px-4">
-								<button class="btn btn-outline-secondary border-0 btnAtras" data-tag='4'><i class="icofont-caret-left"></i> Atrás </button>
+								<button class="btn btn-outline-secondary border-0 btnAtras" data-tag='3'><i class="icofont-caret-left"></i> Atrás </button>
 								<button class="btn btn-outline-secondary border-0 btnSiguiente" data-tag='4'>Siguiente <i class="icofont-caret-right"></i></button>
 							</div>
 						</div>
@@ -372,23 +372,64 @@ color: white
 				
 				</div>
 			</div>
-        
+
+<div id="modalSeleccionarDuplicados" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<button class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h5 class="modal-title" id="my-modal-title">Alumnos encontrados</h5>
+				<table class="table table-hover" id="tblResultadosDuplicados">
+					<thead>
+						<tr>
+							<td>N°</td>
+							<td>D.N.I.</td>
+							<td>Apellidos y Nombres</td>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+				<div class="alert alert-warning" role="alert">
+					Si tus datos no están correctos acércate a una de nuestras oficinas para solucionarlo.
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 	<div class='d-none' id="overlay">
 		<div class="text"><span id="hojita"><i class="icofont icofont-leaf"></i></span> <p id="pFrase"> Solicitando los datos... <br> <span>«Pregúntate si lo que estás haciendo hoy <br> te acerca al lugar en el que quieres estar mañana» <br> Walt Disney</span></p>
 	</div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <script>
 $('#txtBuscarInfo').click(function () {
-	if($('#txtDNI').val()!=''){
+	if($('#txtDNI').val()!='' && $('#txtDNI').val().length ==8 ){
 		pantallaOver(true);
-		$.ajax({url: "php/listarNotas.php", type: 'POST', data:{dni: $('#txtDNI').val() }}).done(function (resp) {
+		$.ajax({url: 'php/buscarDNIRepetidos.php', type: 'POST', data: { texto: $('#txtDNI').val() }}).done(function(resp) {
+			//console.log(resp)
+			$('#tblResultadosDuplicados tbody').html(resp);
+			pantallaOver(false);
+			$('#modalSeleccionarDuplicados').modal('show');
+		});
+		
+		
+	}
+});
+function mostrarData(idAlumno){
+	pantallaOver(true);
+	//console.log(idAlumno);
+	$('#modalSeleccionarDuplicados').modal('hide');
+	$.ajax({url: "php/listarNotas.php", type: 'POST', data:{codAlu: idAlumno }}).done(function (resp) {
 			//console.log(resp);
 			$('#divResultados').children().remove();
 			$('#divResultados').append(resp);
 			pantallaOver(false);
 		});
-	}
-});
+}
 $('#txtBuscarReserva').click(function () {
 	if($('#txtDNIReserva').val()!=''){
 		pantallaOver(true);
@@ -474,8 +515,9 @@ function ocultarCard(elemento){
 
 $('.btnAtras').click(function() { console.log('atras')
 	var proceso = parseInt($(this).attr('data-tag'));
+	$('.progressbar li').removeClass('active');
 	$.each( $('.progressbar li') , function(i, objeto){
-		if(i<=proceso){
+		if(i<proceso){
 			$(this).addClass('active')
 		}else{
 			$(this).removeClass('active');
@@ -483,10 +525,10 @@ $('.btnAtras').click(function() { console.log('atras')
 	});
 	//console.log(proceso)
 
-	const element =  document.querySelector(`#subPro${proceso}`)
+	const element =  document.querySelector(`#subPro${proceso+1}`)
 	element.classList.add('animated', 'bounceOutRight')
-	$(`#subPro${proceso-1}`).addClass('animated bounceInLeft').removeClass('d-none');
-	ocultarCard($(`#subPro${proceso}`));
+	$(`#subPro${proceso}`).addClass('animated bounceInLeft').removeClass('d-none');
+	ocultarCard($(`#subPro${proceso+1}`));
 	
 });
 

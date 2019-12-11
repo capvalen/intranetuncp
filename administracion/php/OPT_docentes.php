@@ -1,9 +1,11 @@
 <?php
 include 'conexionInfocat.php';
 
-$sql="SELECT ep.Emp_Codigo, lower(Emp_Apellido) as Emp_Apellido, lower(Emp_Nombre) as Emp_Nombre FROM `empleado` e
+if(isset($_POST['idioma'])){ $extra = "ep.Idi_Codigo = '{$_POST['idioma']}' and";  }
+
+$sql="SELECT ep.Emp_Codigo, lower(trim(Emp_Apellido)) as Emp_Apellido, lower(trim(Emp_Nombre)) as Emp_Nombre FROM `empleado` e
 inner join especialidadempleado ep on ep.Emp_Codigo = e.Emp_Codigo
-where ep.Idi_Codigo = '{$_POST['idioma']}'
+where {$extra} Emp_displayWeb=1
 order by Emp_Apellido, Emp_Nombre asc;";
 
 $resultado=$cadena->query($sql);
