@@ -59,6 +59,9 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 					<a href="seguimiento.php"><i class="icofont-attachment"></i> Seguimiento académico</a>
 				</li>
 				<li>
+					<a href="reportes.php"><i class="icofont-attachment"></i> Reportes estadísticos</a>
+				</li>
+				<li>
 					<a href="tramites.php"><i class="icofont-attachment"></i> Trámite documentario</a>
 				</li>
 			</ul>
@@ -92,6 +95,9 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 				</li>
 				<li>
 					<a href="seguimiento.php"><i class="icofont-attachment"></i> Seguimiento académico</a>
+				</li>
+				<li>
+					<a href="reportes.php"><i class="icofont-attachment"></i> Reportes estadísticos</a>
 				</li>
 				<li>
 					<a href="tramites.php"><i class="icofont-attachment"></i> Trámite documentario</a>
@@ -129,6 +135,9 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 					<a href="seguimiento.php"><i class="icofont-attachment"></i> Seguimiento académico</a>
 				</li>
 				<li>
+					<a href="reportes.php"><i class="icofont-attachment"></i> Reportes estadísticos</a>
+				</li>
+				<li>
 					<a href="tramites.php"><i class="icofont-attachment"></i> Trámite documentario</a>
 				</li>
 			</ul>
@@ -162,6 +171,9 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 				</li>
 				<li>
 					<a href="seguimiento.php"><i class="icofont-attachment"></i> Seguimiento académico</a>
+				</li>
+				<li>
+					<a href="reportes.php"><i class="icofont-attachment"></i> Reportes estadísticos</a>
 				</li>
 				<li>
 					<a href="tramites.php"><i class="icofont-attachment"></i> Trámite documentario</a>

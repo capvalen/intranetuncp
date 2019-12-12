@@ -1,3 +1,7 @@
+<?php 
+include "php/variablesGenerales.php";
+if (!isset($_COOKIE['ckPower'])){ header('Location: index.php'); }
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
