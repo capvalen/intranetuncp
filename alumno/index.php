@@ -1,3 +1,7 @@
+<?php 
+include "php/fechasPreMatricula.php";
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -270,7 +274,9 @@ color: white
 		</div>
 
 		<div class="d-none" id="divMatricula">
-		 <h1 class="display-3 text-center" style="color: #097bd4;">Pre-Matrícula</h1>
+		<?php if(1==1): ?>
+		<!-- inicio de divMatricula -->
+		 <h1 class="display-3 text-center" style="color: #097bd4;">Pre-Matrícula </h1>
 		 <div class="root" style="display: flex;">
 				<div class="contenedor">
 					<ul class="progressbar">
@@ -289,8 +295,9 @@ color: white
 							<div class="card-body">
 								<h4>Hola alumno CEID</h4>
 								<p>Comencemos el proceso de Pre-Matrícula, Ingrese su D.N.I.: </p>
-								<input class="form-control col-6" type="text" id="txtDniMatriculante">
+								<input class="form-control col-md-6" type="text" id="txtDniMatriculante">
 								<div class="alert alert-light d-none text-danger" role="alert" id="alertaDNI"><i class="icofont-warning-alt"></i> Tu Dni no es correcto </div>
+								<div class="alert alert-success col-md-6 mt-3" role="alert" id="alertaDNI"><i class="icofont-warning-alt"></i> Pre matrícula abierta para el <strong>periodo <?= $periodoAmigable; ?></strong>, si es correcto continua. </div>
 							</div>
 							<div class="card-footer">
 								<div class="row d-flex d-flex flex-row-reverse px-4">
@@ -440,7 +447,11 @@ color: white
             
                     
 				</div> <!--Fin de SubProcesos-->
+		
+		<!-- fin de divPrematricula-->
+		<?php endif; ?>
 		</div>
+		
 	</div>
     
 			<div class='d-none' id="divCertificados">
@@ -806,7 +817,8 @@ $('#btnGuardarTodo').click(function() {
 		nivel: $.nivel,
 		ciclo: $.ciclo,
 		horario: $.horario,
-		motivo: $('#spanMotivoPre').text()+' con nota '+ $('#spaNotaPre').text()
+		motivo: $('#spanMotivoPre').text()+' con nota '+ $('#spaNotaPre').text(),
+		periodo: '<?= $periodo; ?>'
 	 }}).done(function(resp) {
 		pantallaOver(false);
 		console.log(resp)
