@@ -8,7 +8,9 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" href="css/icofont.min.css">
 	<link rel="stylesheet" href="css/animate.css">
+	<link rel="stylesheet" href="css/bootstrap-select.min.css" >
 	<link rel="shortcut icon" href="images/favicon.png" >
+
 </head>
 <body>
 <style>
@@ -273,10 +275,11 @@ color: white
 				<div class="contenedor">
 					<ul class="progressbar">
 						<li data-tag="1" class="active">Reconocimiento</li>
-						<li data-tag="2" >Curso</li>
-						<li data-tag="3">Horario</li>
-						<li data-tag="4">Resumen</li>
-						<li data-tag="5">Paso 5</li>
+						<li data-tag="2" >Datos</li>
+						<li data-tag="3" >Curso</li>
+						<li data-tag="4">Horario</li>
+						<li data-tag="5">Resumen</li>
+						<!-- <li data-tag="6">Paso 5</li> -->
 					</ul>
 				</div>
 				</div>
@@ -284,66 +287,152 @@ color: white
 					<div class="row col" id="subPro1">
 						<div class="card w-100">
 							<div class="card-body">
-								<h4>Ingrese su DNI</h4>
-								<p>Comencemos el proceso de Pre-Matrícula con su D.N.I.: </p>
+								<h4>Hola alumno CEID</h4>
+								<p>Comencemos el proceso de Pre-Matrícula, Ingrese su D.N.I.: </p>
 								<input class="form-control col-6" type="text" id="txtDniMatriculante">
+								<div class="alert alert-light d-none text-danger" role="alert" id="alertaDNI"><i class="icofont-warning-alt"></i> Tu Dni no es correcto </div>
 							</div>
 							<div class="card-footer">
 								<div class="row d-flex d-flex flex-row-reverse px-4">
-									<button class="btn btn-outline-secondary border-0 btnSiguiente" data-tag='1'>Siguiente <i class="icofont-caret-right"></i></button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row d-none" id="subPro2">
-						<div class="card w-100">
-							<div class="card-body">
-								<h4 class='pb-3'>¿Qué proceso deseas hacer?</h4>
-								<div class="list-group col-6">
-									<button type="button" class="list-group-item list-group-item-action active" ><i class="icofont-dotted-right"></i> Quiero empezar un nuevo curso</button>
-									<button type="button" class="list-group-item list-group-item-action"><i class="icofont-dotted-right"></i> Continuar con mis estudios de Inglés</button>
-									<button type="button" class="list-group-item list-group-item-action"><i class="icofont-dotted-right"></i> Continuar con mis estudios de Italiano</button>
-								</div>
-							</div>
-							<div class="card-footer">
-								<div class="row d-flex justify-content-between px-4">
-									<button class="btn btn-outline-secondary border-0 btnAtras" data-tag='1'><i class="icofont-caret-left"></i> Atrás </button>
-									<button class="btn btn-outline-secondary border-0 btnSiguiente" data-tag='2'>Siguiente <i class="icofont-caret-right"></i></button>
+									<button class="btn btn-outline-secondary border-0 btnSiguiente" queProceso="buscarDNI" data-tag='1'>Siguiente <i class="icofont-caret-right"></i></button>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="row d-none" id="subPro3">
-					<div class="card w-100">
-						<div class="card-body">
-							<h4 class='pb-3'>Tenemos los siguientes horarios disponibles:</h4>
-							<div class="list-group col-6">
-								<button type="button" class="list-group-item list-group-item-action active" ><i class="icofont-dotted-right"></i> 9:00 - 10:30 a.m.</button>
-								<button type="button" class="list-group-item list-group-item-action " ><i class="icofont-dotted-right"></i> 11:00 - 12:30 p.m.</button>
-								<button type="button" class="list-group-item list-group-item-action " ><i class="icofont-dotted-right"></i> 3:00 - 4:30 p.m.</button>
+						<div class="card w-100">
+							<div class="card-body">
+								<h4 class='pb-3'>¿Qué proceso deseas hacer?</h4>
+								<div class="list-group col-6" id="listaCursos">
+									
+								</div>
 							</div>
-						</div>
-						<div class="card-footer">
-							<div class="row d-flex justify-content-between px-4">
-								<button class="btn btn-outline-secondary border-0 btnAtras" data-tag='2'><i class="icofont-caret-left"></i> Atrás </button>
-								<button class="btn btn-outline-secondary border-0 btnSiguiente" data-tag='3'>Siguiente <i class="icofont-caret-right"></i></button>
+							<div class="card-footer">
+								<div class="row d-flex flex-row-reverse px-4">
+									<!-- <button class="btn btn-outline-secondary border-0 btnAtras" data-tag='1'><i class="icofont-caret-left"></i> Atrás </button> -->
+									<button class="btn btn-outline-secondary border-0 btnSiguiente" queProceso="elegirCurso" data-tag='3'>Siguiente <i class="icofont-caret-right"></i></button>
+								</div>
 							</div>
 						</div>
 					</div>
+					<div class="row d-none" id="subPro61">
+						<div class="card w-100">
+							<div class="card-body">
+								<h4 class='pb-3'>Nuevo alumno</h4>
+								<p>Al parecer eres nuevo en el Centro de idiomas, ingresa tus datos antes de tu matrícula.</p>
+								<div class="alert alert-warning d-none" role="alert"><i class="icofont-warning"></i> Si consideras que es un error, revisa tu D.N.I. y luego apersonate a nuestras oficinas para solucionarlo. </div>
+								<div class="alert alert-danger d-none" role="alert"><i class="icofont-warning"></i> <span id="spanMensajeNu"></span> </div>
+								<label for=""><small>D.N.I:</small></label>
+								<input class="form-control text-capitalize" type="text" id="txtNueDNI" readonly>
+								<label for=""><small>Nombres:</small></label>
+								<input class="form-control text-capitalize" type="text" id="txtNueNombre">
+								<label for=""><small>Apellidos:</small></label>
+								<input class="form-control text-capitalize" type="text" id="txtNueApellido">
+								<label for=""><small>Fecha de nacimiento:</small></label>
+								<input class="form-control" type="date" id="txtNueFechaNacimiento">
+								<label for=""><small>Celular de contacto:</small></label>
+								<input class="form-control" type="text" id="txtNueCelular">
+								<label for=""><small>Procedencia:</small></label>
+								<select class="selectpicker form-control" id="sltPNueProcedencia" data-live-search="true" data-width="100%">
+									<?php include 'php/OPT_procedencias.php'; ?>
+								</select>
+								<label for=""><small>Carrera:</small></label>
+								<select class="selectpicker form-control" id="sltPNueCarrera" data-live-search="true" data-width="100%">
+									<?php include 'php/OPT_facultadesMax.php'; ?>
+								</select>
+								<label for=""><small>Sexo:</small></label>
+								<select class="selectpicker form-control" id="sltPNueSexo" data-live-search="true" data-width="100%">
+									<option value="1">Masculino</option>
+									<option value="0">Femenino</option>
+								</select>
+							</div>
+							<div class="card-footer">
+								<div class="row d-flex flex-row-reverse px-4">
+									<!-- <button class="btn btn-outline-secondary border-0 btnAtras" data-tag='1'><i class="icofont-caret-left"></i> Atrás </button> -->
+									<button class="btn btn-outline-secondary border-0 btnSiguiente" queProceso="crearData" data-tag='2'>Siguiente <i class="icofont-caret-right"></i></button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row d-none" id="subPro60">
+						<div class="card w-100">
+							<div class="card-body">
+								<h4 class='pb-3'>Antes de continuar...</h4>
+								<p>Por favor, ayúdanos a actualizar tus datos antes de tu matrícula.</p>
+								<div class="alert alert-danger d-none" role="alert"><i class="icofont-warning"></i> <span id="spanMensajeAl"></span> </div>
+								<label for=""><small>Nombres:</small></label>
+								<input class="form-control text-capitalize" type="text" id="txtActNombre">
+								<label for=""><small>Apellidos:</small></label>
+								<input class="form-control text-capitalize" type="text" id="txtActApellido">
+								<label for=""><small>Fecha de nacimiento:</small></label>
+								<input class="form-control" type="date" id="txtActFechaNacimiento">
+								<label for=""><small>Celular de contacto:</small></label>
+								<input class="form-control" type="text" id="txtActCelular">
+								<label for=""><small>Procedencia:</small></label>
+								<select class="selectpicker form-control" id="sltPActProcedencia" data-live-search="true" data-width="100%">
+									<?php include 'php/OPT_procedencias.php'; ?>
+								</select>
+								<label for=""><small>Carrera:</small></label>
+								<select class="selectpicker form-control" id="sltPActCarrera" data-live-search="true" data-width="100%">
+									<?php include 'php/OPT_facultadesMax.php'; ?>
+								</select>
+								<label for=""><small>Sexo:</small></label>
+								<select class="selectpicker form-control" id="sltPActSexo" data-live-search="true" data-width="100%">
+									<option value="1">Masculino</option>
+									<option value="0">Femenino</option>
+								</select>
+							</div>
+							<div class="card-footer">
+								<div class="row d-flex flex-row-reverse px-4">
+									<!-- <button class="btn btn-outline-secondary border-0 btnAtras" data-tag='1'><i class="icofont-caret-left"></i> Atrás </button> -->
+									<button class="btn btn-outline-secondary border-0 btnSiguiente" queProceso="actualizarData" data-tag='2'>Siguiente <i class="icofont-caret-right"></i></button>
+								</div>
+							</div>
+						</div>
 					</div>
 					<div class="row d-none" id="subPro4">
 					<div class="card w-100">
 						<div class="card-body">
-							<h4 class='pb-3'>Resumen</h4>
-							<p>Consolidamos que:</p>
-							<p><strong>Alumno: </strong> <span>Carlos Pariona Valencia</span> </p>
-							<p><strong>Curso: </strong> <span>Inglés</span> </p>
-							<p><strong>Turno: </strong> <span>11:00 - 12:30 p.m.</span> </p>
+							<h4 class='pb-3'>Tenemos los siguientes horarios disponibles:</h4>
+							<div class="row row-cols-2">
+								<div class="col d-none"  id="alertSistemaAI">
+									<strong>El sistema decidió lo siguiente:</strong>
+									<p><strong>Curso: </strong> <span  id="spanCursoPre"></span></p>
+									<p><strong>Nivel: </strong> <span  id="spanNivelPre"></span></p>
+									<p><strong>Ciclo: </strong> <span id="spanCicloPre"></span></p>
+									<p><strong>Última nota: </strong> <span id="spaNotaPre"></span></p>
+									<p><strong>Motivo: </strong> <span id="spanMotivoPre"></span></p>
+								</div>
+								<div class="col d-none" id="alertNuevoCurso">
+									<p>Selecciona el curso nuevo que deseas empezar</p>
+									<select class="selectpicker form-control" id="sltPNueCurso" data-live-search="true" data-width="100%">
+										<?php include 'php/OPT_idiomas.php'; ?>
+									</select>
+								</div>
+								<div class="col">
+									<p>Sólo falta seleccionar el horario que deseas registrate:</p>
+									<div class="list-group " id="listaHorarios">
+										<?php include "php/verHorarios.php"; ?>
+									</div>
+								</div>
+								
+							</div>
+						</div>
 						<div class="card-footer">
 							<div class="row d-flex justify-content-between px-4">
 								<button class="btn btn-outline-secondary border-0 btnAtras" data-tag='3'><i class="icofont-caret-left"></i> Atrás </button>
-								<button class="btn btn-outline-secondary border-0 btnSiguiente" data-tag='4'>Siguiente <i class="icofont-caret-right"></i></button>
+								<button class="btn btn-outline-secondary border-0 btnSiguiente" queProceso = "unirHorarios" data-tag='5'>Siguiente <i class="icofont-caret-right"></i></button>
 							</div>
+						</div>
+					</div>
+					</div>
+					<div class="row d-none" id="subPro5">
+					<div class="card w-100">
+						<div class="card-body">
+							<img src="images/successful-transaction-image.svg" alt="" class="img-fluid">
+							<h4 class="text-primary">Felicitaciones, terminaste tu pre-matrícula. </h4>
+							<p>Ahora puedes acercarte al banco a realizar el pago y luego presentar tu voucher a secretaría para finalizar todo el proceso y asistir a clases.</p>
+						
 						</div>
 					</div>
 					</div>
@@ -353,7 +442,7 @@ color: white
 				</div> <!--Fin de SubProcesos-->
 		</div>
 	</div>
-        
+    
 			<div class='d-none' id="divCertificados">
 				<h1 class="display-3 text-center" style="color: #097bd4;">Certificados  CEID-UNCP</h1>
 				<p class="lead">Bienvenido alumno, nos es grato encontrarte acá para que descargues tu certificado. </p>
@@ -372,7 +461,7 @@ color: white
 				
 				</div>
 			</div>
-
+</div>
 <div id="modalSeleccionarDuplicados" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -399,13 +488,38 @@ color: white
 		</div>
 	</div>
 </div>
+<div id="modalConfirmar" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+	<div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<button class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h5 class="modal-title" id="my-modal-title">Antes de guardar</h5>
+				<p>¿Estás seguro que deseas realizar tu pre matrícula?</p>
+				<div class="d-flex justify-content-between">
+					<button class="btn btn-default" data-dismiss="modal" >No</button>
+					<button class="btn btn-outline-primary" id="btnGuardarTodo"><i class="icofont-save"></i> Sí, pre matricularme</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 	<div class='d-none' id="overlay">
 		<div class="text"><span id="hojita"><i class="icofont icofont-leaf"></i></span> <p id="pFrase"> Solicitando los datos... <br> <span>«Pregúntate si lo que estás haciendo hoy <br> te acerca al lugar en el que quieres estar mañana» <br> Walt Disney</span></p>
 	</div>
+    </div>
+
+        
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="js/bootstrap-select.min.js"></script>
+<script src="js/moment.js"></script>
+
 <script>
+$('.selectpicker').selectpicker();
 $('#txtBuscarInfo').click(function () {
 	if($('#txtDNI').val()!='' && $('#txtDNI').val().length ==8 ){
 		pantallaOver(true);
@@ -443,10 +557,7 @@ $('#txtBuscarReserva').click(function () {
 });
 $('#txtDNI').keyup(function (e) { if (e.which ==13){ $('#txtBuscarInfo').click(); } });
 $('#txtDNIReserva').keyup(function (e) { if (e.which ==13){ $('#txtBuscarReserva').click(); } });
-function pantallaOver(tipo) {
-	if(tipo){$('#overlay').css('display', 'initial');}
-	else{ $('#overlay').css('display', 'none'); }
-}
+
 $('#colVerNotas').click(function() {
 	$('#divNotas').removeClass('d-none');
 	$('#rowOpciones').addClass('d-none');
@@ -486,10 +597,10 @@ $('#colMatricula').click(function() {
 	});
 	
 }); */
-$('.btnSiguiente').click(function() { console.log('sig')
+$('.btnSiguiente').click(function() { console.log('siguiente Proceso')
 	var proceso = parseInt($(this).attr('data-tag'));
 	$.each( $('.progressbar li') , function(i, objeto){
-		if(i<=proceso){
+		if(i<=proceso && proceso<60){
 			$(this).addClass('active')
 		}else{
 			$(this).removeClass('active');
@@ -503,11 +614,210 @@ $('.btnSiguiente').click(function() { console.log('sig')
 		$(`#subPro${proceso}`).addClass('animated bounceInRight').removeClass('d-none');
 	}); */
 
+	if(  $('#txtDniMatriculante').val().length==8 ){
+
+		var queProceso = $(this).attr('queProceso');
+		pantallaOver(true);
+		switch (queProceso) {
+			case 'buscarDNI':
+				if($('#txtDniMatriculante').val().length==8 ){
+					$.ajax({url: 'php/buscarDniBDMatricula.php', type: 'POST', data: { dni: $('#txtDniMatriculante').val() }}).done(function(resp) {
+						//console.log(resp)
+						pantallaOver(false);
+						var data = JSON.parse(resp);
+						if( data.length == 0 ){
+							//console.log( 'alumno nuevo' );
+							$.dni = $('#txtDniMatriculante').val();
+							$('#txtNueDNI').val($.dni);
+							$('#txtNueFechaNacimiento').val(moment().format('YYYY-MM-DD'));
+
+							const element =  document.querySelector(`#subPro${1}`)
+							element.classList.add('animated', 'bounceOutLeft')/* .remove('bounceOutRight') */
+							//console.log(proceso)
+							$(`#subPro${61}`).addClass('animated bounceInRight').removeClass('d-none'); //$(`#subPro${proceso+1}`).
+							ocultarCard($(`#subPro${1}`));
+
+						}else if(data.length==1 ){
+							//console.log( data );
+							$.idAlu = data[0].Alu_Codigo;
+							$('#txtActNombre').val(data[0].Alu_Nombre);
+							$('#txtActApellido').val(data[0].Alu_Apellido);
+							$('#txtActFechaNacimiento').val(data[0].Alu_FechaNacimiento);
+							$('#txtActCelular').val(data[0].Alu_Telefono);
+							$('#sltPActProcedencia').selectpicker('val', data[0].idProcedencia);
+							$('#sltPActCarrera').selectpicker('val', data[0].fac_Codigo);
+							$('#sltPActSexo').val(data[0].Alu_Sexo);
+
+
+							console.log('dni unico');
+							const element =  document.querySelector(`#subPro${proceso}`)
+							element.classList.add('animated', 'bounceOutLeft')/* .remove('bounceOutRight') */
+							//console.log(proceso)
+							$(`#subPro${60}`).addClass('animated bounceInRight').removeClass('d-none'); //$(`#subPro${proceso+1}`).
+							ocultarCard($(`#subPro${proceso}`));
+
+						}else{
+							console.log('dni duplicados');
+						}
+					});
+				}
+				
+				break;
+				case 'crearData': crearData(); break;
+				case 'actualizarData': actualizarData(); break;
+				case 'elegirCurso': elegirCurso(proceso); break;
+				case 'unirHorarios': pantallaOver(false); unirHorarios(proceso); break;
+					
+		
+			default:
+				break;
+		}
+
+	}else{
+		$('#alertaDNI').removeClass('d-none');
+	}
+	
+});
+function crearData(){ 
+	$('#spanMensajeNu').parent().addClass('d-none');
+	if( $('#txtNueNombre').val()=='' || $('#txtNueApellido').val()=='' ){
+		$('#spanMensajeNu').text('No puedes dejar en blanco el nombre y el apellido').parent().removeClass('d-none');
+	}else if( !moment($('#txtNueFechaNacimiento').val(), 'YYYY-MM-DD').isValid() ){
+		$('#spanMensajeNu').text('Ingresa una fecha de nacimiento correcta.').parent().removeClass('d-none');
+	}else{ //console.log('pase validaciones')
+		pantallaOver(true);
+		$.ajax({url: 'php/crearAlumnoNuevo.php', type: 'POST', data: {
+			dni: $.dni,
+			fechanac: $('#txtNueFechaNacimiento').val(),
+			nombre: $('#txtNueNombre').val(),
+			apellido: $('#txtNueApellido').val(),
+			sexo: $('#sltPNueSexo').val(),
+			procedencia: $('#sltPNueProcedencia').val(),
+			facultad: $('#sltPNueCarrera').val(),
+			celular: $('#txtNueCelular').val()
+		}}).done(function(resp) {
+			//console.log(resp);
+			if(resp.length  == 7 ){ $.idAlu = resp; //console.log( 'guardo ok' );
+				$.ajax({url: 'php/listarIdiomasAMatricular.php', type: 'POST', data: { idAlu: $.idAlu }}).done(function(resp) {
+					//console.log(resp)
+					$('#listaCursos').html(resp);
+
+					const element =  document.querySelector(`#subPro${61}`)
+					element.classList.add('animated', 'bounceOutLeft')
+					//console.log(proceso)
+					$(`#subPro${3}`).addClass('animated bounceInRight').removeClass('d-none');
+					ocultarCard($(`#subPro${61}`));
+					
+				});
+			}else{
+				$('#spanMensajeAl').text('Ocurrió un error al conectarse al servidor, inténtalo más tarde porfavor.').parent().removeClass('d-none');
+				$('#spanMensajeAl').parent().parent().find('.btnSiguiente').remove();
+			}
+		});
+		
+	}
+	pantallaOver(false);
+}
+function actualizarData(){
+	$('#spanMensajeAl').parent().addClass('d-none');
+	if( $('#txtActNombre').val()=='' || $('#txtActApellido').val()=='' ){
+		$('#spanMensajeAl').text('No puedes dejar en blanco el nombre y el apellido').parent().removeClass('d-none');
+	}else if( !moment($('#txtActFechaNacimiento').val(), 'YYYY-MM-DD').isValid() ){
+		$('#spanMensajeAl').text('Ingresa una fecha de nacimiento correcta.').parent().removeClass('d-none');
+	}else{
+		pantallaOver(true);
+		$.ajax({url: 'php/updateDataAlumno.php', type: 'POST', data: { idAlu: $.idAlu,
+			fNac: $('#txtActFechaNacimiento').val(),
+			nombre: $('#txtActNombre').val(),
+			apellidos: $('#txtActApellido').val(),
+			sexo: $('#sltPActSexo').val(),
+			procedencia: $('#sltPActProcedencia').val(),
+			facultad: $('#sltPActCarrera').val(),
+			celular: $('#txtActCelular').val()
+		}}).done(function(resp) {
+			//console.log(resp);
+			
+			if(resp=='todo ok'){
+				$.ajax({url: 'php/listarIdiomasAMatricular.php', type: 'POST', data: { idAlu: $.idAlu }}).done(function(resp) {
+					//console.log(resp)
+					$('#listaCursos').html(resp);
+
+					const element =  document.querySelector(`#subPro${60}`)
+					element.classList.add('animated', 'bounceOutLeft')/* .remove('bounceOutRight') */
+					//console.log(proceso)
+					$(`#subPro${3}`).addClass('animated bounceInRight').removeClass('d-none');
+					ocultarCard($(`#subPro${60}`));
+					
+				});
+			}else{
+				$('#spanMensajeAl').text('Ocurrió un error al conectarse al servidor, inténtalo más tarde porfavor.').parent().removeClass('d-none');
+				$('#spanMensajeAl').parent().parent().find('.btnSiguiente').remove();
+			}
+		});
+		
+	}
+	pantallaOver(false);
+}
+function elegirCurso(proceso){ console.log(proceso)
+	$.idioma = $('#listaCursos .active').attr('data-id');
+	if($.idioma!='nuevo'){
+		$.ajax({url: 'php/proximoMomentoAMatricular.php', type: 'POST', data: { idioma: $.idioma, idAlu: $.idAlu }}).done(function(resp) {
+			//console.log(resp)
+			var respuesta = JSON.parse(resp); console.log(respuesta)
+			$('#alertSistemaAI').removeClass('d-none'); $('#alertNuevoCurso').addClass('d-none');
+			$('#spanCursoPre').text(respuesta.idioma);
+			$('#spanNivelPre').text(respuesta.nivel);
+			$('#spanCicloPre').text(respuesta.ciclo);
+			$('#spaNotaPre').text(respuesta.notaFin);
+			$('#spanMotivoPre').text(respuesta.comentario);
+			$.nivel = respuesta.codNivel;
+			$.ciclo = respuesta.ciclo;
+			pantallaOver(false);
+		});
+	}else{
+		$('#sltPNueCurso').selectpicker('val', -1);
+		$('#alertNuevoCurso').removeClass('d-none'); $('#alertSistemaAI').addClass('d-none');
+		pantallaOver(false);
+	}
 	const element =  document.querySelector(`#subPro${proceso}`)
 	element.classList.add('animated', 'bounceOutLeft')/* .remove('bounceOutRight') */
 	//console.log(proceso)
 	$(`#subPro${proceso+1}`).addClass('animated bounceInRight').removeClass('d-none');
 	ocultarCard($(`#subPro${proceso}`));
+}
+function unirHorarios(proceso){
+	$.horario = $('#listaHorarios .active').attr('data-id');
+	if($.horario!=null){
+		$('#modalConfirmar').modal('show');
+	}
+}
+$('#sltPNueCurso').change(function() {
+	$.nivel ='B1';
+	$.ciclo =1;
+	$.idioma = $('#sltPNueCurso').selectpicker('val');
+});
+$('#btnGuardarTodo').click(function() {
+	$('#modalConfirmar').modal('hide');
+	pantallaOver(true);
+
+	$.ajax({url: 'php/insertarPreMatricula.php', type: 'POST', data: {
+		idAlu: $.idAlu,
+		idioma: $.idioma,
+		nivel: $.nivel,
+		ciclo: $.ciclo,
+		horario: $.horario,
+		motivo: $('#spanMotivoPre').text()+' con nota '+ $('#spaNotaPre').text()
+	 }}).done(function(resp) {
+		pantallaOver(false);
+		console.log(resp)
+		if(resp =='todo ok'){
+			const element =  document.querySelector(`#subPro${3}`)
+			element.classList.add('animated', 'bounceOutLeft')/* .remove('bounceOutRight') */
+			//console.log(proceso)
+			$(`#subPro${5}`).addClass('animated bounceInRight').removeClass('d-none');
+			ocultarCard($(`#subPro${4}`));
+		}
+	});
 });
 function ocultarCard(elemento){
 	$(elemento).addClass('d-none').removeClass('animated bounceInRight bounceInLeft bounceOutLeft bounceOutRight');
@@ -543,6 +853,19 @@ $('#txtCertificadoBuscar').click(function() {
 			//console.log(resp)
 			$('#divCertificadoResultados').html(resp);
 		});
+	}
+});
+$('#listaCursos').on('click', '.list-group-item', function (e) {
+	$('.list-group-item').removeClass('active');
+	$(this).addClass('active');
+});
+function pantallaOver(tipo) {
+	if(tipo){$('#overlay').css('display', 'initial').removeClass('d-none');}
+	else{ $('#overlay').css('display', 'none').addClass('d-none'); }
+}
+$('#txtDniMatriculante').keypress(function (e) { 
+	if(e.keyCode == 13){ 
+		$(this).parent().parent().find('.btnSiguiente').click();
 	}
 });
 

@@ -12,7 +12,7 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 	</div>
 
 	<ul class="list-unstyled components">
-		<p class="text-center"><small>Versión 1.0</small></p>
+		<p class="text-center"><small>Versión 1.28</small></p>
 		<li>
 			<a href="perfil.php" class="d-flex align-items-center"><i class="icofont-home"></i> <span
 					class="liText">Principal</span> </a>
