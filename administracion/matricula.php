@@ -16,7 +16,7 @@ if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], 
 <body>
 
 <style>
-.cardAcordeon{
+.btnBorrarPreMatricula, .cardAcordeon{
   cursor:pointer;
 }
 .bootstrap-select .dropdown-toggle{
@@ -24,6 +24,11 @@ if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], 
 }
 .alertify-notifier .ajs-message.ajs-warning {
 	background: #EDBB32;
+	color: white;
+	border-radius: .25rem!important;
+}
+.ajs-danger{
+	background: #ed3232;
 	color: white;
 	border-radius: .25rem!important;
 }
@@ -608,8 +613,8 @@ $('#sltPMIdiomas').change(function() {
 		$('#divPreMatriculados').html('');
 		$('#sltPMNiveles').html(resp);
 		$('#sltPMNiveles').selectpicker('refresh'); $('#sltPMNiveles').selectpicker('val',-1);
-		$('#sltPMCiclos').selectpicker('refresh'); $('#sltPMCiclos').selectpicker('val',-1);
-		$('#sltPMHorario').selectpicker('refresh'); $('#sltPMHorario').selectpicker('val',-1);
+		$('#sltPMCiclos').html(''); $('#sltPMCiclos').selectpicker('refresh'); $('#sltPMCiclos').selectpicker('val',-1);
+		$('#sltPMHorario').html(''); $('#sltPMHorario').selectpicker('refresh'); $('#sltPMHorario').selectpicker('val',-1);
 	});
 });
 $('#sltPMNiveles').change(function() {
@@ -617,7 +622,7 @@ $('#sltPMNiveles').change(function() {
 		$('#divPreMatriculados').html('');
 		$('#sltPMCiclos').html(resp);
 		$('#sltPMCiclos').selectpicker('refresh'); $('#sltPMCiclos').selectpicker('val',-1);
-		$('#sltPMHorario').selectpicker('refresh'); $('#sltPMHorario').selectpicker('val',-1);
+		$('#sltPMHorario').html(''); $('#sltPMHorario').selectpicker('refresh'); $('#sltPMHorario').selectpicker('val',-1);
 	});
 });
 $('#sltPMCiclos').change(function() {
@@ -634,7 +639,6 @@ $('#sltPMHorario').change(function() {
 	});
 });
 $('#divPreMatriculados').on('click', '#btnMatricularTodos', function (e) {
-	
 	matricularTodos( $(this).attr('data-id') );
 });
 function matricularTodos(registro){
@@ -671,7 +675,17 @@ function matricularTodos(registro){
 	}
 	
 }
-
+$('#divPreMatriculados').on('click', '.btnBorrarPreMatricula', function (e) {
+	var padre = $(this).parent().parent();
+	var idPre= padre.attr('data-id') ;
+	$.ajax({url: 'php/borrarPreMatricula.php', type: 'POST', data: {idPre: idPre }}).done(function(resp) {
+		console.log(resp)
+		if(resp =='todo ok'){
+			padre.remove();
+			alertify.notify('Pre matrícula borrada', 'danger', 10, function(){ });
+		}
+	});
+});
 </script>
 </body>
 </html>

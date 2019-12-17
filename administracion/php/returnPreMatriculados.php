@@ -50,7 +50,7 @@ if($resultado->num_rows>=1){ ?>
   <?php
 while($row=$resultado->fetch_assoc()){ ?>
   <tr data-id="<?= $row['id']; ?>" data-alumno='<?= $row['Alu_Codigo']; ?>'>
-    <td><?= $i+1; ?></td>
+    <td> <span class="text-danger btnBorrarPreMatricula "><i class="icofont-close"></i></span> <?= $i+1; ?></td>
     <td class="text-capitalize"><?= $row['Alu_Apellido'].' '.$row['Alu_Nombre']; ?></td>
     <td><?= $row['Idi_Nombre']; ?></td>
     <td><?= $row['Niv_Detalle']; ?></td>
@@ -59,15 +59,15 @@ while($row=$resultado->fetch_assoc()){ ?>
     <td><?= 'De '.$row['Hor_HoraInicio'].' a '.$row['Hor_HoraSalida']; ?></td>
     <td><?= $row['motivo']; ?></td>
     <td><!-- <button class="btn btn-outline-secondary border-0"><i class="icofont-certificate-alt-2"></i></button> -->
-      <div class="form-check abc-checkbox abc-checkbox-warning form-check-inline">
-        <input class="form-check-input" type="checkbox" id="singleCheckbox<?= $i; ?>" value="option2" aria-label="">
-        <label class="form-check-label pb-3" for="singleCheckbox<?= $i; ?>"></label>
-      </div>
+    <div class="form-check abc-checkbox abc-checkbox-warning form-check-inline">
+      <input class="form-check-input" type="checkbox" id="singleCheckbox<?= $i; ?>" value="option2" aria-label="">
+      <label class="form-check-label pb-3" for="singleCheckbox<?= $i; ?>"></label>
+    </div>
   </td>
   </tr>
 <?php $i++; } ?> 
   </table>
-<?php }else{ ?> 
+<?php } else{ ?> 
   <p>No hay alumnos que se hayan matriculado en los filtros indicados.</p>
 <?php }
 
