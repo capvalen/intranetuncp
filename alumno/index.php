@@ -34,6 +34,9 @@ include "php/fechasPreMatricula.php";
 		z-index: 1051; /* Specify a stack order in case you're using a different order for other elements */
 	 /* Add a pointer on hover */
 }
+.bootstrap-select .dropdown-toggle{
+	text-transform: capitalize;
+} 
 #overlay .text{position: absolute;
 		top: 50%;
 		left: 50%;
@@ -407,13 +410,22 @@ color: white
 									<p><strong>Curso: </strong> <span  id="spanCursoPre"></span></p>
 									<p><strong>Nivel: </strong> <span  id="spanNivelPre"></span></p>
 									<p><strong>Ciclo: </strong> <span id="spanCicloPre"></span></p>
+									<p><strong>Sede: </strong> <span id="spaSedePre"></span></p>
 									<p><strong>Última nota: </strong> <span id="spaNotaPre"></span></p>
 									<p><strong>Motivo: </strong> <span id="spanMotivoPre"></span></p>
+									<p>Si deseas cambiar de sucursal, puedes hacerlo acá:</p>
+									<select class="selectpicker form-control" id="sltPMismCurso" data-live-search="true" data-width="100%">
+										<?php include 'php/OPT_sedes.php'; ?>
+									</select>
 								</div>
 								<div class="col d-none" id="alertNuevoCurso">
 									<p>Selecciona el curso nuevo que deseas empezar</p>
 									<select class="selectpicker form-control" id="sltPNueCurso" data-live-search="true" data-width="100%">
 										<?php include 'php/OPT_idiomas.php'; ?>
+									</select>
+									<p>¿En qué sucursal deseas llevar el curso?</p>
+									<select class="selectpicker form-control" id="sltPNueSede" data-live-search="true" data-width="100%">
+										<?php include 'php/OPT_sedes.php'; ?>
 									</select>
 								</div>
 								<div class="col">
@@ -520,13 +532,13 @@ color: white
 	<div class='d-none' id="overlay">
 		<div class="text"><span id="hojita"><i class="icofont icofont-leaf"></i></span> <p id="pFrase"> Solicitando los datos... <br> <span>«Pregúntate si lo que estás haciendo hoy <br> te acerca al lugar en el que quieres estar mañana» <br> Walt Disney</span></p>
 	</div>
-    </div>
+</div>
 
         
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-<script src="js/bootstrap-select.min.js"></script>
+<script src="js/bootstrap-select.min.js?version=1.0.1"></script>
 <script src="js/moment.js"></script>
 
 <script>
@@ -633,7 +645,7 @@ $('.btnSiguiente').click(function() { console.log('siguiente Proceso')
 			case 'buscarDNI':
 				if($('#txtDniMatriculante').val().length==8 ){
 					$.ajax({url: 'php/buscarDniBDMatricula.php', type: 'POST', data: { dni: $('#txtDniMatriculante').val() }}).done(function(resp) {
-						//console.log(resp)
+						console.log(resp)
 						pantallaOver(false);
 						var data = JSON.parse(resp);
 						if( data.length == 0 ){
@@ -780,7 +792,10 @@ function elegirCurso(proceso){ console.log(proceso)
 			$('#spanNivelPre').text(respuesta.nivel);
 			$('#spanCicloPre').text(respuesta.ciclo);
 			$('#spaNotaPre').text(respuesta.notaFin);
+			$('#spaSedePre').text(respuesta.sede);
 			$('#spanMotivoPre').text(respuesta.comentario);
+			$('#sltPMismCurso').selectpicker('val', respuesta.sucursal );
+			$.sucursal = respuesta.sucursal;
 			$.nivel = respuesta.codNivel;
 			$.ciclo = respuesta.ciclo;
 			pantallaOver(false);
@@ -802,10 +817,14 @@ function unirHorarios(proceso){
 		$('#modalConfirmar').modal('show');
 	}
 }
+$('#sltPMismCurso').change(function() {
+	$.sucursal = $('#sltPMismCurso').selectpicker('val');
+});
 $('#sltPNueCurso').change(function() {
 	$.nivel ='B1';
 	$.ciclo =1;
 	$.idioma = $('#sltPNueCurso').selectpicker('val');
+	$.sucursal = $('#sltPNueSede').selectpicker('val');
 });
 $('#btnGuardarTodo').click(function() {
 	$('#modalConfirmar').modal('hide');
@@ -817,6 +836,7 @@ $('#btnGuardarTodo').click(function() {
 		nivel: $.nivel,
 		ciclo: $.ciclo,
 		horario: $.horario,
+		sucursal: $.sucursal,
 		motivo: $('#spanMotivoPre').text()+' con nota '+ $('#spaNotaPre').text(),
 		periodo: '<?= $periodo; ?>'
 	 }}).done(function(resp) {

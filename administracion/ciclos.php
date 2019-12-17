@@ -112,7 +112,7 @@ if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], 
 				<select class="text-capitalize selectpicker" id="sltPAnios" data-live-search="true" data-width="100%">
 					<?php include 'php/OPT_AniosCiclos.php'; ?>
 				</select>
-				<button class="btn btn-outline-primary" id="btnCrearCiclo"><i class="icofont-save"></i> Crear ciclo</button>
+				<button class="btn btn-outline-primary mt-2 " id="btnCrearCiclo"><i class="icofont-save"></i> Crear ciclo</button>
 			</div>
 		</div>
 	</div>

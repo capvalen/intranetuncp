@@ -103,7 +103,7 @@ if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], 
 				<div class="card-body">
 					<p>Rellene los campos</p>
 					<div class=" ">
-						<label for="">Fecha de inicio del ciclo</label>
+						<label for="">Mes para el nuevo ciclo</label>
 						<select class="selectpicker" id="sltMesesLetras" data-width="100%" data-live-search="true">
 							<?php $sqlMeses = "SELECT * FROM `mes`;";
 							$resultadoMeses = $esclavo->query($sqlMeses);

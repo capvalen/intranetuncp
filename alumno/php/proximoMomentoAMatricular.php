@@ -1,12 +1,13 @@
 <?php 
 include 'conexionInfocat.php';
 
-$sql="SELECT ra.Reg_Codigo, s.Idi_Codigo, i.Idi_Nombre, s.Niv_Codigo, n.Niv_Detalle, s.Sec_NroCiclo, ma.Mes_Inicio, nt.not_Prom, ultimoCicloIdioma(s.Idi_Codigo, s.Niv_Codigo) as maxCiclos FROM `alumno` a
+$sql="SELECT ra.Reg_Codigo, s.Idi_Codigo, i.Idi_Nombre, s.Niv_Codigo, n.Niv_Detalle, s.Sec_NroCiclo, ma.Mes_Inicio, nt.not_Prom, ultimoCicloIdioma(s.Idi_Codigo, s.Niv_Codigo) as maxCiclos, s.Suc_Codigo, su.sucDescripcion FROM `alumno` a
 inner join registroalumno ra on ra.Alu_Codigo = a.Alu_Codigo
 inner join seccion s on s.Sec_Codigo = ra.Sec_Codigo
 inner join idioma i on i.Idi_Codigo = s.Idi_Codigo
 inner join nivel n on n.Niv_Codigo = s.Niv_Codigo
 inner join mesacademico ma on ma.Mes_Codigo = s.Mes_Codigo
+inner join sucursal su on su.Suc_Codigo = s.Suc_Codigo
 inner join onota nt on nt.Reg_Codigo = ra.Reg_Codigo
 where ra.alu_codigo = '{$_POST['idAlu']}'
 and s.Idi_Codigo = '{$_POST['idioma']}'
@@ -46,7 +47,7 @@ if($resultado->num_rows>=1){
     $comentario = 'Reprobó, lleva el ciclo nuevamente';
   }
 
-  $filas = array( 'codAlu'=> $_POST['idAlu'], 'idioma' => $row['Idi_Nombre'], 'codIdioma' => $_POST['idioma'], 'nivel'=>$row['Niv_Detalle'], 'codNivel' => $proxNivel, 'ciclo' => $proxCiclo, 'notaFin'=> $row['not_Prom'], 'comentario' => $comentario ); //$_POST['idioma']
+  $filas = array( 'codAlu'=> $_POST['idAlu'], 'idioma' => $row['Idi_Nombre'], 'codIdioma' => $_POST['idioma'], 'nivel'=>$row['Niv_Detalle'], 'codNivel' => $proxNivel, 'ciclo' => $proxCiclo, 'notaFin'=> $row['not_Prom'], 'sede'=> $row['sucDescripcion'], 'sucursal' => $row['Suc_Codigo'], 'comentario' => $comentario ); //$_POST['idioma']
   
 
 }else{

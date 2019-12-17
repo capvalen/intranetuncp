@@ -11,12 +11,21 @@ if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], 
 	<?php include 'php/header.php';
 	include "php/conexionInfocat.php";
 	?>
+	<link rel="stylesheet" href="css/awesome-bootstrap-checkbox.css">
 </head>
 <body>
 
 <style>
 .cardAcordeon{
   cursor:pointer;
+}
+.bootstrap-select .dropdown-toggle{
+	text-transform: capitalize;
+}
+.alertify-notifier .ajs-message.ajs-warning {
+	background: #EDBB32;
+	color: white;
+	border-radius: .25rem!important;
 }
 </style>
 	
@@ -30,33 +39,46 @@ if(isset($_GET['cursor'])){
 ?>
 
 <div id="content" class="container-fluid pt-5">
-	<!-- Contenido de la Página  -->
+<!-- Contenido de la Página  -->
 		
-	<h2 class="d-print-none"><i class="icofont-people"></i> Matrícula</h2>
-	
-	<div class="card col-7">
+<ul class="nav nav-tabs d-print-non" id="myTab" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link active" id="matricula-tab" data-toggle="tab" href="#matricula" role="tab" aria-controls="matricula" aria-selected="true">Matrícula</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" id="prematricula-tab" data-toggle="tab" href="#prematricula" role="tab" aria-controls="prematricula" aria-selected="false">Ver pre matrículas</a>
+		</li>
+	</ul>
+
+<div class="tab-content pt-3" id="myTabContent">
+	<div class="tab-pane fade show active" id="matricula" role="tabpanel" aria-labelledby="matricula-tab">
+		<h2 class="d-print-none"><i class="icofont-people"></i> Matrículas</h2>
+
+		<div class="card col-6">
 		<div class="card-body pt-1">
-		<p class="card-text m-0"><small class="text-muted"><i class="icofont-filter"></i> Filtro alumno antiguo:</small></p>
+			<p class="card-text m-0"><small class="text-muted"><i class="icofont-filter"></i> Filtro alumno antiguo:</small></p>
 			<div class="form-inline">
-      <label class="mr-3" for=""><small>D.N.I/Apellidos Alumno:</small></label>
-      <input type="text ml-3" class="form-control" id="txtAlumnoDni">
-      <button class="btn btn-outline-primary ml-3" id="btnBuscarDniAlumno"><i class="icofont-search-1"></i> Buscar</button>
-      <button class="btn btn-outline-success ml-3" id="btnCrearAlumno"><i class="icofont-bulb-alt"></i> Crear alumno</button>
-			<?php if(isset($_GET['cursor'])){ ?>
-      <a href="seguimiento.php?cursor=<?= trim($rowAlumno['Alu_NroDocumento']); ?>" class="btn btn-outline-dark ml-3 d-none" ><i class="icofont-bulb-alt"></i> Ver seguimiento</a>
-			<?php } ?>
+				<label class="mr-3" for=""><small>D.N.I/Apellidos Alumno:</small></label>
+				<input type="text ml-3" class="form-control" id="txtAlumnoDni">
+				<button class="btn btn-outline-primary ml-3" id="btnBuscarDniAlumno"><i class="icofont-search-1"></i> Buscar</button>
+				<button class="btn btn-outline-success ml-3" id="btnCrearAlumno"><i class="icofont-bulb-alt"></i> Crear alumno</button>
+				<?php if(isset($_GET['cursor'])){ ?>
+				<a href="seguimiento.php?cursor=<?= trim($rowAlumno['Alu_NroDocumento']); ?>" class="btn btn-outline-dark ml-3 d-none" ><i class="icofont-bulb-alt"></i> Ver seguimiento</a>
+				<?php } ?>
+			</div>
 		</div>
-	</div>
-  </div>
+		</div>
+	
+
 	<?php if(isset($_GET['cursor'])){ $_POST['idAlumno']=$_GET['cursor'];
 		$rowAlumno = $resultadoAlumno->fetch_assoc(); $_POST['idAlumno'] = $rowAlumno['Alu_Codigo']; ?>
-  <div class="row mt-3">
-    <div class="col-12 my-3">
-      <div class="card">
-        <div class="card-body">
-        <?php if($resultadoAlumno->num_rows>0){ ?>
-          <div class="row">
-						<small class='text-muted'>Datos del alumno</small>
+	<div class="row mt-1">
+		<div class="col-md-6 my-3">
+			<div class="card">
+				<div class="card-body">
+				<?php if($resultadoAlumno->num_rows>0){ ?>
+					<p class="card-text m-0"><small class='text-muted'>Datos del alumno</small></p>
+					<div class="row">
 						<p class="d-none"><strong>Cod. Int.:</strong> <span><?= $rowAlumno['Alu_Codigo']; ?></span></p>
 						<div class='col'><strong>D.N.I.:</strong> <span><?= $rowAlumno['Alu_NroDocumento']; ?></span></div>
 						<div class='col'><strong>Apellidos:</strong> <span class="text-capitalize"><?= $rowAlumno['Alu_Apellido']; ?></span></div>
@@ -64,13 +86,14 @@ if(isset($_GET['cursor'])){
 						<div class='col-1'><button class="btn btn-outline-primary btn-sm"  id="btnEditStudent"> <i class="icofont-edit"></i> </button> </div>
 						<p class="d-none"><strong>Fecha de Nacimiento:</strong> <span><?= $rowAlumno['Alu_FechaNacimiento']; ?></span></p>
 					</div>
-        </div>
-        <?php }else{ ?>
-          <p>No se encontraron registros de alumnos con el DNI proporcionado</p>
-        <?php } ?>
-      </div>
-    </div>
-    <div class="col">
+				</div>
+				<?php }else{ ?>
+					<p>No se encontraron registros de alumnos con el DNI proporcionado</p>
+				<?php } ?>
+			</div>
+		</div>
+	</div>
+	<div class="col px-0">
 		<div class="card">
 		<div class="card-body">
 			<p class="card-text m-0"><small class="text-muted"><i class="icofont-filter"></i> Filtro</small></p>
@@ -102,7 +125,7 @@ if(isset($_GET['cursor'])){
 				
 			</div>
 			
-			<?php if(isset($_GET['year']) && isset($_GET['month']) && isset($_GET['language']) && isset($_GET['level']) ){?>
+			<?php if(isset($_GET['year']) && isset($_GET['month']) && isset($_GET['language']) && isset($_GET['level']) ){ ?>
 			<table class="table table-hover mt-3">
 				<thead>
 					<tr>
@@ -141,17 +164,69 @@ if(isset($_GET['cursor'])){
 				<?php } } ?>
 				</tbody>
 			</table>
-			<?php }?>
+			<?php } ?>
 		</div>
 		</div>
-		</div>
-					<?php /* include "php/mostrarNuevosCursosActivos.php"; */?>
+	</div>
+			
+	<?php } ?>
+	</div>
+
+	<div class="tab-pane fade pt-3" id="prematricula" role="tabpanel" aria-labelledby="prematricula-tab">
+		<!-- Inicio de tabPane -->
+		<h2 class="d-print-none"><i class="icofont-people"></i> Pre Matrículas</h2>
+		<div class="card col-10" id="filtrosPreMatricula">
+			<div class="card-body pt-1">
+				<p class="card-text m-0"><small class="text-muted"><i class="icofont-filter"></i> Filtros:</small></p>
+				<div class="form-row">
+				<div class="col">
+					<label for=""><small>Sucursal:</small></label>
+					<select class="selectpicker" id="sltPMSucursal" data-live-search="true" data-width="100%">
+						<?php include 'php/OPT_sedes.php'; ?>
+					</select>
+				</div>
+				<div class="col">
+					<label for=""><small>Periodo:</small></label>
+					<select class="selectpicker" id="sltPMPeriodos" data-live-search="true" data-width="100%">
+						<?php include 'php/returnAniosPrematricula.php'; ?>
+					</select>
+				</div>
+				<div class="col">
+					<label for=""><small>Idioma:</small></label>
+					<select class="selectpicker" id="sltPMIdiomas" data-live-search="true" data-width="100%">
+						<option value='-1'>Seleccione primero periodo</option>
+					</select>
+				</div>
+				<div class="col">
+					<label for=""><small>Nivel:</small></label>
+					<select class="selectpicker" id="sltPMNiveles" data-live-search="true" data-width="100%">
+						<option value='-1'>Seleccione primero Idioma</option>
+					</select>
+				</div>
+				<div class="col">
+					<label for=""><small>Ciclo:</small></label>
+						<select class="selectpicker" id="sltPMCiclos" data-live-search="true" data-width="100%">
+							<option value='-1'>Seleccione primero Nivel</option>
+						</select>
+				</div>
+				<div class="col">
+					<label for=""><small>Horario:</small></label>
+					<select class="selectpicker" id="sltPMHorario" data-live-search="true" data-width="100%">
+						<option value='-1'>Seleccione primero nivel</option>
+					</select>
+				</div>
 				</div>
 			</div>
 		</div>
+		</div>
+		
+		<div id="divPreMatriculados" class="d-none">
+		</div>
+		<!-- fin de tabPane -->
+	</div>
+</div>
+  
 
-  </div>
-	<?php } ?>
 
 <!-- Fin de Contenido de la Página  -->
 </div>
@@ -484,6 +559,7 @@ $('#sltTipoMatricula').on('changed.bs.select', function (e, clickedIndex, isSele
 $('#btnEditStudent').click(function() {
 	$('#modalEditStudent').modal('show');
 });
+<?php if( isset($_POST['Alu_Codigo'])): ?>
 $('#btnGuardarDocente').click(function() {
 	$('#alertPagos').addClass('d-none');
 	if( $('#txtDNIAlumno').val()=='' || $('#txtApellidosAlumno').val()=='' || $('#txtNombresAlumno').val()=='' ){
@@ -509,6 +585,92 @@ $('#btnGuardarDocente').click(function() {
 		});
 	}
 });
+<?php endif; ?>
+
+$('#prematricula-tab').click(function() {
+	$('#filtrosPreMatricula .selectpicker').selectpicker('val', -1);
+});
+$('#sltPMSucursal').change(function() {
+	$('#sltPMPeriodos').change();
+});
+$('#sltPMPeriodos').change(function() {
+	$.ajax({url: 'php/returnIdiomasPrematricula.php', type: 'POST', data: { sucursal: $('#sltPMSucursal').val(), periodo: $('#sltPMPeriodos').val() }}).done(function(resp) { //console.log( resp );
+		$('#divPreMatriculados').html('');
+		$('#sltPMIdiomas').html(resp);
+		$('#sltPMIdiomas').selectpicker('refresh'); $('#sltPMIdiomas').selectpicker('val',-1);
+		$('#sltPMNiveles').selectpicker('refresh'); $('#sltPMNiveles').selectpicker('val',-1);
+		$('#sltPMCiclos').selectpicker('refresh'); $('#sltPMCiclos').selectpicker('val',-1);
+		$('#sltPMHorario').selectpicker('refresh'); $('#sltPMHorario').selectpicker('val',-1);
+	});
+});
+$('#sltPMIdiomas').change(function() {
+	$.ajax({url: 'php/returnNivelPrematricula.php', type: 'POST', data: { sucursal: $('#sltPMSucursal').val(), periodo: $('#sltPMPeriodos').val(), idioma: $('#sltPMIdiomas').val() }}).done(function(resp) { //console.log( resp );
+		$('#divPreMatriculados').html('');
+		$('#sltPMNiveles').html(resp);
+		$('#sltPMNiveles').selectpicker('refresh'); $('#sltPMNiveles').selectpicker('val',-1);
+		$('#sltPMCiclos').selectpicker('refresh'); $('#sltPMCiclos').selectpicker('val',-1);
+		$('#sltPMHorario').selectpicker('refresh'); $('#sltPMHorario').selectpicker('val',-1);
+	});
+});
+$('#sltPMNiveles').change(function() {
+	$.ajax({url: 'php/returnCiclosPrematricula.php', type: 'POST', data: { sucursal: $('#sltPMSucursal').val(), periodo: $('#sltPMPeriodos').val(), idioma: $('#sltPMIdiomas').val(), nivel: $('#sltPMNiveles').val() }}).done(function(resp) { //console.log( resp );
+		$('#divPreMatriculados').html('');
+		$('#sltPMCiclos').html(resp);
+		$('#sltPMCiclos').selectpicker('refresh'); $('#sltPMCiclos').selectpicker('val',-1);
+		$('#sltPMHorario').selectpicker('refresh'); $('#sltPMHorario').selectpicker('val',-1);
+	});
+});
+$('#sltPMCiclos').change(function() {
+	$.ajax({url: 'php/returnHorariosPrematricula.php', type: 'POST', data: { sucursal: $('#sltPMSucursal').val(), periodo: $('#sltPMPeriodos').val(), idioma: $('#sltPMIdiomas').val(), nivel: $('#sltPMNiveles').val(), ciclo: $('#sltPMCiclos').val() }}).done(function(resp) { //console.log( resp );
+		$('#divPreMatriculados').html('');
+		$('#sltPMHorario').html(resp);
+		$('#sltPMHorario').selectpicker('refresh'); $('#sltPMHorario').selectpicker('val',-1);
+	});
+});
+$('#sltPMHorario').change(function() {
+	$.ajax({url: 'php/returnPreMatriculados.php', type: 'POST', data: { sucursal: $('#sltPMSucursal').val(), periodo: $('#sltPMPeriodos').val(), idioma: $('#sltPMIdiomas').val(), nivel: $('#sltPMNiveles').val(), ciclo: $('#sltPMCiclos').val(),  horario: $('#sltPMHorario').val() }}).done(function(resp) { //console.log( resp );
+		$('#divPreMatriculados').html(resp);
+		$('#divPreMatriculados').removeClass('d-none');
+	});
+});
+$('#divPreMatriculados').on('click', '#btnMatricularTodos', function (e) {
+	
+	matricularTodos( $(this).attr('data-id') );
+});
+function matricularTodos(registro){
+	pantallaOver(true);
+	var idsPrematriculados = []; var contador=0;
+	$.each( $('.form-check-input') , function(i, objeto){
+		if( $(objeto).prop('checked')  ){ //console.log( 'si' );
+			contador++;
+			idsPrematriculados.push({ idReg: parseInt($(objeto).parent().parent().parent().attr('data-id')), idAlu: $(objeto).parent().parent().parent().attr('data-alumno') });
+		}else{
+			//console.log( 'no' );
+		}
+	});
+	console.log( idsPrematriculados );
+	if(contador >=1){
+		$.ajax({url: 'php/matricularBloque.php', type: 'POST', data: {idsPrematriculados: idsPrematriculados, codSec: registro }}).done(function(resp) {
+		console.log(resp)
+		pantallaOver(false);
+		if(resp == 'todo ok'){
+			$('#h1Advertencia').text('Se realizó las matrículas exitosamente.');
+			$('#modalAdvertencia').modal('show');
+			$.each( $('.form-check-input') , function(i, objeto){
+				if( $(objeto).prop('checked')  ){ //console.log( 'si' );
+					$(objeto).parent().html(`
+					<span class="text-success"><i class="icofont-check-circled"></i></span>
+					`);
+				}
+			});
+		}
+		});
+	}else{
+		alertify.notify('No hay nada seleccionado', 'warning', 10, function(){ });
+		pantallaOver(false);
+	}
+	
+}
 
 </script>
 </body>

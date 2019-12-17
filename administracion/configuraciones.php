@@ -35,6 +35,9 @@ if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], 
 		<li class="nav-item">
 			<a class="nav-link" href="#docentes" data-toggle="tab" ><i class="icofont-graduate"></i> Docentes</a>
 		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="#fechas" data-toggle="tab" ><i class="icofont-clock-time"></i> Fechas</a>
+		</li>
 		
 	</ul>
 	<div class="tab-content">
@@ -117,6 +120,11 @@ if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], 
 
 
 
+		</div>
+		<div class="tab-pane fade" id="fechas" role="tabpanel" aria-labelledby="home-tab">
+			<p>Fecha máxima para la subida de notas y el inicio para las pre matrículas.</p>
+			<input type="date" name="" id="dtpFechaMaxima" class="form-control col-md-4">
+			<button class="btn btn-outline-danger btn-sm border-0" onClick="actualizarfecha()"> <i class="icofont-close"></i> </button>
 		</div>
 
 	</div>
@@ -358,6 +366,14 @@ $('#btnGuardarPwdDocente').click(function() {
 		$('#modalAdvertencia').modal('show');
 	}
 });
+function actualizarfecha(){
+	var efecha = moment($('#dtpFechaMaxima').val(), 'YYYY-MM-DD');
+	if( efecha.isValid() ){
+		$.ajax({url: 'php/updateFechaSubidaNotas.php', type: 'POST', data: { fecha: $('#dtpFechaMaxima').val(), anio: efecha.format('YYYY'), mes: efecha.format('M') }}).done(function(resp) {
+			console.log(resp)
+		});
+	}
+}
 
 
 </script>
