@@ -32,6 +32,7 @@ h5{
 				<label class="mr-3" for=""><small>Nombre/D.N.I Alumno:</small></label>
 				<input type="text" class="form-control mr-3" id="txtAlumnoDni">
 				<button class="btn btn-outline-primary" id="btnBuscarDniAlumno"><i class="icofont-search-1"></i> Buscar</button>
+				<button class="btn btn-outline-success ml-3" id="btnCrearAlumno"><i class="icofont-bulb-alt"></i> Crear alumno</button>
 			</div>
 		</div>
 	</div>
@@ -182,6 +183,47 @@ h5{
 <!-- Fin de #wrapper  -->
 </div>
 
+<!-- Modal para craer alumno  -->
+<div class="modal fade" id="modalCrearAlumno" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar datos</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+				<p>Ingrese el D.N.I. que se desea crear:</p>
+				<input type="text" class="form-control" id="txtCrearDni">
+				<button class="btn btn-outline-warning mt-3" id="btnBuscarDni"> <i class="icofont-search-1"></i> Buscar en Reniec</button>
+				<div class="d-none" id="datosEncontrados">
+					<label for="">Apellidos</label>
+					<input type="text" class="form-control text-capitalize" id="txtCrearApellidos">
+					<label for="">Nombres</label>
+					<input type="text" class="form-control text-capitalize" id="txtCrearNombres">
+					<label for="">Género:</label>
+					<select class="selectpicker" id="SltPSexo" data-search='false' data-width='100%'>
+						<option value="0">Femenino</option>
+						<option value="1">Masculino</option>
+					</select>
+					<div class="d-none">
+						<label for="">Facultad:</label>
+						<select class="selectpicker" id="SltPFacultad" data-search='true' data-width='100%'>
+							<?php include 'php/OPT_facultades.php'; ?>
+						</select>
+						<label for="">Fecha de nacimiento:</label>
+						<input type="date" class="form-control" id="txtCrearFecha" value="<?= date('Y-m-d'); ?>">
+					</div>
+					<button class="btn btn-outline-primary mt-3" id="btnSaveAlumno"><i class="icofont-save"></i> Guardar Alumno</button>
+				</div>
+			
+      </div>
+      
+    </div>
+  </div>
+</div>
+
 <?php include "php/footer.php"; ?>
 <?php if($dominio=='infocatsoluciones.com'){ ?>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.js"></script> <!-- extraido de https://jquery-form.github.io/form/ -->
@@ -219,7 +261,31 @@ function cancelarEdicion(){
 	$('#divDatosAlumno .selects').addClass('d-none');
 
 }
-
+$('#btnCrearAlumno').click(function () {
+	$('#modalCrearAlumno').modal('show');
+});
+$('#btnSaveAlumno').click(function () {
+	pantallaOver(true);
+	$.ajax({url: 'php/insertarAlumnoNuevo.php', type: 'POST', data: {
+		dni: $('#txtCrearDni').val(), nombre: $('#txtCrearNombres').val(), apellido: $('#txtCrearApellidos').val(), sexo: $('#SltPSexo').val(), facultad: $('#SltPFacultad').val(), fechanac: $('#txtCrearFecha').val()
+	}}).done(function (resp) {
+		console.log(resp)
+		pantallaOver(false);
+		if(resp=='todo ok'){
+			window.location='matricula.php?cursor='+$('#txtCrearDni').val();
+		}else{
+			$('#h1Advertencia').text('Ocurrió un error al intentar insertar al alumno, comuníquelo al área de soporte');
+			$('#modalAdvertencia').modal('show');
+		}
+	})
+});
+$('#btnBuscarDni').click(function () {
+	pantallaOver(true);
+	$('#btnBuscarDni').addClass('d-none');
+	$('#datosEncontrados').removeClass('d-none');
+	$('#txtCrearApellidos').focus();
+	pantallaOver(false);
+});
 <?php if(isset($_GET['cursor'])){ ?>
 function guardarEdicion(){
 pantallaOver(true);

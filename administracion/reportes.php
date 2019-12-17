@@ -24,7 +24,7 @@ if (!isset($_COOKIE['ckPower'])){ header('Location: index.php'); }
 	<!-- Contenido de la Página  -->
 
 		
-	<h2 class="d-print-none"><i class="icofont-people"></i> Reportes</h2>
+	<h2 class="d-print-none"><i class="icofont-paper"></i> Reportes</h2>
 	
 	<div class="card col-7 py-2">
 		<p class="card-text m-0"><small class="text-muted"><i class="icofont-filter"></i> Filtro</small></p>

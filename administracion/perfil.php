@@ -154,6 +154,14 @@ if (!isset($_COOKIE['ckPower'])){ header('Location: index.php'); } ?>
 				</div>
 			</div>
 		</div>
+		<div class="col-3 my-3 d-flex align-items-stretch">
+			<div class="card" style="width: 100%;">
+				<div class="card-body">
+					<h5><a class="text-decoration-none" href="reportes.php"><i class="icofont-paper"></i> Reportes</a></h5>
+					<span><small>Sección para visualizar reportes de los alumnos CEID.</small></span>
+				</div>
+			</div>
+		</div>
 	
 	</div>
 	
