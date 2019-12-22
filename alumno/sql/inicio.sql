@@ -244,3 +244,10 @@ ALTER TABLE `configuraciones` ADD `idConfiguraciones` INT NOT NULL AUTO_INCREMEN
 
 
 ALTER TABLE `empleado` ADD `Emp_displayWeb` BIT(1) NOT NULL DEFAULT b'1' AFTER `pwd`;
+
+
+
+/*Cambiando el tamaño de seccion: */
+ALTER TABLE `comentariosy_oobservaciones` DROP INDEX `FK_Comentariosy/oObservaciones_Seccion`;
+
+ALTER TABLE regencuesta DROP FOREIGN KEY FK_RegEncuesta_Seccion

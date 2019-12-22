@@ -4,6 +4,7 @@ if (!isset($_COOKIE['ckPower'])){ header('Location: index.php'); }
 
 if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], $subBasico) ){
 	header('Location: sinPermiso.php'); }
+$meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 ?>
 
 <!DOCTYPE html>
@@ -65,19 +66,18 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 		
 		<div class="card-body row">
 			<div class="col">
-				<p><strong>Curso:</strong> <span id="p1Curso"><?= $rowdatosCurso['Idi_Nombre']; ?></span></p>
-				<p><strong>Detalle:</strong> <?= $rowdatosCurso['Niv_Detalle']; ?></p>
+				<p><strong>Idioma:</strong> <span id="p1Curso"><?= $rowdatosCurso['Idi_Nombre']; ?></span> <span><?= $rowdatosCurso['Niv_Detalle']; ?></span></p>
 				<p><strong>Ciclo:</strong> <span id="p1Ciclo"><?= $rowdatosCurso['Sec_NroCiclo']; ?></span></p>
+				<p><strong>Sección:</strong> <?= $rowdatosCurso['Sec_Seccion']; ?></p>
 			</div>
 			<div class="col">
-				<p><strong>Temporada:</strong> <?= $rowdatosCurso['Mes_Codigo']; ?></p>
-				<p><strong>Sección:</strong> <?= $rowdatosCurso['Sec_Seccion']; ?></p>
+				<p><strong>Temporada:</strong> <?= $meses[intval(substr($rowdatosCurso['Mes_Codigo'], 0,2))] ." ". substr($rowdatosCurso['Mes_Codigo'], -4); ?></p>
 				<p><strong>Sucursal:</strong> <?= $rowdatosCurso['sucDescripcion']; ?></p>
 			</div>
 			<div class="col">
-				<p><strong>Inicio:</strong> <span class='text-capitalize'><?= strtolower($rowdatosCurso['Hor_HoraInicio']); ?></span></p>
-				<p><strong>Final:</strong> <span class='text-capitalize'><?= strtolower($rowdatosCurso['Hor_HoraSalida']); ?></span></p>
-				<p><strong>Docente:</strong> <span class='text-capitalize'><?= strtolower($rowdatosCurso['nomDocente']); ?></span></p>
+				<p><strong>Días:</strong> <span class='text-capitalize'><?= strtolower($rowdatosCurso['horDiaInicial'])." - ". strtolower($rowdatosCurso['horDiaFinal']); ?></span></p>
+				<p><strong>Horario:</strong> <span class='text-capitalize'><?= strtolower($rowdatosCurso['Hor_HoraInicio']); ?> - <?= strtolower($rowdatosCurso['Hor_HoraSalida']); ?></span></p>
+				<p><strong>Docente:</strong> <span class='text-capitalize'><a href="docente.php?cursor=<?= $rowdatosCurso['Emp_Codigo']; ?>"><?= strtolower($rowdatosCurso['nomDocente']); ?></a></span></p>
 			</div>
 		</div>
 			
@@ -87,9 +87,9 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 	<?php if(isset($_GET['cursor'])){ ?>
 	<div class="card">
 		<div class="card-body d-flex justify-content-between">
-			<div>
-				<button class="btn btn-outline-primary" id="btnAsignarAlumno"><i class="icofont-badge"></i> Asignar alumno</button>
-				<button class="btn btn-outline-warning" id="btnReubicarAlumno"><i class="icofont-magic"></i> Re/Ubicar alumno</button>
+			<div class="row">
+				<button class="btn btn-outline-primary mx-2" id="btnAsignarAlumno"><i class="icofont-badge"></i> Asignar alumno</button>
+				<button class="btn btn-outline-warning mx-2" id="btnReubicarAlumno"><i class="icofont-magic"></i> Re/Ubicar alumno</button>
 			</div>
 			<?php if($resultadoCursos->num_rows >0){ ?>
 				<button class="btn btn-outline-primary" id="btnGuardarNotas"><i class="icofont icofont-save"></i> Guardar notas</button>
@@ -98,10 +98,11 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 	</div>
 	<?php } ?>
 
-	<p>Listado de alumnos inscritos:</p>
+	
+	<h4 class="mt-3">Registro de alumnos inscritos:</h4>
 		
-	<div class="container">
-		<table class="table table-hover">
+	<div class="container-fluid table-responsive">
+		<table class="table table-hover" id="listAlumnosInscritos">
 			<thead>
 				<tr>
 					<th class="text-center">N°</th>
@@ -408,7 +409,7 @@ $('#btnUbicarAlumno').click(function () {
 				if(elem.Alu_NroDocumento == null ){ docDni='';}else{docDni = elem.Alu_NroDocumento}
 				$('#segundaParte tbody').append(`<tr>
 				<td> ${index+1} </td>
-				<td class='text-capitalize tdNombre'> ${elem.Alu_Apellido.toLowerCase() +', '+ elem.Alu_Nombre.toLowerCase()}</td>
+				<td class='text-capitalize tdNombre'> <span class='apellido'>${elem.Alu_Apellido.toLowerCase() + "</span>, <span class='nombre'>" + elem.Alu_Nombre.toLowerCase()}</span></td>
 				<td>${docDni}</td>
 				<td><button class="btn btn-outline-success btn-sm btnElegirAlumno" data-id="${elem.Alu_Codigo}"><i class="icofont-ui-rate-add"></i></button></td>
 			</tr>`)
@@ -462,6 +463,8 @@ $('tbody').on('click', '.btnElegirAlumno', function () {
 	$('#txtNombreChosen').text( $(this).parent().parent().find('.tdNombre').text())
 	$('#btnInsertChosen').attr('data-id', $(this).attr('data-id'));
 	$('#modalAsignarAlumno').modal('hide');
+	$.nombreAlu = $(this).parent().parent().find('.nombre').text();
+	$.apellidoAlu = $(this).parent().parent().find('.apellido').text();
 	//$('#modalChosenAlumno').modal('show');
 	$('#btnInsertChosen').click();
 });
@@ -470,11 +473,26 @@ function goBack() {
 }
 <?php if (isset($_GET['cursor'])){ ?>
 $('#btnInsertChosen').click(function () {
-	$.ajax({url: 'php/insertarAlumnoaCurso.php', type: 'POST', data: {codSec: '<?= $_GET['cursor'];?>', codAlu: $('#btnInsertChosen').attr('data-id')}}).done(function (resp) { //console.log(resp);
+	var codAlu = $('#btnInsertChosen').attr('data-id');
+	var codSec = '<?= $_GET['cursor'];?>';
+	$.ajax({url: 'php/insertarAlumnoaCurso.php', type: 'POST', data: {codSec: codSec, codAlu: codAlu }}).done(function (resp) { //console.log(resp);
 		$('#modalChosenAlumno').modal('hide');
 		if(resp=='todo ok'){
 			/* $('#h1Bien').text('Alumno registrado al curso');
 			$('#modalGuardadoCorrecto').modal('show'); */
+			if( $('#listAlumnosInscritos .rowAlumno').length==0 ){
+				$('#listAlumnosInscritos tbody').children().remove();
+			}
+			$('#listAlumnosInscritos tbody').append(`<tr class="rowAlumno" data-alu="${codSec+codAlu}">
+					<th>${$('#listAlumnosInscritos tbody .rowAlumno').length+1}</th>
+					<td><button class="btn btn-outline-danger btn-sm border-0 btnRemoveStudent"><i class="icofont-close"></i></button> <a href="alumnos.php?cursor=${codAlu}">${codAlu}</a></td>
+					<td class="text-capitalize">${$.apellidoAlu}</td>
+					<td class="text-capitalize">${$.nombreAlu}</td>
+					<td><input type="number" class="form-control text-center txtNotas" id="txtNota1" max="20" min="0" step="1" disabled='' autocomplete="nope" value="0"></td>
+					<td><input type="number" class="form-control text-center txtNotas" id="txtNota2" max="20" min="0" step="1" disabled='' autocomplete="nope" value="0"></td>
+					<td><input type="number" class="form-control text-center txtNotas" id="txtNota3" max="20" min="0" step="1" disabled='' autocomplete="nope" value="0"></td>
+					<td><input type="number" class="form-control text-center" id="txtPromedio" disabled="" value="0"></td>
+				</tr>`);
 			alertify.notify('<i class="icofont-check-circled"></i> Alumno registrado al curso con éxito', 'success' );
 		}else if(resp=='ya registrado'){
 			/* $('#h1Advertencia').text('El alumno ya se encontraba registrado en el curso ' + $('#spanCursoConf').text());
@@ -491,7 +509,7 @@ $('#btnInsertChosen').click(function () {
 $('#modalGuardadoCorrecto').on('hidden.bs.modal', function (e) {
   location.reload();
 });
-$('.btnRemoveStudent').click(function () {
+$('#listAlumnosInscritos').on('click', '.btnRemoveStudent', function (e) {
 	$('#btnRemoveChosen').attr( 'data-alu', $(this).parent().parent().attr('data-alu'))
 	$('#modalRemoveAlumno').modal('show');
 });
@@ -533,7 +551,7 @@ $('#btnReUbicarBuscaAlumno').click(function () {
 				if(elem.Alu_NroDocumento == null ){ docDni='';}else{docDni = elem.Alu_NroDocumento}
 				$('#segundaParteUbica tbody').append(`<tr>
 				<td> ${index+1} </td>
-				<td class='text-capitalize tdNombre'> ${elem.Alu_Apellido.toLowerCase() +', '+ elem.Alu_Nombre.toLowerCase()}</td>
+				<td class='text-capitalize tdNombre'> <span class='apellido'>${elem.Alu_Apellido.toLowerCase() + "</span>, <span class='nombre'>" + elem.Alu_Nombre.toLowerCase()}</span></td>
 				<td>${docDni}</td>
 				<td><button class="btn btn-outline-success btn-sm btnUbicaElegirAlumno" data-id="${elem.Alu_Codigo}"><i class="icofont-ui-rate-add"></i></button></td>
 			</tr>`)
@@ -554,6 +572,8 @@ $('tbody').on('click', '.btnUbicaElegirAlumno', function () {
 	$('#txtNombreChosenUbica').text( $(this).parent().parent().find('.tdNombre').text())
 	$('#btnUbicaChosen').attr('data-id', $(this).attr('data-id'));
 	$('#modalReubicarAlumno').modal('hide');
+	$.nombreAlu = $(this).parent().parent().find('.nombre').text();
+	$.apellidoAlu = $(this).parent().parent().find('.apellido').text();
 	$('#modalChosenUbicaAlumno').modal('show');
 });
 $('#sltPTipoUbica').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
@@ -562,13 +582,28 @@ $('#sltPTipoUbica').on('changed.bs.select', function (e, clickedIndex, isSelecte
 });
 $('#btnUbicaChosen').click(function() {
 	pantallaOver(true);
-	$.ajax({url: 'php/insertarAlumnoReubicacion.php', type: 'POST', data: {codAlu: $(this).attr('data-id'), codSec: '<?= $_GET['cursor']; ?>', tipoProceso: $(`#sltPTipoUbica option[value="${$('#sltPTipoUbica').val()}"]`).text(), calificacion: $('#txtUbicaCalificacion').val(), idiomaC: $('#p1Curso').text()+ $('#p1Ciclo').text() }}).done(function(resp) {
+	var codAlu = $(this).attr('data-id');
+	var codSec = '<?= $_GET['cursor'];?>';
+	$.ajax({url: 'php/insertarAlumnoReubicacion.php', type: 'POST', data: {codAlu: codAlu , codSec: codSec, tipoProceso: $(`#sltPTipoUbica option[value="${$('#sltPTipoUbica').val()}"]`).text(), calificacion: $('#txtUbicaCalificacion').val(), idiomaC: $('#p1Curso').text()+ $('#p1Ciclo').text() }}).done(function(resp) {
 		console.log(resp) 
 		pantallaOver(false);
 		$('#modalChosenUbicaAlumno').modal('hide');
 		if(resp=='todo ok'){
 			/* $('#h1Bien').text('Alumno ha sido ubicado al curso');
 			$('#modalGuardadoCorrecto').modal('show'); */
+			if( $('#listAlumnosInscritos .rowAlumno').length==0 ){
+				$('#listAlumnosInscritos tbody').children().remove();
+			}
+			$('#listAlumnosInscritos tbody').append(`<tr class="rowAlumno" data-alu="${codSec+codAlu}">
+					<th>${$('#listAlumnosInscritos tbody .rowAlumno').length+1}</th>
+					<td><button class="btn btn-outline-danger btn-sm border-0 btnRemoveStudent"><i class="icofont-close"></i></button> <a href="alumnos.php?cursor=${codAlu}">${codAlu}</a></td>
+					<td class="text-capitalize">${$.apellidoAlu}</td>
+					<td class="text-capitalize">${$.nombreAlu}</td>
+					<td><input type="number" class="form-control text-center txtNotas" id="txtNota1" max="20" min="0" step="1" disabled='' autocomplete="nope" value="0"></td>
+					<td><input type="number" class="form-control text-center txtNotas" id="txtNota2" max="20" min="0" step="1" disabled='' autocomplete="nope" value="0"></td>
+					<td><input type="number" class="form-control text-center txtNotas" id="txtNota3" max="20" min="0" step="1" disabled='' autocomplete="nope" value="0"></td>
+					<td><input type="number" class="form-control text-center" id="txtPromedio" disabled="" value="0"></td>
+				</tr>`);
 			alertify.notify('<i class="icofont-check-circled"></i> Alumno registrado al curso con éxito', 'success' );
 		}else if(resp=='ya registrado'){
 			/* $('#h1Advertencia').text('El alumno ya se encontraba registrado en el curso ' + $('#spanCursoConf').text());

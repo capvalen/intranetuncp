@@ -283,7 +283,11 @@ if(isset($_GET['cursor'])){
       <div class="modal-body">
 				<p>Ingrese el D.N.I. que se desea crear:</p>
 				<input type="text" class="form-control" id="txtCrearDni">
-				<button class="btn btn-outline-warning mt-3" id="btnBuscarDni"> <i class="icofont-search-1"></i> Buscar en Reniec</button>
+				<div class="alert alert-warning d-none mt-3" role="alert" id="alertaDNIUsado">
+					<p><strong class="alert-heading">El Dni ya se encuentra registrado, por:</strong></p>
+					<div id="divUsadosDNI"></div>
+				</div>
+				<button class="btn btn-outline-warning mt-3" id="btnBuscarDni"> <i class="icofont-search-1"></i> Verificar si es nuevo</button>
 				<div class="d-none" id="datosEncontrados">
 					<label for="">Apellidos</label>
 					<input type="text" class="form-control text-capitalize" id="txtCrearApellidos">
@@ -294,14 +298,19 @@ if(isset($_GET['cursor'])){
 						<option value="0">Femenino</option>
 						<option value="1">Masculino</option>
 					</select>
-					<div class="d-none">
-						<label for="">Facultad:</label>
-						<select class="selectpicker" id="SltPFacultad" data-search='true' data-width='100%'>
-							<?php include 'php/OPT_facultades.php'; ?>
-						</select>
-						<label for="">Fecha de nacimiento:</label>
-						<input type="date" class="form-control" id="txtCrearFecha" value="<?= date('Y-m-d'); ?>">
-					</div>
+					<label for="">Fecha de nacimiento:</label>
+					<input type="date" class="form-control" id="txtCrearFecha" value="<?= date('Y-m-d'); ?>">
+					
+					<label for="">Facultad:</label>
+					<select class="selectpicker" id="SltPFacultad" data-search='true' data-width='100%'>
+						<?php include 'php/OPT_facultadesMax.php'; ?>
+					</select>
+					<label for="">Procedencia:</label>
+					<select class="selectpicker" id="SltPProcedencia" data-search='true' data-width='100%'>
+						<?php include 'php/OPT_procedencias.php'; ?>
+					</select>
+				
+				
 					<button class="btn btn-outline-primary mt-3" id="btnSaveAlumno"><i class="icofont-save"></i> Guardar Alumno</button>
 				</div>
 			
@@ -465,13 +474,13 @@ $('#btnBuscarDniAlumno').click(function () {
 				<td class='text-capitalize tdNombre'> ${elem.Alu_Apellido.toLowerCase() +', '+ elem.Alu_Nombre.toLowerCase()}</td>
 				<td>${docDni}</td>
 				<td><button class="btn btn-outline-success btn-sm btnElegirAlumno" data-id="${elem.Alu_NroDocumento}"><i class="icofont-ui-rate-add"></i></button></td>
-			</tr>`)
+			</tr>`);
 			});
 
 		}else{
 			$('#modalListadoAlumnos tbody').append(`<tr>
 				<td colspan="3"> <i class="icofont-not-allowed"></i> No existen alumnos coincidentes con lo solicitado </td>
-			</tr>`)
+			</tr>`);
 		}
 		pantallaOver(false);
 		$('#modalListadoAlumnos').modal('show');
@@ -495,6 +504,7 @@ $('#modalGuardadoCorrecto').on('hidden.bs.modal', function (e) {
   location.reload();
 });
 $('#btnCrearAlumno').click(function () {
+	$('#alertaDNIUsado').addClass('d-none');
 	$('#modalCrearAlumno').modal('show');
 });
 $('#txtCrearDni').keyup(function (e) {
@@ -506,34 +516,41 @@ $('#txtCrearDni').keyup(function (e) {
 })
 $('#btnBuscarDni').click(function () {
 	pantallaOver(true);
-	// $.ajax({url: 'php/apiReniec.php', type: 'POST', data: {dni: $('#txtCrearDni').val() }}).done(function (resp) {
-	// 	console.log(resp);
-	// 	if(resp =='ya registrado'){
-	// 		//ya fue
-	// 	}else{
-	// 		var datos = JSON.parse(resp);
-	// 		console.log(datos)
-	// 		$('#txtCrearApellidos').val($.trim(datos[0]+ ' '+ datos[1]) );
-	// 		$('#txtCrearNombres').val(datos[2]);
-	// 		$('#btnBuscarDni').addClass('d-none');
-	// 		$('#datosEncontrados').removeClass('d-none');
-	// 		$('#txtCrearApellidos').focus();
+	$.ajax({url: 'php/apiReniec.php', type: 'POST', data: {dni: $('#txtCrearDni').val() }}).done(function (resp) {
+		var data = JSON.parse(resp);
+		
+		if(data[0].resp =='ya registrado'){
+			var repetidos = '';
+			for (let index = 1; index < data.length; index++) { 
+				repetidos = repetidos + `<p><a class="text-capitalize" href="alumnos.php?cursor=${data[index].codigo}">${data[index].nombres}</a></p>`;
+			}
+			$('#divUsadosDNI').html(repetidos);
+			//ya fue
+			$('#alertaDNIUsado').removeClass('d-none');
+			$('#datosEncontrados').addClass('d-none');
+			pantallaOver(false);
+		}else{
+			//var datos = JSON.parse(resp);
+			//console.log(datos)
+			$('#alertaDNIUsado').addClass('d-none');
+			$('#txtCrearApellidos').val(''); //$.trim(datos[0]+ ' '+ datos[1])
+			$('#txtCrearNombres').val(''); //datos[2]
+			$('#btnBuscarDni').addClass('d-none');
+			$('#datosEncontrados').removeClass('d-none');
+			$('#txtCrearApellidos').focus();
 
-	// 	}
-	// 	$('#btnBuscarDni').addClass('d-none');
-	// 		$('#datosEncontrados').removeClass('d-none');
-	// 		$('#txtCrearApellidos').focus();
-	// 	pantallaOver(false);
-	// })
-	$('#btnBuscarDni').addClass('d-none');
+			pantallaOver(false);
+		}
+	})
+	/* $('#btnBuscarDni').addClass('d-none');
 	$('#datosEncontrados').removeClass('d-none');
-	$('#txtCrearApellidos').focus();
-	pantallaOver(false);
+	$('#txtCrearApellidos').focus(); */
+	
 });
 $('#btnSaveAlumno').click(function () {
 	pantallaOver(true);
 	$.ajax({url: 'php/insertarAlumnoNuevo.php', type: 'POST', data: {
-		dni: $('#txtCrearDni').val(), nombre: $('#txtCrearNombres').val(), apellido: $('#txtCrearApellidos').val(), sexo: $('#SltPSexo').val(), facultad: $('#SltPFacultad').val(), fechanac: $('#txtCrearFecha').val()
+		dni: $('#txtCrearDni').val(), nombre: $('#txtCrearNombres').val(), apellido: $('#txtCrearApellidos').val(), sexo: $('#SltPSexo').val(), facultad: $('#SltPFacultad').val(), fechanac: $('#txtCrearFecha').val(), procedencia: $('#SltPProcedencia').val()
 	}}).done(function (resp) {
 		console.log(resp)
 		pantallaOver(false);

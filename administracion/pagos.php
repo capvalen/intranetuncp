@@ -239,6 +239,7 @@ $('#btnInsertPay').click(function () {
   pantallaOver(true);
   $('#alertPagos').addClass('d-none');
   if($('#txtCodRecibo').val()=='' || ( $('#txtMontoPago').val()=='' || $('#txtMontoPago').val()<0 ) ){
+    pantallaOver(false);
     $('#alertPagos span').text('Tiene campos mal rellenados o en blanco, revise por favor.').parent().removeClass('d-none')
   }else{
     var motivo = $('#sltMotivoPago').selectpicker('val');

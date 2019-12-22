@@ -18,26 +18,52 @@ if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], 
 <style>
 .colSubInt{border-bottom: 2px solid #525252; }
 /* .colNormal, .colHorarios{font-size: .8em;} */
-.border-negro{ }
+
 .border-negro{
 	border: 2px solid #525252!important;
 }
 /* .border-dark:last-child{border-bottom: 2px solid #525252!important; } */
-header {
-    position: absolute; /* fixed */
-    top: -30px; /* 0; */
-		right:0;
-  }
-@media print{
-	
-	footer {
-    position: fixed;
-    bottom: 0;
-  }
-	
-}
+
 .bloqueEntero  {
 	page-break-inside: avoid;
+}
+
+#encabezadoPagina, {
+  height: 50px;
+}
+.espacioEncabezado{
+  height: 120px;
+}
+.espacioSimple{
+	height: 60px;
+}
+#encabezadoPagina{ width: 100%; }
+.pagina {
+  page-break-after: always;
+	margin-top: -60px;
+}
+.page-footer, .page-footer-space {
+  height: 50px;
+
+}
+.page-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+@page {
+  margin: 20mm; 
+}
+
+@media print{
+	thead {display: table-header-group;} 
+	tfoot {display: table-footer-group;}
+	body {margin: 0;}
+	#encabezadoPagina{
+		position: fixed;
+		top: 0mm;
+	}
+	
 }
 </style>
 	
@@ -65,6 +91,7 @@ header {
 
 		</div>
 	</div>
+	
 	<?php if(isset($_GET['cursor'])){
 		$sqlAlumno = "SELECT lower(a.Alu_Apellido) as Alu_Apellido, lower(a.Alu_Nombre) as Alu_Nombre, a.Alu_Codigo FROM `alumno` a where Alu_NroDocumento = '{$_GET['cursor']}'";
 	}else if(isset($_GET['patron'])){
@@ -94,75 +121,105 @@ header {
 			order by i.Idi_Nombre, year(STR_TO_DATE(s.Mes_Codigo, '%m%Y')), month(STR_TO_DATE(s.Mes_Codigo, '%m%Y')) asc ;"; //  and Sec_Detalle = 'Habilitado'
 	?> 
 
-	<div class="content-block">
-		<div class="">
-			<div class="row">
-				<div class="col-3 "><img src="images/ceid_print.jpg" class="d-none d-print-block img-fluid " style="max-width: 88%;"></div>
-				<div class="col d-flex align-items-center justify-content-center">
-					<h3 class="">HOJA DE SEGUIMIENTO ACADÉMICO</h3>
-				</div>
-				<div class="col-3 d-flex justify-content-end "> <img class="d-none d-print-block" src="images/uncp-logo.png?v=1" style="height: 80px;"> </div>
+	<div class="container-fluid" id="encabezadoPagina">
+		<div class="row">
+			<div class="col-3 "><img src="images/ceid_print.jpg" class="d-none d-print-block img-fluid " style="max-width: 80%;"></div>
+			<div class="col d-flex align-items-center justify-content-center">
+				<h3 class="">HOJA DE SEGUIMIENTO ACADÉMICO</h3>
 			</div>
+			<div class="col-3 d-flex justify-content-end "> <img class="d-none d-print-block" src="images/uncp-logo.png?v=1" style="height: 80px;"> </div>
+		</div>
+		<div class="row">
 			<h5><strong>Apellidos y nombres: </strong> <span class="text-uppercase"><?= $rowAlumno['Alu_Apellido'].', ';?></span> <span class="text-capitalize"><?=$rowAlumno['Alu_Nombre']; ?></span> <a href="alumnos.php?cursor=<?= $rowAlumno['Alu_Codigo'];?>" class="d-print-none" role="button"><i class="icofont-edit"></i></a></h5>
-		<?php 
-			$resultadoDetalles=$cadena->query($sqlDetalles);
-			if($resultadoDetalles->num_rows>=1){ $i=0;
-			while($rowDetalles=$resultadoDetalles->fetch_assoc()){ $i++;
-				$cursoAnt = $rowDetalles['Idi_Nombre'];;
-
-		 ?>
-			<div class="container-fluid bloqueEntero border-negro" >
-				<div class="row">
-					<div class="col colHorarios"><?= $rowDetalles['Idi_Nombre']; ?></div>
-					<div class="col-3 colHorarios"><?= $rowDetalles['Niv_Detalle'].'-'.$rowDetalles['Sec_NroCiclo']; ?></div>
-					<div class="col-3 colHorarios"><?= $rowDetalles['Hor_HoraInicio'].'-'.$rowDetalles['Hor_HoraSalida']; ?></div>
-					<div class="col-4 text-capitalize "><?= $rowDetalles['nomDocente']; ?></div>
-					<div class="col"><strong><?php if($rowDetalles['nomDocente']=='reserva matricula'){echo ''; }elseif( $rowDetalles['not_Prom']<=9){ echo str_pad($rowDetalles['not_Prom'], 2, "0", STR_PAD_LEFT); }else{ echo $rowDetalles['not_Prom']; } ?></strong></div>
-				</div>
-				<div class="row">
-					<div class="col-2"><?= $rowDetalles['Mes_Inicio'].'-'.$rowDetalles['Mes_Detalle']; ?></div>
-					<div class="col-2"><?= $rowDetalles['sucDescripcion']; ?></div>
-					<div class="col container-fluid">
-						<div class="row"><div class="col colNormal text-capitalize"><?= $rowDetalles['AlSe_Condicion']; ?></div></div>
-						<div class="row container-fluid">
-							<div class="col text-center colSubInt"><strong>N° Recibo</strong></div>
-							<div class="col-3 text-center colSubInt"><strong>Descripción</strong></div>
-							<div class="col-2 text-center colSubInt"><strong>Monto</strong></div>
-						</div>
-						<?php $sqlPagos = "SELECT dp.`Cod_DetPag`, dp.`Cod_Recibo`, dp.`Pag_Codigo`, round(dp.`Monto_Pagado`,2) as Monto_Pagado , pg.Pag_Detalle FROM `detallepago` dp
-						inner join registroalumno ra on ra.Reg_Codigo = dp.Reg_Codigo 
-						inner join pago pg on pg.Pag_Codigo = dp.Pag_Codigo
-						where dp.Reg_Codigo = '{$rowDetalles['Reg_Codigo']}' order by Pag_Detalle desc ;";
-						$resultadoPagos=$esclavo->query($sqlPagos);
-						if($resultadoPagos->num_rows>=1){ 
-							while($rowPagos=$resultadoPagos->fetch_assoc()){ ?>
-								<div class="row container-fluid">
-									<div class="col text-uppercase"><?= $rowPagos['Cod_Recibo']; ?></div>
-									<div class="col-3"><?= $rowPagos['Pag_Detalle']; ?></div>
-									<div class="col-2"><?= $rowPagos['Monto_Pagado']; ?></div>
-								</div>
-						<?php } //fin de while
-						}else{ ?>
-						<div class="row">
-						<?php if(trim($rowDetalles['AlSe_Condicion'])=='Normal'){ ?>
-							<p>Sin pagos</p>
-						<?php }else{ ?>
-							<p class='text-capitalize'><strong><?= $rowDetalles['AlSe_Condicion']; ?></strong></p>
-						<?php } ?>
-						</div>
-						<?php } ?>
-					
-						
-					</div>
-				</div>
-			</div>
-			<?php } // fin de bucle while ?>
 		</div>
 	</div>
+
+	<div class=" page-footer d-flex justify-content-between"> <!-- d-none d-print-block -->
+		<span class="paginas"></span>
+    <span class="pr-5"><?= date('d/m/Y'); ?></span>
+  </div>
+
+	<table class="w-100">
+	<thead>
+		<tr>
+			<td>
+				<div class=" d-print-none espacioSimple"></div>
+				<div class=" d-none d-print-block espacioEncabezado"></div>
+			</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+				<div class="pagina">
+				<?php 
+				$resultadoDetalles=$cadena->query($sqlDetalles);
+				if($resultadoDetalles->num_rows>=1){ $i=0;
+				while($rowDetalles=$resultadoDetalles->fetch_assoc()){ $i++;
+					$cursoAnt = $rowDetalles['Idi_Nombre'];;
+
+				?>
+				<div class="container-fluid bloqueEntero border-negro" >
+					<div class="row">
+						<div class="col colHorarios"><?= $rowDetalles['Idi_Nombre']; ?></div>
+						<div class="col-3 colHorarios"><?= $rowDetalles['Niv_Detalle'].'-'.$rowDetalles['Sec_NroCiclo']; ?></div>
+						<div class="col-3 colHorarios"><?= $rowDetalles['Hor_HoraInicio'].'-'.$rowDetalles['Hor_HoraSalida']; ?></div>
+						<div class="col-4 text-capitalize "><?= $rowDetalles['nomDocente']; ?></div>
+						<div class="col"><strong><?php if($rowDetalles['nomDocente']=='reserva matricula'){echo ''; }elseif( $rowDetalles['not_Prom']<=9){ echo str_pad($rowDetalles['not_Prom'], 2, "0", STR_PAD_LEFT); }else{ echo $rowDetalles['not_Prom']; } ?></strong></div>
+					</div>
+					<div class="row">
+						<div class="col-2"><?= $rowDetalles['Mes_Inicio'].'-'.$rowDetalles['Mes_Detalle']; ?></div>
+						<div class="col-2"><?= $rowDetalles['sucDescripcion']; ?></div>
+						<div class="col container-fluid">
+							<div class="row"><div class="col colNormal text-capitalize"><?= $rowDetalles['AlSe_Condicion']; ?></div></div>
+							<div class="row container-fluid">
+								<div class="col text-center colSubInt"><strong>N° Recibo</strong></div>
+								<div class="col-3 text-center colSubInt"><strong>Descripción</strong></div>
+								<div class="col-2 text-center colSubInt"><strong>Monto</strong></div>
+							</div>
+							<?php $sqlPagos = "SELECT dp.`Cod_DetPag`, dp.`Cod_Recibo`, dp.`Pag_Codigo`, round(dp.`Monto_Pagado`,2) as Monto_Pagado , pg.Pag_Detalle FROM `detallepago` dp
+							inner join registroalumno ra on ra.Reg_Codigo = dp.Reg_Codigo 
+							inner join pago pg on pg.Pag_Codigo = dp.Pag_Codigo
+							where dp.Reg_Codigo = '{$rowDetalles['Reg_Codigo']}' order by Pag_Detalle desc ;";
+							$resultadoPagos=$esclavo->query($sqlPagos);
+							if($resultadoPagos->num_rows>=1){ 
+								while($rowPagos=$resultadoPagos->fetch_assoc()){ ?>
+									<div class="row container-fluid">
+										<div class="col text-uppercase"><?= $rowPagos['Cod_Recibo']; ?></div>
+										<div class="col-3"><?= $rowPagos['Pag_Detalle']; ?></div>
+										<div class="col-2"><?= $rowPagos['Monto_Pagado']; ?></div>
+									</div>
+							<?php } //fin de while
+							}else{ ?>
+							<div class="row">
+							<?php if(trim($rowDetalles['AlSe_Condicion'])=='Normal'){ ?>
+								<p>Sin pagos</p>
+							<?php }else{ ?>
+								<p class='text-capitalize'><strong><?= $rowDetalles['AlSe_Condicion']; ?></strong></p>
+							<?php } ?>
+							</div>
+							<?php } ?>
+						
+							
+						</div>
+					</div>
+				</div>
+				<?php } // fin de bucle while ?>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+	<tfoot>
+	</tfoot>
+		<tr>
+			<td><div class="page-footer-space"></div></td>
+		</tr>
+	</table>
+
+		
 	
-	<header class="d-flex justify-content-end">
-	<span><?= date('d/m/Y'); ?></span>
-	</header>
+		
+
 	<?php
 		}else{ //fin de busqueda de cursos ?>
 		<p>El alumno no tiene cursos asignados aún.</p>

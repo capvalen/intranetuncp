@@ -26,11 +26,22 @@ if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], 
 
 <div id="content" class="container-fluid pt-5">
 	<!-- Contenido de la Página  -->
-		
-	<h2 class="d-print-none"><i class="icofont-people"></i> Ciclos</h2>
-	
-	<?php if( isset($_GET['month']) && $_COOKIE['ckidSucursal']!='SUC001'){ $_GET['campus']=$_COOKIE['ckidSucursal']; }
-	if(!isset($_GET['nuevo'])): ?>
+
+	<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="buscarCiclos-tab" data-toggle="tab" href="#buscarCiclos" role="tab" aria-controls="buscarCiclos" aria-selected="true">Búsqueda de Ciclos</a>
+  </li>
+  <li class="nav-item" id="tabCrearCiclos">
+    <a class="nav-link" id="crearCiclos-tab" data-toggle="tab" href="#crearCiclos" role="tab" aria-controls="crearCiclos" aria-selected="false">Creación de ciclos</a>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="buscarCiclos" role="tabpanel" aria-labelledby="home-tab">
+		<!-- inicio de Busqueda de Ciclos -->
+		<h2 class="d-print-none"><i class="icofont-bullseye"></i> Ciclos</h2>
+
+		<?php if( isset($_GET['month']) && $_COOKIE['ckidSucursal']!='SUC001'){ $_GET['campus']=$_COOKIE['ckidSucursal']; } ?>
+
 	<div class="card mb-3 ">
 		<div class="card-body pt-1">
 		<p class="card-text m-0"><small class="text-muted"><i class="icofont-filter"></i> Filtro</small></p>
@@ -73,52 +84,9 @@ if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], 
 			</div>
 		</div>
 	</div>
-	<?php endif; ?>
 
-	<?php if(isset($_GET['nuevo'])): ?>
-	<div class="container">
-		<div class="card col-6">
-			<div class="card-body">
-				<label for="">Sucursal:</label>
-				<select class="text-capitalize selectpicker" id="sltPSucursales" data-live-search="true" data-width="100%">
-					<?php include 'php/OPT_sedes.php'; ?>
-				</select>
-				<label for="">Idioma:</label>
-				<select class="text-capitalize selectpicker" id="sltPIdiomas" data-live-search="true" data-width="100%">
-					<?php include 'php/OPT_idiomas.php'; ?>
-				</select>
-				<label for="">Nivel:</label>
-				<select class="text-capitalize selectpicker" id="sltPAniosNiveles" data-live-search="true" data-width="100%">
-					<?php include 'php/OPT_niveles.php'; ?>
-				</select>	
-				<label for="">Ciclo:</label>
-				<select class="text-capitalize selectpicker" id="sltPCiclos" data-live-search="true" data-width="100%">
-					<?php include 'php/OPT_ciclos.php'; ?>
-				</select>	
-				<label for="">Horario:</label>
-				<select class="text-capitalize selectpicker" id="sltPHorario" data-live-search="true" data-width="100%">
-					<?php include 'php/OPT_horarios.php'; ?>
-				</select>	
-				<label for="">Docente:</label>
-				<select class="text-capitalize selectpicker" id="sltPDocentes" data-live-search="true" data-width="100%">
-				<?php include 'php/OPT_todosDocentes.php'; ?>
-				</select>	
-			
-				<label for="">Mes:</label>
-				<select class="text-capitalize selectpicker" id="sltPMeses" data-live-search="true" data-width="100%">
-					<?php include 'php/OPT_mesesTodos.php'; ?>
-				</select>	
-				<label for="">Año:</label>
-				<select class="text-capitalize selectpicker" id="sltPAnios" data-live-search="true" data-width="100%">
-					<?php include 'php/OPT_AniosCiclos.php'; ?>
-				</select>
-				<button class="btn btn-outline-primary mt-2 " id="btnCrearCiclo"><i class="icofont-save"></i> Crear ciclo</button>
-			</div>
-		</div>
-	</div>
-	<?php endif; ?>
-	
-	
+
+
 	<?php 
 	if(isset($_GET['campus'])):
 	
@@ -138,7 +106,8 @@ if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], 
 	where year(ma.Mes_Inicio)= {$_GET['year']} and month(ma.Mes_Inicio)= {$_GET['month']} AND Sec_NroCiclo<>0 {$filtroExtra}
 	order by Idi_Nombre, Niv_Detalle, Sec_NroCiclo, Sec_Seccion asc; "; //echo $sqlCursos;
 	$resultadoCursos=$cadena->query($sqlCursos); $i=1; ?>
-	<div class="container-fluid">
+
+	<div class="container-fluid table-responsive">
 		<table class="table table-hover">
 			<thead>
 				<tr>
@@ -183,6 +152,66 @@ if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], 
 		</table>
 	<?php endif; ?>
 
+
+		<!-- fin de Busqueda de Ciclos -->
+	</div>
+	</div>
+	
+  <div class="tab-pane fade" id="crearCiclos" role="tabpanel" aria-labelledby="crearCiclos-tab">
+
+	<div class="container-fluid">
+	<h2 class="d-print-none"><i class="icofont-bullseye"></i> Creación de Ciclos</h2>
+		<div class="card col-6">
+			<div class="card-body">
+				<label for="">Sucursal:</label>
+				<select class="text-capitalize selectpicker" id="sltPCrearSucursales" data-live-search="true" data-width="100%">
+					<?php include 'php/OPT_sedes.php'; ?>
+				</select>
+				<label for="">Idioma:</label>
+				<select class="text-capitalize selectpicker" id="sltPCrearIdiomas" data-live-search="true" data-width="100%">
+					<?php include 'php/OPT_idiomasTodos.php'; ?>
+				</select>
+				<label for="">Nivel:</label>
+				<select class="text-capitalize selectpicker" id="sltPCrearAniosNiveles" data-live-search="true" data-width="100%">
+					<?php include 'php/OPT_niveles.php'; ?>
+				</select>	
+				<label for="">Ciclo:</label>
+				<select class="text-capitalize selectpicker" id="sltPCrearCiclos" data-live-search="true" data-width="100%">
+					<?php include 'php/OPT_ciclos.php'; ?>
+				</select>	
+				<label for="">Horario:</label>
+				<select class="text-capitalize selectpicker" id="sltPCrearHorario" data-live-search="true" data-width="100%">
+					<?php include 'php/OPT_horarios.php'; ?>
+				</select>	
+				<label for="">Docente:</label>
+				<select class="text-capitalize selectpicker" id="sltPCrearDocentes" data-live-search="true" data-width="100%">
+				<?php include 'php/OPT_todosDocentes.php'; ?>
+				</select>	
+			
+				<label for="">Mes:</label>
+				<select class="text-capitalize selectpicker" id="sltPCrearMeses" data-live-search="true" data-width="100%">
+					<?php include 'php/OPT_mesesTodos.php'; ?>
+				</select>	
+				<label for="">Año:</label>
+				<select class="text-capitalize selectpicker" id="sltPCrearAnios" data-live-search="true" data-width="100%">
+					<?php include 'php/OPT_AniosCiclos.php'; ?>
+				</select>
+				<button class="btn btn-outline-primary mt-2 " id="btnCrearCiclo"><i class="icofont-save"></i> Crear ciclo</button>
+			</div>
+		</div>
+	</div>
+	</div>
+
+	</div>
+</div>
+		
+	
+	
+	
+	
+	
+
+
 	
 <!-- Fin de Contenido de la Página  -->
 </div>
@@ -210,7 +239,7 @@ if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], 
 
 <script>
 $('.selectpicker').selectpicker();
-<?php if(!isset($_GET['nuevo'])): ?>
+
 	$('#sltPAnios').selectpicker('val',-1);
 	$('#sltPMeses').selectpicker('val',-1);
 	$('#sltPSedes').selectpicker('val',-1);
@@ -277,18 +306,17 @@ $('#btnRemoveCurso').click(function() {
 		}
 	});
 });
-<?php else: ?>
 
-<?php if(isset($_GET['nuevo'])): ?>
-$('.selectpicker').selectpicker('val', -1).selectpicker('refresh');
-
+$('#tabCrearCiclos').click(function(){ console.log( '1' );
+	$('#crearCiclos .selectpicker').selectpicker('val', -1).selectpicker('refresh');
+})
 
 $('#btnCrearCiclo').click(function () {
 	$.ajax({url: 'php/insertCiclo.php', type: 'POST', data:{
-		sucursal: $('#sltPSucursales').val(), idioma: $('#sltPIdiomas').val(), nivel: $('#sltPAniosNiveles').val(), ciclo: $('#sltPCiclos').val(), horario: $('#sltPHorario').val(), mes: $('#sltPMeses').val(), anio: $('#sltPAnios').val(), docente: $('#sltPDocentes').val()
+		sucursal: $('#sltPCrearSucursales').val(), idioma: $('#sltPCrearIdiomas').val(), nivel: $('#sltPCrearAniosNiveles').val(), ciclo: $('#sltPCrearCiclos').val(), horario: $('#sltPCrearHorario').val(), mes: $('#sltPCrearMeses').val(), anio: $('#sltPCrearAnios').val(), docente: $('#sltPCrearDocentes').val()
 	}}).done(function (resp) {
 		console.log(resp)
-		if(resp.length == 18){
+		if( resp.length>=18 && resp.length <= 20 ){
 			location.href = "cursodocente.php?cursor="+resp;
 		}else{
 			$('#h1Advertencia').text('Ocurrió un error al intentar insertar ciclo nuevo, comuníquelo al área de soporte');
@@ -309,10 +337,8 @@ $('#btnCrearCiclo').click(function () {
 		});
 	}
 }); */
-<?php endif; ?>
 
 
-<?php endif; ?>
 
 </script>
 </body>
