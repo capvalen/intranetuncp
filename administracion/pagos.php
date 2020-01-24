@@ -22,6 +22,39 @@ if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], 
     color: #196cc7;
     background-color: #ffffff;
 }
+.modal-xl {
+    max-width: 90vw;
+}
+@media print{
+	#content{padding-top:0px; margin-top:0px;}
+	a{text-decoration: none!important; color: #000;}
+	#cardEncabezados p{margin-bottom: 0.4rem;}
+	#cardEncabezados .card-body{padding: 4px 11px;}
+	#divContenidoPagado .card-body{
+		padding: 0;
+	}
+	#divContenidoPagado .card{
+		border:none;
+		margin-bottom:0px!important;
+		padding-top:0px!important;
+		padding-bottom:0px!important;
+	}
+	.h5Titulo{
+		font-size: 1rem;
+	}
+	#rowPadreEncabezados{
+		margin-top:0px!important;
+	}
+	#divTabs{
+		padding-top:0px!important;
+	}
+}
+.sltTipoMatriculaDebe{
+	width: 250px;
+}
+/* .checkbox>label{
+	margin-bottom: 1rem;
+} */
 </style>
 	
 <div class="wrapper">
@@ -42,7 +75,7 @@ if(isset($_GET['cursor'])){
 		
 	<h2 class="d-print-none"><i class="icofont-people"></i> Pagos</h2>
 	
-	<div class="card col-7">
+	<div class="card col-7 d-print-none">
 		<div class="card-body pt-1">
 		<p class="card-text m-0"><small class="text-muted"><i class="icofont-filter"></i> Filtro</small></p>
 			<div class="form-inline">
@@ -56,9 +89,9 @@ if(isset($_GET['cursor'])){
 	</div>
   </div>
   <?php if(isset($_GET['cursor']) || isset($_GET['patron'])){ ?>
-  <div class="row mt-3">
+  <div class="row mt-3" id="rowPadreEncabezados">
     <div class="col-12">
-      <div class="card mb-3">
+      <div class="card mb-3" id="cardEncabezados">
         <div class="card-body">
         <?php if($resultadoAlumno->num_rows>0){$rowAlumno = $resultadoAlumno->fetch_assoc(); $_POST['idAlumno'] = $rowAlumno['Alu_Codigo']; ?>
           <h5>Datos del alumno</h5>
@@ -80,8 +113,7 @@ if(isset($_GET['cursor'])){
       </div>
     </div>
     <?php if($resultadoAlumno->num_rows>0){$rowAlumno = $resultadoAlumno->fetch_assoc(); ?>
-    
-    <?php include 'php/mostrarCursosPagos.php'; ?>
+			<?php include 'php/mostrarCursosPagos.php'; ?>
     <?php } ?>
 
   </div>
@@ -118,6 +150,20 @@ if(isset($_GET['cursor'])){
         <div class="row col justify-content-end mx-0 mt-3">
           <button type="button" class="btn btn-outline-primary float-right" id="btnInsertPay"><i class="icofont-save"></i> Insertar pago</button>
         </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modalAddPayv2" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button><h5 class="modal-title">Agregar pago</h5>
+				<p>Ingrese los pagos correspondientes:</p>
+				<div id="divMostrarFuturosPagos"></div>
       </div>
       
     </div>
@@ -199,19 +245,80 @@ $('#btnBuscarDniAlumno').click(function () {
 });
 $('.btnAddPagoDyno').click(function () {
   pantallaOver(true);
-  $('#btnInsertPay').attr('reg_cod', $(this).parent().parent().attr('id'))
-  $('#btnInsertPay').attr('data-idioma', $(this).parent().parent().attr('data-idioma'))
-  $('#btnInsertPay').attr('data-ciclo', $(this).parent().parent().attr('data-ciclo'))
+  $('#btnInsertPay').attr('reg_cod', $(this).parent().parent().attr('id'));
+  $('#btnInsertPay').attr('data-idioma', $(this).parent().parent().attr('data-idioma'));
+	$('#btnInsertPay').attr('data-ciclo', $(this).parent().parent().attr('data-ciclo'));
+	let padre = $(this).parent().parent();
 
-  $.ajax({url: 'php/OPT_detalleConPagos.php', type:'POST', data:{idioma: $('#btnInsertPay').attr('data-idioma'), nivel: $('#btnInsertPay').attr('data-ciclo'), registro: $('#btnInsertPay').attr('reg_cod') }}).done(function (resp) { //console.log(resp)
-    $('#sltMotivoPago').selectpicker('val', 'Normal').selectpicker('refresh');
-    $('#sltTipoPago').children().remove(); $('#sltTipoPago').append(resp);
-    $('#sltTipoPago').change();
-    $('#txtCodRecibo').val('');
-    $('#modalAddPay').modal('show');
-    pantallaOver(false);
-  })
+	$.ajax({url: 'php/resumenMostrarPagos.php', type:'POST', data:{idioma: $('#btnInsertPay').attr('data-idioma'), nivel: $('#btnInsertPay').attr('data-ciclo'), registro: $('#btnInsertPay').attr('reg_cod') }}).done(function (resp) { //console.log(resp)
+		$('#divMostrarFuturosPagos').html(resp);
+		$.ajax({url: 'php/resumenPagosRealizados.php', type: 'POST', data: { codReg: padre.attr('id') }}).done(function(respuesta) {
+			//console.log(resp);
+			let data = JSON.parse(respuesta);
+			//console.log( data.length );
+			if( data.length>0){
+				limpiarPagos();
+				let padrecito='';
+				$.each( data , function(i, objeto){ console.log( objeto );
+					switch (objeto.Pag_Codigo) {
+						case "Matr0001":
+							padrecito = $('#tdMatricula').parent();
+							$('#chkMatricula').prop('checked', true);
+							break;
+						case "Pens0001":
+							padrecito = $('#tdPension').parent();
+							$('#chkPension').prop('checked', true);
+							break;
+						case "sltPagoOtro":
+							$('#chkOtros').prop('checked', true);
+							break;
+						default:
+							break;
+					}
+					padrecito.find('.txtCantidadPagaDebe').val(parseFloat(objeto.Monto_Pagado).toFixed(2));
+					padrecito.find('.sltTipoMatriculaDebe').val( padrecito.find(`.sltTipoMatriculaDebe option[data-id="${objeto.idCondicion}"]`).val() );
+					padrecito.find('.txtReciboDebe').val(objeto.Cod_Recibo);
+					padrecito.find('.txtFechaDebe').val(objeto.pagFechaAuto);
+					padrecito.find('.tdUser').text(objeto.Emp_Apellido + " " + objeto.Emp_Nombre );
+					padrecito.find('.txtFechaDebe').val(objeto.observacion);
+					let deuda = parseFloat(padrecito.find('#tdMatricula').attr('data-costo'));
+					let descuento = 0;
+					switch (padrecito.find('.sltTipoMatriculaDebe').attr('data-tipodscto')) {
+						case 'NINGUNO': descuento =0; break;
+						case 'PORCENTAJE': descuento = deuda*(padrecito.find('.sltTipoMatriculaDebe').attr('data-tipodscto'))/100 ; break;
+						case 'MONTO': descuento = padrecito.find('.sltTipoMatriculaDebe').attr('data-tipodscto') ; break;
+						default: break;
+					}
+					console.log( 'Descuento ' + descuento );
+					let paga = parseFloat(objeto.Monto_Pagado);
+					let resta = deuda - descuento -paga;
+					if( resta>0){
+						padrecito.find('.tdDebe').html( '<span class="text-danger">Debe S/ '+ parseFloat(resta).toFixed(2) +'</span>' );
+					}else{
+						padrecito.find('.tdDebe').html( '<span class="text-primary>Cancelado</span>');
+					}
+				});
+			}
+			
+			$('#modalAddPayv2').modal('show');
+			pantallaOver(false);
+		});
+		
+  });
 });
+function limpiarPagos(){
+	$('#chkMatricula').prop('checked', false);
+	$('#chkPension').prop('checked', false);
+	$('#chkOtros').prop('checked', false);
+	$('.sltTipoMatriculaDebe').val(-1);
+	$('.txtCantidadPagaDebe').val('0.00');
+	$('.txtReciboDebe').val('');
+	$('.txtFechaDebe').val('');
+	$('.txtFechaDebe').val('');
+	$('.txtObservacion').val('');
+	$('.tdUser').text('');
+
+}
 $('#sltTipoPago').change(function () { calculoPension(); });
 $('#sltMotivoPago').change(function () { calculoPension(); });
 function calculoPension(){

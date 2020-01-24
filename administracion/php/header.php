@@ -13,7 +13,8 @@
 <link rel="stylesheet" href="css/bootstrap-select.min.css?version=0.4" >
 <link rel="stylesheet" href="css/bootstrap-material-datetimepicker.css?version=0.1" >
 <link rel="stylesheet" href="css/animate.css?version=0.0" >
-<link rel="stylesheet" href="css/alertify.min.css?version=1.0.1" >
+<link rel="stylesheet" href="css/alertify.min.css?version=1.0.3" >
+<link rel="stylesheet" href="css/awesome-bootstrap-checkbox.css4?version=1.0.2" >
 
 
 

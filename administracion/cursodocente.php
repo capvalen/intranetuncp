@@ -32,6 +32,11 @@ input[type=number] {
 thead th{
 	border-top: none!important;
 }
+@media print{
+	#content{padding-top:0px; margin-top:0px;}
+	a{text-decoration: none!important; color: #000;}
+	#cardEncabezados p{margin-bottom: 0.4rem;}
+}
 </style>
 	
 <div class="wrapper">
@@ -54,7 +59,7 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 
 <div id="content" class="px-5 pt-5">
 	<!-- Contenido de la Página  -->
-	<nav aria-label="breadcrumb">
+	<nav aria-label="breadcrumb" class="d-print-none">
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="#!" onClick="goBack()">Ciclos</a></li>
 			<li class="breadcrumb-item active" aria-current="page">Curso</li>
@@ -64,14 +69,14 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 	
 	<div class="card mb-3">
 		
-		<div class="card-body row">
+		<div class="card-body row" id="cardEncabezados">
 			<div class="col">
 				<p><strong>Idioma:</strong> <span id="p1Curso"><?= $rowdatosCurso['Idi_Nombre']; ?></span> <span><?= $rowdatosCurso['Niv_Detalle']; ?></span></p>
 				<p><strong>Ciclo:</strong> <span id="p1Ciclo"><?= $rowdatosCurso['Sec_NroCiclo']; ?></span></p>
 				<p><strong>Sección:</strong> <?= $rowdatosCurso['Sec_Seccion']; ?></p>
 			</div>
 			<div class="col">
-				<p><strong>Temporada:</strong> <?= $meses[intval(substr($rowdatosCurso['Mes_Codigo'], 0,2))] ." ". substr($rowdatosCurso['Mes_Codigo'], -4); ?></p>
+				<p><strong>Temporada:</strong> <?= $meses[intval(substr($rowdatosCurso['Mes_Codigo'], 0,2))-1] ." ". substr($rowdatosCurso['Mes_Codigo'], -4); ?></p>
 				<p><strong>Sucursal:</strong> <?= $rowdatosCurso['sucDescripcion']; ?></p>
 			</div>
 			<div class="col">
@@ -85,7 +90,7 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 	
 
 	<?php if(isset($_GET['cursor'])){ ?>
-	<div class="card">
+	<div class="card d-print-none">
 		<div class="card-body d-flex justify-content-between">
 			<div class="row">
 				<button class="btn btn-outline-primary mx-2" id="btnAsignarAlumno"><i class="icofont-badge"></i> Asignar alumno</button>
@@ -102,11 +107,11 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 	<h4 class="mt-3">Registro de alumnos inscritos:</h4>
 		
 	<div class="container-fluid table-responsive">
-		<table class="table table-hover" id="listAlumnosInscritos">
+		<table class="table table-sm table-hover " id="listAlumnosInscritos">
 			<thead>
 				<tr>
 					<th class="text-center">N°</th>
-					<th class="text-center">Código</th>
+					<th class="text-center d-print-none">Código</th>
 					<th class="text-center">Apellidos</th>
 					<th class="text-center">Nombres</th>
 					<th class="text-center">Nota 1</th>
@@ -120,13 +125,13 @@ $rowdatosCurso =$resultadodatosCurso ->fetch_assoc();
 				while($rowCursos =$resultadoCursos ->fetch_assoc()){ ?>
 				<tr class="rowAlumno" data-alu="<?= $rowCursos['Reg_Codigo']; ?>">
 					<td><?= $i;?></td>
-					<td><button class="btn btn-outline-danger btn-sm border-0 btnRemoveStudent"><i class="icofont-close"></i></button> <a href="alumnos.php?cursor=<?= $rowCursos['Alu_Codigo']?>"><?= $rowCursos['Alu_Codigo'];?></a></td>
+					<td class="d-print-none"><button class="btn btn-outline-danger btn-sm border-0 btnRemoveStudent"><i class="icofont-close"></i></button> <a href="alumnos.php?cursor=<?= $rowCursos['Alu_Codigo']?>"><?= $rowCursos['Alu_Codigo'];?></a></td>
 					<td class="text-capitalize"><?= $rowCursos['Alu_Apellido'];?></td>
 					<td class="text-capitalize"><?= $rowCursos['Alu_Nombre'];?></td>
-					<td><input type="number" class="form-control text-center txtNotas" id="txtNota1" max="20" min="0" step="1" autocomplete="nope" value="<?php if($rowCursos['not_1']==null){ echo 0;} else {echo $rowCursos['not_1'];} ?>"></td>
-					<td><input type="number" class="form-control text-center txtNotas" id="txtNota2" max="20" min="0" step="1" autocomplete="nope" value="<?php if($rowCursos['not_2']==null){ echo 0;} else {echo $rowCursos['not_2'];} ?>"></td>
-					<td><input type="number" class="form-control text-center txtNotas" id="txtNota3" max="20" min="0" step="1" autocomplete="nope" value="<?php if($rowCursos['not_3']==null){ echo 0;} else {echo $rowCursos['not_3'];} ?>"></td>
-					<td><input type="number" class="form-control text-center" id="txtPromedio" disabled value="<?php if($rowCursos['not_Prom']==null){ echo 0;} else {echo $rowCursos['not_Prom'];} ?>"></td>
+					<td><input type="number" class="form-control text-center txtNotas d-print-none" id="txtNota1" max="20" min="0" step="1" autocomplete="nope" value="<?php if($rowCursos['not_1']==null){ echo 0;} else {echo $rowCursos['not_1'];} ?>"><span class="d-none d-print-block"><?= $rowCursos['not_1']; ?></span></td>
+					<td><input type="number" class="form-control text-center txtNotas d-print-none" id="txtNota2" max="20" min="0" step="1" autocomplete="nope" value="<?php if($rowCursos['not_2']==null){ echo 0;} else {echo $rowCursos['not_2'];} ?>"><span class="d-none d-print-block"><?= $rowCursos['not_2']; ?></span></td>
+					<td><input type="number" class="form-control text-center txtNotas d-print-none" id="txtNota3" max="20" min="0" step="1" autocomplete="nope" value="<?php if($rowCursos['not_3']==null){ echo 0;} else {echo $rowCursos['not_3'];} ?>"><span class="d-none d-print-block"><?= $rowCursos['not_3']; ?></span></td>
+					<td><input type="number" class="form-control text-center d-print-none" id="txtPromedio" disabled value="<?php if($rowCursos['not_Prom']==null){ echo 0;} else {echo $rowCursos['not_Prom'];} ?>"><span class="d-none d-print-block"><?= $rowCursos['not_Prom']; ?></span></td>
 				</tr>
 				<?php $i++; }
 				}else{?>
@@ -372,6 +377,7 @@ $('.txtNotas').change(function () {
 });
 $('.txtNotas').keyup(function(e) {
 	if( $(this).val()>=3 ){
+		var valor = $(this).val();
 		if( $(this).attr('id')=='txtNota3'){
 			$(this).parent().parent().next().find('#txtNota1').focus();
 		}else{
@@ -438,12 +444,24 @@ $('#btnGuardarNotas').click(function () {
 		console.log(resp);
 		pantallaOver(false);
 		if(resp=='ok'){
-			$('#toastInfoTitle').text('¡Guardado exitoso!'); $('#toastInfo').text("Acaba de actualizar correctamente su padrón de notas."); $('#tostadaInfo').toast('show');
+			//$('#toastInfoTitle').text('¡Guardado exitoso!'); $('#toastInfo').text("Acaba de actualizar correctamente su padrón de notas."); $('#tostadaInfo').toast('show');
+			alertify.success('<strong><i class="icofont-check-circled"></i> ¡Guardado exitoso!</strong><br>' + " Acaba de actualizar correctamente su padrón de notas."); 
 		}else{
-			$('#toastAdverTitle').text('Advertencia'); $('#toastError').text("Hubo un error al actualizar sus notas, es posible que no se hayan guardado los cambios."); $('#tostadaError').toast('show');
+			alertify.error('<strong><i class="icofont-warning"></i> ¡Alerta!</strong><br>' + " Hubo un error al actualizar sus notas, es posible que no se hayan guardado los cambios."); 
+			//$('#toastAdverTitle').text('Advertencia'); $('#toastError').text("Hubo un error al actualizar sus notas, es posible que no se hayan guardado los cambios."); $('#tostadaError').toast('show');
 		}
+		rellenarNuevamenteNotas();
 	})
 });
+function rellenarNuevamenteNotas(){
+	$.each( $('.editado'), function (index, elem ) {
+		let padre = $(elem).parent().parent();
+		let valor=$(padre).find('#txtNota1').val();
+		$(padre).find('#txtNota1').next().text(valor);
+		$(elem).next().text( $(elem).val() )
+
+	});
+}
 <?php } ?>
 
 function animateCSS(element, animationName, callback) {
@@ -485,7 +503,7 @@ $('#btnInsertChosen').click(function () {
 			}
 			$('#listAlumnosInscritos tbody').append(`<tr class="rowAlumno" data-alu="${codSec+codAlu}">
 					<th>${$('#listAlumnosInscritos tbody .rowAlumno').length+1}</th>
-					<td><button class="btn btn-outline-danger btn-sm border-0 btnRemoveStudent"><i class="icofont-close"></i></button> <a href="alumnos.php?cursor=${codAlu}">${codAlu}</a></td>
+					<td><button class="btn btn-outline-danger btn-sm border-0 btnRemoveStudent d-print-none"><i class="icofont-close"></i></button> <a href="alumnos.php?cursor=${codAlu}">${codAlu}</a></td>
 					<td class="text-capitalize">${$.apellidoAlu}</td>
 					<td class="text-capitalize">${$.nombreAlu}</td>
 					<td><input type="number" class="form-control text-center txtNotas" id="txtNota1" max="20" min="0" step="1" disabled='' autocomplete="nope" value="0"></td>
@@ -596,7 +614,7 @@ $('#btnUbicaChosen').click(function() {
 			}
 			$('#listAlumnosInscritos tbody').append(`<tr class="rowAlumno" data-alu="${codSec+codAlu}">
 					<th>${$('#listAlumnosInscritos tbody .rowAlumno').length+1}</th>
-					<td><button class="btn btn-outline-danger btn-sm border-0 btnRemoveStudent"><i class="icofont-close"></i></button> <a href="alumnos.php?cursor=${codAlu}">${codAlu}</a></td>
+					<td><button class="btn btn-outline-danger btn-sm border-0 btnRemoveStudent d-print-none"><i class="icofont-close"></i></button> <a href="alumnos.php?cursor=${codAlu}">${codAlu}</a></td>
 					<td class="text-capitalize">${$.apellidoAlu}</td>
 					<td class="text-capitalize">${$.nombreAlu}</td>
 					<td><input type="number" class="form-control text-center txtNotas" id="txtNota1" max="20" min="0" step="1" disabled='' autocomplete="nope" value="0"></td>

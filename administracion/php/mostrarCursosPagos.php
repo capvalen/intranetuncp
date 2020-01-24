@@ -1,4 +1,4 @@
-<div class="col">
+<div class="col" id="divContenidoPagado">
 <?php 
 
 $meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
@@ -14,8 +14,8 @@ if( $resultadoCursos->num_rows>0){
 ?>
 <div class="card">
   <div class="card-body">
-    <h5>Cursos registrados</h5>
-    <nav>
+    <h5 class="d-print-none">Cursos registrados</h5>
+    <nav class="d-print-none">
       <ul class="nav nav-tabs" role="tablist">
       <?php $i=0; while($rowCursos = $resultadoCursos->fetch_assoc()){ ?>
         <li class="nav-item">
@@ -24,7 +24,7 @@ if( $resultadoCursos->num_rows>0){
         <?php }  //fin de while cursos ?>
       </ul>
     </nav>
-    <div class="tab-content pt-3">
+    <div class="tab-content pt-3" id="divTabs">
     <?php $resultadoCursos->data_seek(0); $i=0;
       while($rowCursos = $resultadoCursos->fetch_assoc()){ //inicio de tabPane cursos ?>
       <div class="tab-pane fade <?php if($i==0){echo "show active"; } $i++; ?>" id="<?= $rowCursos['Idi_Codigo']; ?>" role="tabpanel" aria-labelledby="home-tab" >
@@ -39,7 +39,8 @@ if( $resultadoCursos->num_rows>0){
       //echo $sqlCiclos;
       $resultadoCiclos = $esclavo->query($sqlCiclos);
       if($resultadoCiclos->num_rows>0){
-        ?> <p>Total de ciclos: <?= $resultadoCiclos->num_rows; ?></p> <?php
+				?> <h5 class="d-none d-print-block">Idioma: <?= $rowCursos['Idi_Nombre']; ?> <small>(<?= $resultadoCiclos->num_rows; ?> ciclos)</small></h5>
+				 <p class="d-print-none">Total de ciclos: <?= $resultadoCiclos->num_rows; ?></p> <?php
         while($rowCiclos = $resultadoCiclos->fetch_assoc()){
       $fecha = new DateTime($rowCiclos['Mes_Codigo']);
        ?>
@@ -48,8 +49,8 @@ if( $resultadoCursos->num_rows>0){
         <div class="card p-2 mb-2" >
           <div class="card-body " id="<?= $rowCiclos['Reg_Codigo'];?>" data-idioma='<?= $rowCiclos['Idi_Codigo'];?>' data-ciclo='<?= $rowCiclos['Niv_Codigo'];?>'>
             <div class="d-flex justify-content-between ">
-              <h5 class='d-inline-flex'><?= $rowCiclos['Niv_Detalle'].' '.$rowCiclos['Sec_NroCiclo']. ' (' . $meses[$fecha->format('n')-1] .' '. $fecha->format('Y').')' ; ?></h5>
-              <button class="btn btn-outline-secondary btn-sm mb-3 btnAddPagoDyno "><i class="icofont-plus"></i> Agregar pago en <?= $rowCiclos['Niv_Detalle'].' '.$rowCiclos['Sec_NroCiclo']; ?> </button>
+              <h5 class='d-inline-flex h5Titulo'><?= $rowCiclos['Niv_Detalle'].' '.$rowCiclos['Sec_NroCiclo']. ' (' . $meses[$fecha->format('n')-1] .' '. $fecha->format('Y').')' ; ?></h5>
+              <button class="btn btn-outline-secondary btn-sm mb-3 btnAddPagoDyno d-print-none"><i class="icofont-plus"></i> Agregar pago en <?= $rowCiclos['Niv_Detalle'].' '.$rowCiclos['Sec_NroCiclo']; ?> </button>
             </div>
             <?php $sqlPagos="SELECT Cod_DetPag, dp.Pag_Codigo, round(dp.Monto_Pagado,2) as Monto_Pagado, pg.Pag_Detalle, dp.Cod_Recibo  FROM `detallepago` dp
             inner join pago pg on pg.Pag_Codigo = dp.Pag_Codigo 
@@ -70,10 +71,10 @@ if( $resultadoCursos->num_rows>0){
               <tbody>
               <?php $i=1; while($rowPagos = $resultadoPagos->fetch_assoc()){ ?>
                 <tr data-id="<?= $rowPagos['Cod_DetPag']; ?>">
-                  <td><button class="btn btn-outline-danger btn-sm border-0 btnBorrarPay" ><i class="icofont-close"></i></button> <?= $i; ?></td>
+                  <td><button class="btn btn-outline-danger btn-sm border-0 btnBorrarPay d-print-none" ><i class="icofont-close"></i></button> <?= $i; ?></td>
                   <td><?= $rowPagos['Cod_DetPag']; ?></td>
                   <td><?= $rowPagos['Pag_Detalle']; ?></td>
-                  <td><?= $rowPagos['Cod_Recibo']; ?></td>
+                  <td><?= ucfirst($rowPagos['Cod_Recibo']); ?></td>
                   <td><?= $rowPagos['Monto_Pagado']; ?></td>
                 </tr>
               <?php $i++; } ?>
