@@ -55,6 +55,9 @@ if( in_array($_COOKIE['ckPower'], $secretaria) || in_Array($_COOKIE['ckPower'], 
 /* .checkbox>label{
 	margin-bottom: 1rem;
 } */
+.checkbox{
+	padding-left: 0px;
+}
 </style>
 	
 <div class="wrapper">
@@ -253,7 +256,7 @@ $('.btnAddPagoDyno').click(function () {
 	$.ajax({url: 'php/resumenMostrarPagos.php', type:'POST', data:{idioma: $('#btnInsertPay').attr('data-idioma'), nivel: $('#btnInsertPay').attr('data-ciclo'), registro: $('#btnInsertPay').attr('reg_cod') }}).done(function (resp) { //console.log(resp)
 		$('#divMostrarFuturosPagos').html(resp);
 		$.ajax({url: 'php/resumenPagosRealizados.php', type: 'POST', data: { codReg: padre.attr('id') }}).done(function(respuesta) {
-			//console.log(resp);
+			//console.log(resp); 
 			let data = JSON.parse(respuesta);
 			//console.log( data.length );
 			if( data.length>0){

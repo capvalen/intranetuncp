@@ -23,8 +23,13 @@ $row=$resultado->fetch_assoc();
 	?> 
 	<tr>
 		<td>
-			<div class="checkbox checkbox-primary d-inline pl-0"><input id="chkMatricula" class="styled" type="checkbox" > <label for="checkbox2"><strong>1.</strong> Matrícula</label> </div>
-			</td>
+			<div class="checkbox checkbox-primary">
+				<input id="chkMatricula" class="styled" type="checkbox" >
+				<label for="chkMatricula">
+						<strong>1. </strong> Matrícula
+				</label>
+			</div>
+		</td>
 		<td class="d-none" id="tdMatricula" data-costo="<?= $row['nxi_Matricula']; ?>">S/ <?= $row['nxi_Matricula']; ?></td>
 		<td class="tdSecundario">
 			<select name="" id="" class="form-control sltTipoMatriculaDebe">
@@ -40,8 +45,11 @@ $row=$resultado->fetch_assoc();
 	</tr>
 	<tr>
 		<td>
-		<div class="checkbox checkbox-primary d-inline pl-0"><input id="chkPension" class="styled" type="checkbox" > <label for="checkbox2"><strong>2. </strong> Pensión</label> </div>
-			</td>
+			<div class="checkbox checkbox-primary">
+				<input id="chkPension" class="styled" type="checkbox" >
+				<label for="chkPension"><strong>2. </strong> Pensión</label>
+			</div>
+		</td>
 		<td class="d-none" id="tdPension" data-costo="<?= $row['nxi_Pension']; ?>">S/ <?= $row['nxi_Pension']; ?></td>
 		<td class="tdSecundario">
 			<select name="" id="" class="form-control sltTipoMatriculaDebe">
@@ -57,8 +65,11 @@ $row=$resultado->fetch_assoc();
 	</tr>
 	<tr>
 		<td>
-			<div class="checkbox checkbox-primary d-inline pl-0"><input id="chkOtros" class="styled" type="checkbox" > <label for="checkbox2"><strong>3. </strong> Extra</label> </div>
-			</td>
+			<div class="checkbox checkbox-primary">
+				<input id="chkOtros" class="styled" type="checkbox" >
+				<label for="chkOtros"><strong>3. </strong> Extra</label>
+			</div>
+		</td>
 		<td class="d-none" id="tdPension" data-costo="<?= $row['nxi_Pension']; ?>">S/ <?= $row['nxi_Pension']; ?></td>
 		<td class="tdSecundario">
 			<select name="" id="sltPagoOtro" class="form-control sltTipoMatriculaDebe">
